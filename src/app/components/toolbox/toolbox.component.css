@@ -1,0 +1,79 @@
+.toolbox-card{
+  width: 300px;
+  height: max-content;
+  z-index: 100;
+  position: fixed;
+  top: 0;
+  right: 0;
+  margin: 20px;
+  padding: 10px 20px;
+}
+
+.toolbox-off{
+  transition:display all 0.5s ease;
+  display: none;
+}
+
+
+.toolbox-titulo{
+  display: flex;
+  justify-content: space-between;
+    p{
+      margin-top: 10px;
+      font-size: larger;
+      font-weight: bold;
+    }
+    button{
+      font-weight: bolder;
+      font-size: larger;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: all 0.5s ease-in;
+    }
+
+    button:hover{
+      color: #fff;
+      background-color: rgba(0, 0, 0, 0.074);
+      border-radius: 5px;
+    }
+}
+
+
+
+.toolbox-success{
+  background-color: rgba(28, 226, 28, 0.7);
+}
+
+.toolbox-error{
+  background-color: rgba(251, 92, 92, 0.7);
+}
+
+.toolbox-warning{
+  background-color: rgba(250, 250, 106,0.7);
+}
+
+
+
+@media screen and (max-width: 800px) {
+  .toolbox-card{
+    width: 90vw;
+    height: 100px;
+    top: 0;
+    right: 1;
+    left: 0;
+  }
+
+  .toolbox-success{
+    background-color: rgb(28, 226, 28);
+  }
+  
+  .toolbox-error{
+    background-color: rgb(251, 92, 92);
+  }
+  
+  .toolbox-warning{
+    background-color: rgb(250, 250, 106);
+  }
+}
+

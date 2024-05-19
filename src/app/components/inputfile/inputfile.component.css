@@ -1,0 +1,26 @@
+/* Estilos para a área do input file */
+.input-file-area {
+  position: relative;
+  width: fit-content;
+  margin: 20px auto;
+}
+
+/* Estilo para o título */
+.input-file-titulo {
+  font-size: 13px;
+  margin-bottom: 10px;
+  color: #888585;
+  margin-left: 3px;
+}
+
+
+/* Estilo para o input file (invisível) */
+.input-file-area input[type="file"] {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}

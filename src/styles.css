@@ -1,4 +1,199 @@
 /* You can add global styles to this file, and also import other style files */
+* {
+  scrollbar-color: #8893d4 #3f51b5;
+  scrollbar-width: 6px; 
+  padding: 0px;
+  margin: 0px;
+  box-sizing: border-box;
+}
 
+html, body { height: auto; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+body {
+  font-family: 'Arial', sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  background-color: #f4f4f4; 
+}
+
+app-root {
+  display: flex;
+}
+
+router-outlet {
+  flex: 1;
+}
+
+/* Estilos para a barra de rolagem */
+/* Largura e cor do thumb */
+::-webkit-scrollbar-thumb {
+  background-color: #8893d4; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar-thumb {
+  background-color: #8893d4; /* Para Firefox */
+}
+
+/* Cor do track */
+::-webkit-scrollbar-track {
+  background-color: #3f51b5; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar-track {
+  background-color: #3f51b5; /* Para Firefox */
+}
+
+/* Largura da scrollbar */
+::-webkit-scrollbar {
+  width: 6px; /* Para Chrome, Safari, e Opera */
+}
+::-moz-scrollbar {
+  width: 6px; /* Para Firefox */
+}
+
+
+
+::-ms-scrollbar {
+  color: #8893d4; 
+  background-color: #3f51b5;
+}
+
+
+.tab-invalid {
+  color: red ;
+}
+
+.icon-green:hover{
+  color: rgb(19, 110, 19);
+  transition: color 0.5s ease-in-out;
+}
+
+.icon-red:hover{
+  color: rgb(148, 39, 39);
+  transition: color 0.5s ease-in-out;
+}
+
+.icon-blue:hover{
+  color: rgb(39, 123, 148);
+  transition: color 0.5s ease-in-out;
+}
+
+
+
+
+
+
+
+.page-container-grid{
+  width: 80vw;
+  max-width: 80vw;
+  display: block;
+ }
+ 
+ .search-field-grid{
+   width: 80%;
+ }
+ 
+ .header-grid{
+   display: flex;
+   width: 100%;
+   justify-content: space-between;
+ }
+ 
+ 
+
+ .container-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 80vw;
+  max-width: 80vw;
+}
+.card-form {
+  width: 100%;
+}
+
+mat-form-field {
+  padding: 10px;
+  width: 100%;
+}
+
+div.inputs-row-form{
+  display: flex;
+}
+
+
+.area-botao-form{
+  width: 100%; 
+  display: flex;
+  justify-content: space-between;
+  button{
+    padding: 20px 10px;
+    margin: 10px;
+  }
+}
+
+table{
+  table-layout: fixed !important;
+  width: 100%;
+}
+
+@media screen and (max-width: 800px) {
+  body {
+    align-items: flex-start;
+  }
+  .menu-open-margin {
+    display:none;
+  }
+  .menu-closed-margin {
+    margin-top: 50px;  
+  }
+
+  
+  .page-container-grid{
+    width: 95vw;
+    padding: 5px;
+  }
+  .header-grid{
+   flex-direction: column;
+   margin-bottom: 50px;
+  }
+  .search-field-grid{
+    width: 100%;
+  }
+
+  .container-form {
+    z-index: 1;
+    width: 100vw;
+
+    margin-top: 80px;
+
+ 
+    justify-content: flex-start;
+  }
+  div.inputs-row-form{
+    flex-direction: column;
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .menu-closed-margin {
+    margin: 15px; 
+  }
+
+  .page-container-grid{
+    width: calc(100vw - 80px);
+    margin-left: 5px;
+    margin-top: 80px;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .header-grid{
+    width: calc(100vw - 50px);
+   }
+}
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

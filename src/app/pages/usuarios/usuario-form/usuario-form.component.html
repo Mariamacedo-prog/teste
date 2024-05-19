@@ -1,0 +1,87 @@
+<div class="container-form ">
+  <mat-card class="card-form ">
+    <mat-card-header>
+      <mat-card-title>Cadastro de Usuário</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input [readonly]="view" matInput [formControl]="nomeFormControl" />
+        <mat-error *ngIf="nomeFormControl.hasError('required')">
+          Este campo é <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label>Email</mat-label>
+          <input [readonly]="view" type="email" matInput [formControl]="emailFormControl" placeholder="Ex. pat@example.com" />
+          <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="emailFormControl.hasError('required')" >
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Telefone</mat-label>
+          <input [readonly]="view" matInput [formControl]="telefoneFormControl" (input)="formatPhone()" />
+          <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
+            Por favor digite um telefone válido.
+          </mat-error>
+          <mat-error *ngIf="telefoneFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>  
+      </div>
+
+      <mat-form-field>
+        <mat-label>CPF</mat-label>
+        <input [readonly]="view" matInput [formControl]="loginCpfFormControl" />
+        <mat-error *ngIf="loginCpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+      </mat-form-field>
+
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label>Senha</mat-label>
+          <input [readonly]="view" matInput type="password" [formControl]="senhaFormControl" />
+          
+          <mat-error *ngIf="senhaFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>.
+          </mat-error>
+          <mat-error *ngIf="senhaFormControl.hasError('minlength')">
+            Deve ter no mínimo 8 dígitos.
+          </mat-error>
+          <mat-error *ngIf="senhaFormControl.hasError('pattern')">
+            Deve ter letras e números.
+          </mat-error>
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Confirmar Senha</mat-label>
+          <input [readonly]="view" matInput type="password"  [formControl]="confirmSenhaFormControl"/>
+          <mat-error *ngIf="confirmSenhaFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+          <mat-error *ngIf="confirmSenhaFormControl.hasError('senhasDivergentes')">
+            Senhas não batem.
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+        <div class="area-botao-form " *ngIf="this.userId === '' || this.userId === undefined">
+          <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
+          <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
+          <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
+        </div>
+
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.userId !== '' && this.userId !== undefined">
+          <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</div>
+

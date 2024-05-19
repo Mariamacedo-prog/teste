@@ -1,0 +1,147 @@
+
+
+
+<mat-accordion class="container-form-pagamento" >
+  <mat-expansion-panel  class="card-form " 
+    (opened)="panelOpenState = true"
+    (closed)="panelOpenState = false" 
+    style="margin-right: -20px;">
+
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <mat-card-title>Parcelamento</mat-card-title>
+      </mat-panel-title>
+      <mat-panel-description>
+    
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+
+    <div >
+      <mat-card >
+        <mat-card-header>
+          <mat-card-title>Calcular Pagamento</mat-card-title>
+        </mat-card-header>
+    
+    
+        <form [formGroup]="formControls">
+          <mat-card-content >
+            <div >
+                <mat-form-field >
+                  <mat-label>Tipo De Plano</mat-label>
+                  <mat-select  (selectionChange)="changePlano($event)" formControlName="plano" >
+                    <mat-option *ngFor="let plano of planos;" [value]="plano.value" >
+                      {{ plano.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+       
+                <mat-slide-toggle
+                *ngIf="formControls.get('plano')?.value > 600"
+                color="primary"
+                formControlName="isAvista"
+                (change)="pagamentoAvista($event)"
+                style="margin-bottom: 50px;"
+                >Pagamento à vista</mat-slide-toggle>
+
+                <div class="inputs-row-form" *ngIf="this.formControls?.get('isAvista')?.value ==true && this.formControls.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+                    <mat-form-field  >
+                      <mat-label>Valor à vista</mat-label>
+                      <input matInput [value]="(this.formControls.get('plano')?.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
+                    </mat-form-field>
+                    <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
+                      <mat-label>Data do Pagamento</mat-label>
+                      <input [min]="minDate"  matInput (dateChange)="calculateDataFinalEntrada()"
+                       [matDatepicker]="pickerPrimeiro" 
+                       formControlName="dataPrimeiroPagamento"  
+                       placeholder="dd/mm/yyyy">
+                      <mat-datepicker-toggle matSuffix [for]="pickerPrimeiro"></mat-datepicker-toggle>
+                      <mat-datepicker #pickerPrimeiro ></mat-datepicker>
+                    </mat-form-field>
+                </div>
+            
+              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+                <mat-form-field  >
+                  <mat-label>Entrada</mat-label>
+                  <mat-select  (selectionChange)="changeEntrada($event)" formControlName="valor">
+                    <mat-option *ngFor="let entrada of optionsEntrada;" [value]="entrada.value" >
+                      {{ entrada.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <div class="inputs-row-form">
+                  <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
+                    <mat-label>Data da Primeira parcela da Entrada</mat-label>
+                    <input [min]="minDate"  matInput 
+                    (dateChange)="calculateDataFinalEntrada()" 
+                    [matDatepicker]="pickerPrimeiro" 
+                    formControlName="dataPrimeiroPagamento" 
+                    dateInputFormat="dd/MM/yyyy"
+                     placeholder="dd/mm/yyyy">
+                    <mat-datepicker-toggle matSuffix [for]="pickerPrimeiro"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerPrimeiro ></mat-datepicker>
+                  </mat-form-field>
+      
+    
+                  <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('quantidade')?.value > 1" >
+                    <mat-label>Data da Final da Entrada</mat-label>
+                    <input [disabled]="true" [min]="minDate" matInput [matDatepicker]="picker"
+                 
+                    formControlName="dataUltimoPagamento" 
+                      placeholder="dd/mm/yyyy">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker ></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+    
+              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('entrada')?.get('valor')?.value > 0"  formGroupName="parcelas">
+                <mat-form-field  >
+                  <mat-label>Parcelas</mat-label>
+                  <mat-select (selectionChange)="changeParcela($event)" formControlName="valor">
+                    <mat-option *ngFor="let parcela of optionsParcelas;" [value]="parcela.value"  >
+                      {{ parcela.viewValue }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                
+                <div class="inputs-row-form">
+                  <mat-form-field *ngIf="this.formControls?.get('parcelas')?.get('valor')?.value > 0">
+                    <mat-label>Data da Primeira Parcela</mat-label>
+                    <input [min]="minDate"  matInput (dateChange)="calculateDataFinalParcela()" [matDatepicker]="pickerPrimeiroParcela" formControlName="dataPrimeiroPagamento"  placeholder="dd/mm/yyyy">
+                    <mat-datepicker-toggle matSuffix [for]="pickerPrimeiroParcela"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerPrimeiroParcela ></mat-datepicker>
+                  </mat-form-field>
+                  <mat-form-field *ngIf="this.formControls?.get('parcelas')?.get('quantidade')?.value > 1" >
+                    <mat-label>Data da Final da Parcela</mat-label>
+                    <input [disabled]="true" [min]="minDate"  matInput 
+                    [matDatepicker]="pickerParcela" 
+                    [value]="this.formControls.get('parcelas')?.get('dataUltimoPagamento')?.value"  
+                    placeholder="dd/mm/yyyy">
+                    <mat-datepicker-toggle matSuffix [for]="pickerParcela"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerParcela></mat-datepicker>
+                  </mat-form-field>
+                </div>
+         
+              </div>
+            </div>
+
+            <form [formGroup]="formControls">
+              <div>
+              </div>
+            </form>
+       
+    
+            <div class="area-botao-form " *ngIf="!existeParcelamento">
+              <button [disabled]="!formularioValido()" (click)="gerarParcelamento()" mat-stroked-button color="primary" >Confirmar Parcelamento</button>
+            </div>
+            <div class="area-botao-form " *ngIf="existeParcelamento">
+              <button [disabled]="!formularioValido()" (click)="atualizarParcelamento()" mat-stroked-button color="primary" >Atualizar Parcelamento</button>
+            </div>
+
+            </mat-card-content>
+        </form>
+      </mat-card>
+    </div>
+  </mat-expansion-panel>
+</mat-accordion>

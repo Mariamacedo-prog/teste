@@ -1,0 +1,221 @@
+<div class="container-form ">
+
+
+  <mat-card class="card-form " >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Contratante</mat-card-title>
+    </mat-card-header>
+
+    <form [formGroup]="formControls">
+      <mat-card-content >
+        <mat-tab-group >
+          <mat-tab  label="Informações" class="tab-1"> 
+            
+            <div class="inputs-row-form" formGroupName="cartorio">
+              <mat-form-field class="example-full-width">
+                <mat-label>Nome do Cartório</mat-label>
+                <input type="text"
+                      [readonly]="visualizar"
+                       matInput
+                       formControlName="nome"
+                       [matAutocomplete]="auto"
+                       (keyup)="handleKeyUp($event)">
+                <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                    <mat-option *ngFor="let option of filteredCartorios" [value]="option.nome" (onSelectionChange)="selectedCartorio(option)">
+                      {{option.nome + " - CNS: " + option.cns}}
+                    </mat-option>
+                </mat-autocomplete>
+                <mat-progress-bar *ngIf="loadingCartorio" mode="indeterminate"></mat-progress-bar>
+              </mat-form-field>
+
+              <mat-form-field>
+                <mat-label>CNS do Cartório</mat-label>
+                <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
+              </mat-form-field>
+            </div>
+                
+
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Nome</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="nome" />
+                <mat-error *ngIf="formControls?.get('nome')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>CPF</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="cpf" />
+                <mat-error *ngIf="formControls?.get('cpf')?.hasError('cpfInvalido')">CPF inválido</mat-error>
+              </mat-form-field>
+            </div>
+      
+            <div class="inputs-row-form">
+              <mat-slide-toggle 
+              color="primary"
+              formControlName="estrangeiro"
+              (change)="isEstrangeiro($event)"
+              style="margin-bottom: 50px;"
+              >Cidadão Estrangeiro</mat-slide-toggle>
+            </div>
+
+            <div class="inputs-row-form">
+              <mat-form-field *ngIf="!formControls?.get('estrangeiro')?.value">
+                <mat-label>Documento de Identificação</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="rg"  />
+                <mat-error *ngIf="formControls?.get('rg')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+                <mat-error *ngIf="formControls?.get('rg')?.hasError('rgInvalid')">
+                  Número do Documento de Identificação inválido.
+                </mat-error>
+              </mat-form-field> 
+
+              <mat-form-field *ngIf="formControls?.get('estrangeiro')?.value">
+                <mat-label>RNE</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="rne"  />
+                <mat-error *ngIf="formControls?.get('rne')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field> 
+
+                <mat-form-field>
+                <mat-label>Órgão de expedição</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="orgaoExpedicao"  />
+                <mat-error *ngIf="formControls?.get('orgaoExpedicao')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field> 
+              <mat-form-field *ngIf="!formControls?.get('estrangeiro')?.value">
+                <mat-label>Data de Expedição</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="dataExpedicao">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+              </mat-form-field>
+            </div>
+
+            <div class="inputs-row-form"> 
+              <mat-form-field>
+                <mat-label>Email</mat-label>
+                <input [readonly]="visualizar"  type="email" matInput formControlName="email" placeholder="Ex.pat@example.com" />
+                <mat-error *ngIf="formControls?.get('email')?.hasError('email') && !formControls?.get('email')?.hasError('required')">
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="formControls?.get('email')?.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+   
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Telefone</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="telefone" (input)="formatPhone()" />
+                <mat-error *ngIf="formControls?.get('telefone')?.hasError('pattern')">
+                  Por favor digite um telefone válido.
+                </mat-error>
+                <mat-error *ngIf="formControls?.get('telefone')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field> 
+              
+              <mat-form-field>
+                <mat-label>Profissão</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="profissao"  />
+                <mat-error *ngIf="formControls?.get('profissao')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>  
+    
+              <mat-form-field>
+                <mat-label>Nacionalidade</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="nacionalidade" />
+                <mat-error *ngIf="formControls?.get('nacionalidade')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field> 
+            </div>
+  
+            <div class="inputs-row-form">
+              <mat-form-field class="search-field-grid">
+                <mat-label>Estado Civil</mat-label>
+                <mat-select formControlName="estadoCivil" (selectionChange)="selectEstadoCivil()">
+                  <mat-option *ngFor="let estado of estadoCivil" [value]="estado.label">{{estado.label}}</mat-option>
+                </mat-select>
+                <mat-error *ngIf="formControls?.get('estadoCivil')?.hasError('required')">Este campo é <strong>obrigatório</strong></mat-error>
+              </mat-form-field>
+            </div>
+       
+            <div *ngIf="isMarried" class="inputs-row-form">  
+              <mat-form-field>
+                <mat-label>Nome Cônjuge</mat-label>
+                <input [readonly]="visualizar"  matInput  formControlName="nomeConjugue" />
+                <mat-error *ngIf="formControls?.get('nomeConjugue')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+    
+              <mat-form-field >
+                <mat-label>Nacionalidade Cônjuge</mat-label>
+                <input [readonly]="visualizar"  matInput  formControlName="nacionalidadeConjugue" />
+                <mat-error *ngIf="formControls?.get('nomeConjugue')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </mat-tab>
+  
+          <mat-tab label="Anexar Documentos" class="tab-2" *ngIf="showAnexos"> 
+           <div class="input-file-row">
+            <app-file-input [nome]="'Documento de Identificação*'" 
+                [fileInput]="this.formControls.get('anexos')?.get('rgFile')?.value"
+               (fileOutput)="saveFileBase64($event, 'rgFile')" 
+              (fileSelected)="onFileSelected($event)"></app-file-input>
+            <app-file-input [nome]="'CPF*'" 
+            [fileInput]="this.formControls.get('anexos')?.get('cpfFile')?.value"
+            (fileOutput)="saveFileBase64($event, 'cpfFile')" 
+            (fileSelected)="onFileSelected($event)"></app-file-input>
+           </div>
+        
+  
+           <div class="input-file-row">
+            <app-file-input [nome]="'Comprovante de Aquisição do  imóvel*'" 
+            [fileInput]="this.formControls.get('anexos')?.get('comprovanteAquisicaoImovelFile')?.value"  
+            (fileOutput)="saveFileBase64($event, 'comprovanteAquisicaoImovelFile')"  (fileSelected)="onFileSelected($event)"></app-file-input>
+            <app-file-input [nome]="'Comprovante de Endereço*'" 
+            [fileInput]="this.formControls.get('anexos')?.get('comprovanteEnderecofile')?.value" 
+             (fileOutput)="saveFileBase64($event, 'comprovanteEnderecofile')" (fileSelected)="onFileSelected($event)"></app-file-input>
+            </div>
+  
+           <div class="input-file-row" *ngIf="isMarried">
+            <app-file-input [nome]="'Certidão de Casamento*'"
+             [fileInput]="this.formControls.get('cetidaoCasamentoFile')?.get('cpfFile')?.value"  
+             (fileOutput)="saveFileBase64($event, 'cetidaoCasamentoFile')" 
+              (fileSelected)="onFileSelected($event)"></app-file-input>
+            <app-file-input [nome]="'Documento de Identificação do Cônjuge*'" 
+            [fileInput]="this.formControls.get('rgConjugueFile')?.get('cpfFile')?.value" 
+             (fileOutput)="saveFileBase64($event, 'rgConjugueFile')"  
+             (fileSelected)="onFileSelected($event)"></app-file-input>
+            <app-file-input [nome]="'CPF do Cônjuge*'" 
+            [fileInput]="this.formControls.get('cpfConjugueFile')?.get('cpfFile')?.value" 
+             (fileOutput)="saveFileBase64($event, 'cpfConjugueFile')"  
+             (fileSelected)="onFileSelected($event)"></app-file-input>
+           </div>
+  
+          </mat-tab>
+
+        </mat-tab-group>
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId === '' || this.contratanteId === undefined">
+            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+            <button  mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
+          </div>
+  
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratanteId !== '' && this.contratanteId !== undefined">
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+            <button mat-raised-button color="link" routerLink="/contratante/lista">Voltar</button>
+          </div>
+      </mat-card-content>
+    </form>
+
+  </mat-card>
+</div>

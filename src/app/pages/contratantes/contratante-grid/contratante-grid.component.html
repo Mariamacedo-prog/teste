@@ -1,0 +1,120 @@
+<div class="page-container-grid">
+  <h1>Listagem de Contratantes</h1>
+  <div >
+    <div class=" inputs-row-form">
+      <mat-form-field class="search-field-grid">
+        <mat-label>Situação do Pagamento</mat-label>
+        <mat-select disabled>
+          <!-- @for (food of foods; track food) {
+            <mat-option [value]="food.value">{{food.viewValue}}</mat-option>
+          } -->
+          <mat-option >ok</mat-option>
+          <mat-option >não ok</mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field class="search-field-grid">
+        <mat-label>Escolha uma Data</mat-label>
+        <input disabled matInput [matDatepicker]="picker">
+        <mat-hint>MM/DD/YYYY</mat-hint>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field class="search-field-grid">
+        <mat-label>Cidade</mat-label>
+        <mat-select disabled>
+          <mat-option >São paulo</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class=" inputs-row-form" > 
+      <mat-form-field class="search-field-grid">
+        <mat-label>Estado</mat-label>
+        <mat-select disabled>
+          <mat-option >São paulo</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field class="search-field-grid">
+        <mat-label>Cartórios</mat-label>
+        <mat-select (selectionChange)="cartorioSelected($event)">
+          <mat-option value="">Escolha um cartorio</mat-option>
+          @for (cartorio of cartorios; track cartorio) {
+            <mat-option [value]="cartorio.nome">{{cartorio.nome}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+     </div>
+    <div class=" inputs-row-form">
+      <mat-form-field class="search-field-grid">
+        <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="search()" />
+        <mat-icon matPrefix>search</mat-icon>
+      </mat-form-field>
+      <button style="margin-top:17px; margin-left: 20px; padding: 15px 50px;" (click)="search()" mat-stroked-button color="primary">Filtrar</button>
+      <button style="margin-top:17px; margin-left: 20px;" mat-raised-button color="primary"  (click)="adicionarNovo()">Novo Contratante</button>
+     </div>
+  </div>
+
+
+  <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef > Nome</th>
+      <td mat-cell *matCellDef="let element" > {{element.nome}} </td>
+    </ng-container>
+    <ng-container matColumnDef="cpf">
+      <th mat-header-cell *matHeaderCellDef > CPF </th>
+      <td mat-cell *matCellDef="let element"> {{element.cpf}} </td>
+    </ng-container>
+    <ng-container matColumnDef="cidade" >
+      <th mat-header-cell *matHeaderCellDef > Cidade</th>
+      <td mat-cell *matCellDef="let element" > {{element.cidade}} </td>
+    </ng-container>
+    <ng-container matColumnDef="estado" >
+      <th mat-header-cell *matHeaderCellDef >Estado</th>
+      <td mat-cell *matCellDef="let element" > {{element.estado}} </td>
+    </ng-container>
+    <ng-container matColumnDef="situacaoPagamento" >
+      <th mat-header-cell *matHeaderCellDef >Situacao de Pagamento</th>
+      <td mat-cell *matCellDef="let element" > {{element.situacaoPagamento}} </td>
+    </ng-container>
+    <ng-container matColumnDef="cartorio" >
+      <th mat-header-cell *matHeaderCellDef >Cartório</th>
+      <td mat-cell *matCellDef="let element" > {{element.cartorio.nome}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="data" >
+      <th mat-header-cell *matHeaderCellDef >Data</th>
+      <td mat-cell *matCellDef="let element" > {{element.data}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="valoresReceber" >
+      <th mat-header-cell *matHeaderCellDef >Valores a Receber</th>
+      <td mat-cell *matCellDef="let element" > {{element.valoresReceber}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="valoresRecebidos" >
+      <th mat-header-cell *matHeaderCellDef >Valores Recebidos</th>
+      <td mat-cell *matCellDef="let element" > {{element.valoresRecebidos}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="actions" class="">
+      <th mat-header-cell *matHeaderCellDef > Ações </th>
+      <td mat-cell *matCellDef="let element" >
+        <button class="icon-blue" mat-icon-button (click)="viewItem(element)">
+          <mat-icon >visibility</mat-icon>
+        </button>
+        <button class="icon-green" mat-icon-button (click)="editItem(element)">
+          <mat-icon >edit</mat-icon>
+        </button>
+        <button class="icon-red" mat-icon-button  (click)="deleteItem(element)">
+          <mat-icon >delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+</div>
+
+

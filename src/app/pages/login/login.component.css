@@ -1,0 +1,81 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 95vh;
+  width: 95vw;
+  background-color: #f0f2f5; /* Cor de fundo semelhante à do Facebook */
+}
+
+.mat-card {
+  max-width: 400px;
+  width: 100%;
+}
+
+.mat-card-header {
+  background-color: #4267b2; /* Cor de fundo do cabeçalho semelhante à do Facebook */
+}
+
+.mat-card-title {
+  color: #fff; /* Cor do texto do título do cabeçalho */
+}
+
+.mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+button {
+  width: 100%;
+}
+
+
+
+button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.login-links a {
+  text-decoration: none;
+  color: #4267b2; /* Cor do link semelhante à do Facebook */
+}
+
+.divider {
+  margin: 0 10px;
+  color: #555;
+}
+
+
+mat-form-field {
+  width: 100%;
+  box-sizing: border-box;
+  margin-bottom: 15px;
+}
+
+button {
+  width: 100%;
+  margin-top: 10px;
+}
+
+.login-links {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.login-links a {
+  text-decoration: none;
+  color: #4267b2; /* Cor do link semelhante à do Facebook */
+}
+
+.divider {
+  margin: 0 10px;
+  color: #555;
+}

@@ -1,13 +1,24 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { AuthService } from './auth/auth.service';
+import 'firebase/firestore';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
 export class AppComponent {
-  title = 'reubr_1';
+  constructor(private authService: AuthService) {}
+
+  isLoggedIn: boolean = true;
+  title = 'reurb';
+  isMenuOpen: boolean = false;
+
+  ngOnInit() {
+    this.isLoggedIn = this.authService.isLoggedIn;
+  }
+
+  onMenuToggled(isMenuOpen: any) {
+    this.isMenuOpen = isMenuOpen;
+  }
 }

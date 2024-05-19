@@ -1,0 +1,8 @@
+<h1 mat-dialog-title style="background-color: red; color: white;">ATENÇÃO!</h1>
+<div mat-dialog-content>
+  <p>Tem certeza que deseja excluir Usuário <b>"{{data.nome}}"?</b></p>
+</div>
+<div mat-dialog-actions>
+  <button mat-raised-button (click)="onYesClick()">Sim</button>
+  <button mat-raised-button color="warn" (click)="onCancelClick()" cdkFocusInitial >Cancelar</button>
+</div>

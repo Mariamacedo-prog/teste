@@ -1,0 +1,16 @@
+<div *ngIf="pdfSrc">
+  <iframe [src]="pdfSrc" type="application/pdf" width="200" height="200" > </iframe>
+</div>
+
+<div *ngIf="imagemSrc">
+  <img [src]="imagemSrc"  style="width:200px;height:200px;" alt="Imagem Selecionada" />
+</div>
+
+
+<div class="input-file-area">
+  <p class="input-file-titulo">{{nome}}</p>
+
+  <input type="file" [accept]="accept" (change)="onFileSelected($event)" #fileInput style="display: none" />
+  <button ></button>
+  <button mat-stroked-button color="primary" (click)="fileInput.click()">{{nomeBotao}}</button>
+</div>

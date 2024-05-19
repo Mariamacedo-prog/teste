@@ -1,0 +1,135 @@
+<div class="container-form ">
+  <mat-card class="card-form " >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Vendedor</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content >
+      <mat-tab-group >
+        <mat-tab  label="Dados Pessoais"> 
+          <div class="inputs-row-form">
+            <app-file-input [nome]="'Foto: '" 
+                            [accept]="'.jpg'"
+                            [fileInput]="this.fotoFormControl.value ? this.fotoFormControl.value : {base64: '',type: ''}"
+                            (fileOutput)="saveFileBase64($event)" 
+                            (fileSelected)="onFileSelected($event)">
+            </app-file-input>
+         
+        
+       
+        </div>
+        <mat-form-field>
+          <mat-label>Nome</mat-label>
+          <input [readonly]="visualizar"  matInput [formControl]="nomeFormControl" />
+          <mat-error *ngIf="nomeFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Email</mat-label>
+              <input [readonly]="visualizar"  type="email" matInput [formControl]="emailFormControl" placeholder="Ex.pat@example.com" />
+              <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                Please enter a valid email address
+              </mat-error>
+              <mat-error *ngIf="emailFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <mat-label>Telefone</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="telefoneFormControl" (input)="formatPhone()" />
+              <mat-error *ngIf="telefoneFormControl.hasError('pattern')">
+                Por favor digite um telefone válido.
+              </mat-error>
+              <mat-error *ngIf="telefoneFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>  
+          </div>
+    
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>CPF</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
+              <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+            </mat-form-field>
+      
+            <mat-form-field>
+              <mat-label>Documento de Identificação</mat-label>
+              <input [readonly]="visualizar"  matInput [formControl]="rgFormControl" />
+              <mat-error *ngIf="rgFormControl?.hasError('pattern')">
+                Número do RG inválido.
+              </mat-error>
+            </mat-form-field>
+          </div>          
+        </mat-tab>
+
+        <mat-tab label="Endereço"> 
+          <mat-form-field>
+            <mat-label>CEP</mat-label>
+            <input [readonly]="visualizar" (keyup)="findAddress()" maxlength="8" type="text" matInput [formControl]="cepFormControl" />
+            <mat-error *ngIf="cepFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Rua</mat-label>
+              <input [readonly]="visualizar"  type="text" matInput [formControl]="ruaFormControl" />
+              <mat-error *ngIf="ruaFormControl.hasError('required')" >
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label>Número</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="numeroFormControl" />
+                <mat-error *ngIf="numeroFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Complemento</mat-label>
+                <input [readonly]="visualizar"  type="text" matInput [formControl]="complementoFormControl" />
+                <mat-error *ngIf="complementoFormControl.hasError('required')" >
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <mat-form-field>
+            <mat-label>Bairro</mat-label>
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="bairroFormControl" />
+            <mat-error *ngIf="bairroFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>Cidade/UF</mat-label>
+            <input [readonly]="visualizar"  type="text" matInput [formControl]="cidadeUfFormControl" />
+            <mat-error *ngIf="cidadeUfFormControl.hasError('required')" >
+              Este campo é <strong>obrigatório</strong>
+            </mat-error>
+          </mat-form-field>
+        </mat-tab>
+      </mat-tab-group>
+
+
+
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId === '' || this.vendedorId === undefined">
+          <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+          <button  mat-raised-button color="link" routerLink="/vendedor/lista">Voltar</button>
+        </div>
+
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId !== '' && this.vendedorId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/vendedor/lista">Voltar</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -1,0 +1,35 @@
+.negativeButton{
+  margin: 10px;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  background-color: rgb(247, 104, 104);
+  transition: all ease 1s;
+  color: #fff;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.negativeButton:hover{
+  background-color: rgb(215, 66, 66);
+}
+.positiveButton{
+  margin: 10px;
+  width: 100%;
+  border: none;
+  padding: 10px;
+  transition: all ease 1s;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.positiveButton:hover{
+  background-color: rgb(81, 0, 255);
+  color: #fff;
+}
+
+.buttonArea{
+  display: flex;
+
+}

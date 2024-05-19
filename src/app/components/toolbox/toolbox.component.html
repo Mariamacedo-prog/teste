@@ -1,0 +1,11 @@
+<mat-card *ngIf="tooltip.info.titulo !== ''" class="toolbox-card" 
+  [ngClass]="{'toolbox-error': tooltip.info.tipo == 'error', 'toolbox-warning': tooltip.info.tipo == 'warning', 
+  'toolbox-success': tooltip.info.tipo == 'success', 'toolbox-off': tooltip.closeTooltip}">
+  <div class="toolbox-titulo">
+    <p>{{tooltip.info.titulo}}</p>
+    <button (click)="this.tooltip.closeTooltip = true">X</button>
+  </div>
+  <div class="toolbox-descricao">
+    <p>{{tooltip.info.descricao}}</p>
+  </div>
+</mat-card>

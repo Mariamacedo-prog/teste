@@ -1,0 +1,233 @@
+{
+  "usuarios":[
+    {
+      "id": 1,
+      "email":"teste@gmail.com",
+      "senha":"1111",
+      "nome": "Maria Macedo",
+      "telefone": "(11) 983475047",
+      "cpf":"1111"
+    }
+  ],
+  "acessos":[
+    {
+      "id": 2,
+      "nivelPermissao": "Total",
+      "usuario":{
+        "id": 1,
+        "email":"teste@gmail.com",
+        "nome": "Maria Macedo",
+        "telefone": "(11) 983475047",
+        "cpf":"1111",
+        "telas": []
+      },
+      "grupo":{
+        "id": 1,
+        "nome": "ADMIN",
+        "descricao": "Acesso total ao sistema",
+        "telas": []
+      }
+    },
+    {
+      "id": 3,
+      "nivelPermissao": "Visual",
+      "usuario":{
+        "id": 2,
+        "email":"teste111@gmail.com",
+        "nome": "Maria 2121 Macedo",
+        "telefone": "(11) 983471111",
+        "cpf":"86839129063",
+        "telas": []
+      },
+      "grupos":0
+    }
+  ],
+  "funcionarios":[
+  ],
+  "vendedores":[
+  ],
+  "contratantes":[
+  ],
+  "prefeituras":[
+  ],
+  "menu":[
+    {"icon": "group", "label": "Usuários", "route": "/usuario/lista"}, 
+    {"icon": "how_to_reg", "label": "Acessos", "route": "/acesso/lista"},
+    {"icon": "account_box", "label": "Funcionários", "route": "/funcionario/lista"},
+    {"icon": "tag_faces", "label": "Contratante", "route": "/contratante/lista"},
+    {"icon": "location_city", "label": "Imóvel", "route": "/imovel/lista"},
+    {"icon": "nature_people", "label": "Vendedores", "route": "/vendedor/lista"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/prefeitura/lista"},
+    {"icon": "gavel", "label": "Cartório", "route": "/cartorio/lista"},
+    {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista"}
+  ],
+  "menu2":[
+    {"icon": "group", "label": "Usuários", "route": "/usuario/lista"}, 
+    {"icon": "how_to_reg", "label": "Acessos", "route": "/acesso/lista"},
+    {"icon": "account_box", "label": "Funcionários", "route": "/funcionario/lista"},
+    {"icon": "tag_faces", "label": "Contratante", "route": "/contratante/lista"},
+    {"icon": "location_city", "label": "Imóvel", "route": "/imovel/lista"},
+    {"icon": "nature_people", "label": "Vendedores", "route": "/vendedor/lista"},
+    {"icon": "flag", "label": "Prefeitura", "route": "/prefeitura/lista"},
+    {"icon": "gavel", "label": "Cartório", "route": "/cartorio/lista"},
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "route": "/vendasPagamentos/lista"}, 
+    {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista"}, 
+    {"icon": "touch_app", "label": "Gerar Serviços/Contratos", "route": "/serviçosContratos/lista"},
+    {"icon": "attach_money", "label": "Valores", "route": "/valore/lista"},
+    {"icon": "credit_card", "label": "Pagamentos", "route": "/pagamento/lista"},
+    {"icon": "timeline", "label": "Juros/parcelamentos", "route": "/jurosParcelamento/lista"},
+    {"icon": "mail", "label": "Emissão ao cartório", "route": "/emissaoAoCartorio/lista"}, 
+    {"icon": "print", "label": "Importação", "route": "/importacao/lista"}
+  ],
+  "estadosBrasil": [
+    { "label": "Acre", "id": 1 },
+    { "label": "Alagoas", "id": 2 },
+    { "label": "Amapá", "id": 3 },
+    { "label": "Amazonas", "id": 4 },
+    { "label": "Bahia", "id": 5 },
+    { "label": "Ceará", "id": 6 },
+    { "label": "Distrito Federal", "id": 7 },
+    { "label": "Espírito Santo", "id": 8 },
+    { "label": "Goiás", "id": 9 },
+    { "label": "Maranhão", "id": 10 },
+    { "label": "Mato Grosso", "id": 11 },
+    { "label": "Mato Grosso do Sul", "id": 12 },
+    { "label": "Minas Gerais", "id": 13 },
+    { "label": "Pará", "id": 14 },
+    { "label": "Paraíba", "id": 15 },
+    { "label": "Paraná", "id": 16 },
+    { "label": "Pernambuco", "id": 17 },
+    { "label": "Piauí", "id": 18 },
+    { "label": "Rio de Janeiro", "id": 19 },
+    { "label": "Rio Grande do Norte", "id": 20 },
+    { "label": "Rio Grande do Sul", "id": 21 },
+    { "label": "Rondônia", "id": 22 },
+    { "label": "Roraima", "id": 23 },
+    { "label": "Santa Catarina", "id": 24 },
+    { "label": "São Paulo", "id": 25 },
+    { "label": "Sergipe", "id": 26 },
+    { "label": "Tocantins", "id": 27 }
+  ],
+  "estadoCivil": [
+      { "label": "Solteiro", "id": 1 },
+      { "label": "Casado", "id": 2 },
+      { "label": "Divorciado", "id": 3 },
+      { "label": "Viúvo", "id": 4 },
+      { "label": "União Estável", "id": 5 },
+      { "label": "Separado Judicialmente", "id": 6 }
+  ],
+  "gruposAcessos":[
+    {
+      "id": 1,
+      "nome": "ADMIN",
+      "descricao": "Acesso total ao sistema",
+      "telas": [
+        {
+            "tela": "Usuários",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Acessos",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Funcionários",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Contratante",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Imóvel",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Vendedores",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Prefeitura",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Cartório",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Vendas/pagamentos",
+            "nivel": "Total"
+        },
+        {
+            "tela": "Contratos",
+            "nivel": "Total"
+        }
+    ]
+    },
+    {
+      "id": 2,
+      "nome": "FUNC",
+      "descricao": "Acesso as telas de gestao",
+      "telas": []
+    }
+  ],
+  "telas":[
+    {"icon": "group", "label": "Usuários", "id": 1}, 
+    {"icon": "how_to_reg", "label": "Acessos", "id": 2},
+    {"icon": "account_box", "label": "Funcionários", "id":3},
+    {"icon": "tag_faces", "label": "Contratante", "id": 4},
+    {"icon": "location_city", "label": "Imóvel", "id": 5},
+    {"icon": "nature_people", "label": "Vendedores", "id": 6},
+    {"icon": "flag", "label": "Prefeitura", "id": 7},
+    {"icon": "gavel", "label": "Cartório", "id": 8},
+    {"icon": "local_atm", "label": "Vendas/pagamentos", "id": 9}, 
+    {"icon": "border_color", "label": "Contratos", "id": 10}
+  ],
+  "cartorios":[
+    {
+      "id": 1, 
+      "endereco":{
+        "rua": "Rua Salvador Gianetti",
+        "numero": "12",
+        "bairro": "Guaianazes",
+        "complemento": "",
+        "cidadeUf": "São Paulo / SP",
+        "cep": "08410000"
+      },
+      "representante":{
+        "nome":"Marcela teste",
+        "estadoCivil":"Casado",
+        "nacionalidade":"Brasileiro",
+        "cpf":"93733643089",
+        "rg":"412588821",
+        "cargo": "teste"
+      },
+      "cartorio":{
+        "nome":"Catorio name",
+        "cnpj":"22335935000161",
+        "cns":"123456",
+        "telefone": "(11) 983475047",
+        "email": "prefeitura@org.com"
+      }
+    }
+  ],
+  "contratos":[
+  ],
+  "vendasPagamentos":[
+  ],
+  "imoveis":[
+  ],
+  "empresa":[
+    {
+      "nome": "LC - REURB BRASIL Assessoria e consultoria Ltda",
+      "cnpj": "07.893.365/0001-31",
+      "endereco": {
+        "rua": "Rua Conselheiro Ribas",
+        "numero": "399",
+        "bairro": "Bairro Vila Anastácio",
+        "complemento": "a",
+        "cidadeUf": "São Paulo / SP"
+      }
+    }
+  ]
+}

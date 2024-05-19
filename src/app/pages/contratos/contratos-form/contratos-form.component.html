@@ -1,0 +1,163 @@
+<div class="container-form">
+  <mat-card class="card-form " >
+    <mat-card-header>
+      <mat-card-title>Cadastro de Contrato</mat-card-title>
+    </mat-card-header>
+
+
+    <form [formGroup]="formControls">
+      <mat-card-content >
+        <div formGroupName="contratante">
+
+          <button (click)="generateMatricula()" style="margin-left: 10px;" *ngIf="formControls.get('crf.numerocrf')?.value == 0" mat-stroked-button color="accent">Adicionar Matricula</button>
+          <mat-form-field>
+            <mat-label>CRF</mat-label>
+            <input disabled [readonly]="visualizar" matInput [value]="formControls.get('crf.numerocrf')?.value"/>
+          </mat-form-field>
+
+          <mat-form-field > 
+            <mat-label>CPF do Contratante</mat-label>
+            <input type="text"
+                  [readonly]="visualizar"
+                    matInput
+                    formControlName="cpf"
+                    [matAutocomplete]="autoCpf"
+                    (keyup)="handleKeyUpContratante($event)">
+            <mat-autocomplete autoActiveFirstOption #autoCpf="matAutocomplete">
+                <mat-option *ngFor="let option of filteredContratantes" [value]="option.cpf" (onSelectionChange)="selectContratante(option)">
+                  {{option.nome + " - " + option.cpf}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingCpf" mode="indeterminate"></mat-progress-bar>
+          </mat-form-field>
+        
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Nome</mat-label>
+              <input disabled [readonly]="visualizar"  matInput [value]="formControls.get('contratante.nome')?.value"/>
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>RG</mat-label>
+              <input [readonly]="visualizar"  matInput disabled  [value]="formControls.get('contratante.rg')?.value" />
+            </mat-form-field> 
+          </div>
+        </div>
+        
+        <div class="inputs-row-form" formGroupName="cartorio">
+          <mat-form-field class="example-full-width">
+            <mat-label>Nome do Cartório</mat-label>
+            <input disabled matInput [value]="formControls.get('cartorio.nome')?.value" >
+          </mat-form-field>
+
+          <mat-form-field>
+            <mat-label>CNS do Cartório</mat-label>
+            <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
+          </mat-form-field>
+        </div>
+
+        <mat-form-field *ngIf="imoveisList.length > 0 && (this.contratoId === '' || this.contratoId === undefined)">
+          <mat-label>Escolha o imovel</mat-label>
+          <mat-select (selectionChange)="changeImovel($event)">
+            @for (imovel of imoveisList; track imovel) {
+              <mat-option [value]="imovel">{{imovel.enderecoPorta.rua}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta && imovelDoContratante.enderecoPorta.rua != '' ">
+          <mat-label>Endereço Porta</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoPorta.rua + ', n '+ 
+          imovelDoContratante.enderecoPorta.numero + ' ' + imovelDoContratante.enderecoPorta.complemento + ', ' +
+          imovelDoContratante.enderecoPorta.bairro + ', ' + imovelDoContratante.enderecoPorta.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoDefinitivo && imovelDoContratante.enderecoDefinitivo.rua != ''">
+          <mat-label>Endereço Definitivo</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoDefinitivo.rua + ', n '+ 
+          imovelDoContratante.enderecoDefinitivo.numero + ' ' + imovelDoContratante.enderecoDefinitivo.complemento + ', ' +
+          imovelDoContratante.enderecoDefinitivo.bairro + ', ' + imovelDoContratante.enderecoDefinitivo.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+        <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoProjeto && imovelDoContratante.enderecoProjeto.rua != ''">
+          <mat-label>Endereço Projeto</mat-label>
+          <input disabled [readonly]="visualizar" matInput 
+          [value]="imovelDoContratante.enderecoProjeto.rua + ', n '+ 
+          imovelDoContratante.enderecoProjeto.numero + ' ' + imovelDoContratante.enderecoProjeto.complemento + ', ' +
+          imovelDoContratante.enderecoProjeto.bairro + ', ' + imovelDoContratante.enderecoProjeto.cidadeUf + ' '"
+          />
+        </mat-form-field>
+
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
+            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+            <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+          </div>
+  
+          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
+     
+            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+            <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+          </div>
+      </mat-card-content>
+      <br/> <br/> <br/>
+      <div *ngIf="contratoId" style="padding-right:20px;">
+        <app-pagamento-calculo [dataImovelInfo]="this.formControls.get('imovelId')?.value"  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
+      </div>
+    </form>
+
+
+
+   
+    <br/> <br/> <br/>
+    
+    <div *ngIf="showSignature" style="display: flex; align-items: center; justify-content: center;">
+      <app-signature-pad [active]="signButtomActive" (dataEvent)="receiveSignImage($event)" ></app-signature-pad>
+    </div>
+
+
+    <div style="display: flex; justify-content: space-between;" class="inputs-row-form">
+      <button [disabled]="formControls.get('assinaturaContratante')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaContratante' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaContratante')" > Assinatura CONTRATANTE</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaContratada')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaContratada' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaContratada')" >Assinatura CONTRATADA</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaTesteminha1')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaTesteminha1' ? 'primary' : 'link'"
+      (click)="generateSign('assinaturaTesteminha1')" >Assinatura Testemunhas 1</button>
+      <br/>
+      <button [disabled]="formControls.get('assinaturaTesteminha2')?.value != ''" 
+      mat-raised-button [color]="this.signButtomActive == 'assinaturaTesteminha2' ? 'primary' : 'link'" 
+      (click)="generateSign('assinaturaTesteminha2')" >Assinatura Testemunhas 2</button>
+    </div>
+    <br/>
+    <br/>
+    <br/>
+
+
+    <button *ngIf="contratoId" [disabled]="!formValid() || !showDownloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
+      <!-- <mat-icon>download</mat-icon> -->
+      Download Contrato
+    </button>
+    <br/>
+    <br/>
+
+  </mat-card>
+</div>
+
+
+
+
+
+
+
+
+
+
+

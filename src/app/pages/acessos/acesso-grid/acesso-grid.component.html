@@ -1,0 +1,95 @@
+
+<mat-card style="margin-top:90px;">
+  <mat-tab-group >
+
+    <mat-tab  label="Usuários"> 
+      <div class="page-container-grid" style="margin-top:50px;">
+        <h1>Listagem de Usuários</h1>
+        <div class="header-grid">
+          <mat-form-field class="search-field-grid">
+            <input matInput placeholder="Pesquisar por Nome, CPF ou Grupo" [(ngModel)]="searchTerm" (keyup)="procurar()" />
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+      
+          <button style="margin-top:17px;" mat-raised-button color="primary"  (click)="adicionarNovo()">Adicionar</button>
+        </div>
+      
+        <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef > Nome</th>
+            <td mat-cell *matCellDef="let element" > {{element.usuario.nome}} </td>
+          </ng-container>
+          <ng-container matColumnDef="cpf">
+            <th mat-header-cell *matHeaderCellDef > CPF </th>
+            <td mat-cell *matCellDef="let element"> {{element.usuario.cpf}} </td>
+          </ng-container>
+          <ng-container matColumnDef="grupo" >
+            <th mat-header-cell *matHeaderCellDef >Grupo </th>
+            <td mat-cell *matCellDef="let element" > {{element.grupo ? element.grupo.nome : 'Sem grupo'}}</td>
+          </ng-container>
+          <ng-container matColumnDef="actions" class="">
+            <th mat-header-cell *matHeaderCellDef > Ações </th>
+            <td mat-cell *matCellDef="let element" >
+              <button class="icon-blue" mat-icon-button (click)="visualizarItem(element)">
+                <mat-icon >visibility</mat-icon>
+              </button>
+              <button class="icon-green" mat-icon-button (click)="editarItem(element)">
+                <mat-icon >edit</mat-icon>
+              </button>
+              <button class="icon-red" mat-icon-button  (click)="deletarItem(element)">
+                <mat-icon >delete</mat-icon>
+              </button>
+              <button mat-stroked-button color="primary" disabled (click)="gerenciarPermissoes(element)" class="button-action"> Gerenciar Permissões</button>
+      
+              <button mat-stroked-button color="primary" disabled (click)="adicionarGrupo(element)" class="button-action">Adicionar a um Grupo</button>
+            </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <mat-tab  label="Grupos"> 
+      <div class="page-container-grid" style="margin-top:50px;">
+        <h1>Listagem de Grupos</h1>
+        <div class="header-grid">
+          <mat-form-field class="search-field-grid">
+            <input matInput placeholder="Pesquisar por Nome" [(ngModel)]="searchTermGrupo" (keyup)="procurarGrupo()" />
+            <mat-icon matPrefix>search</mat-icon>
+          </mat-form-field>
+      
+          <button style="margin-top:17px;" mat-raised-button color="primary"  (click)="adicionarNovoGrupo()">Adicionar</button>
+        </div>
+      
+        <table mat-table [dataSource]="dataGrupoSourceFilter" class="mat-elevation-z8">
+          <ng-container matColumnDef="nome">
+            <th mat-header-cell *matHeaderCellDef > Nome</th>
+            <td mat-cell *matCellDef="let element" > {{element.nome}} </td>
+          </ng-container>
+          <ng-container matColumnDef="actions" class="">
+            <th mat-header-cell *matHeaderCellDef > Ações </th>
+            <td mat-cell *matCellDef="let element" >
+              <button class="icon-blue" mat-icon-button disabled (click)="visualizarItem(element)">
+                <mat-icon >visibility</mat-icon>
+              </button>
+              <button class="icon-green" mat-icon-button disabled (click)="editarItem(element)">
+                <mat-icon >edit</mat-icon>
+              </button>
+              <button class="icon-red" mat-icon-button disabled (click)="deletarItem(element)">
+                <mat-icon >delete</mat-icon>
+              </button>
+              <button mat-stroked-button color="primary" disabled (click)="gerenciarPermissoes(element)" class="button-action"> Gerenciar Permissões</button>
+      
+              <button mat-stroked-button color="primary" disabled (click)="adicionarGrupo(element)" class="button-action">Adicionar participante</button>
+            </td>
+          </ng-container>
+      
+          <tr mat-header-row *matHeaderRowDef="displayedGrupoColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedGrupoColumns;"></tr>
+        </table>
+      </div>
+    </mat-tab>
+  </mat-tab-group >
+</mat-card>

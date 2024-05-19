@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "reubr_1": {
+    "reubr": {
       "projectType": "application",
       "schematics": {},
       "root": "",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:application",
           "options": {
-            "outputPath": "dist/reubr_1",
+            "outputPath": "dist/reubr",
             "index": "src/index.html",
             "browser": "src/main.ts",
             "polyfills": [
@@ -28,12 +28,7 @@
               "@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.css"
             ],
-            "scripts": [],
-            "server": "src/main.server.ts",
-            "prerender": true,
-            "ssr": {
-              "entry": "server.ts"
-            }
+            "scripts": []
           },
           "configurations": {
             "production": {
@@ -63,10 +58,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "reubr_1:build:production"
+              "buildTarget": "reubr:build:production"
             },
             "development": {
-              "buildTarget": "reubr_1:build:development"
+              "buildTarget": "reubr:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -74,7 +69,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "buildTarget": "reubr_1:build"
+            "buildTarget": "reubr:build"
           }
         },
         "test": {
