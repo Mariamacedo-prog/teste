@@ -2790,6 +2790,11 @@
     "@types/node" "*"
     "@types/send" "*"
 
+"@types/signature_pad@^2.3.6":
+  version "2.3.6"
+  resolved "https://registry.npmjs.org/@types/signature_pad/-/signature_pad-2.3.6.tgz#8bbd6c8b763d7e2d2f10b95bc3ddab62557a4869"
+  integrity sha512-v3j92gCQJoxomHhd+yaG4Vsf8tRS/XbzWKqDv85UsqjMGy4zhokuwKe4b6vhbgncKkh+thF+gpz6+fypTtnFqQ==
+
 "@types/sockjs@^0.3.33":
   version "0.3.36"
   resolved "https://registry.npmjs.org/@types/sockjs/-/sockjs-0.3.36.tgz#ce322cf07bcc119d4cbf7f88954f3a3bd0f67535"
@@ -6456,6 +6461,11 @@ signal-exit@^4.0.1:
   version "4.1.0"
   resolved "https://registry.npmjs.org/signal-exit/-/signal-exit-4.1.0.tgz#952188c1cbd546070e2dd20d0f41c0ae0530cb04"
   integrity sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==
+
+signature_pad@^4.2.0:
+  version "4.2.0"
+  resolved "https://registry.npmjs.org/signature_pad/-/signature_pad-4.2.0.tgz#7513cee8cb8afd6594d871c61cf4d61420601422"
+  integrity sha512-YLWysmaUBaC5wosAKkgbX7XI+LBv2w5L0QUcI6Jc4moHYzv9BUBJtAyNLpWzHjtjKTeWOH6bfP4a4pzf0UinfQ==
 
 sigstore@^2.2.0:
   version "2.3.1"
