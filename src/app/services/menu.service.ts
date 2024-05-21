@@ -12,10 +12,15 @@ export class MenuService {
     {"icon": "account_box", "label": "Funcionários", "route": "/funcionario/lista", id: 3},
     {"icon": "tag_faces", "label": "Contratante", "route": "/contratante/lista", id: 4},
     {"icon": "location_city", "label": "Imóvel", "route": "/imovel/lista", id: 5},
-    {"icon": "nature_people", "label": "Vendedores", "route": "/vendedor/lista", id: 6},
+    {"icon": "nature_people", "label": "Vendedores / Corretores", "route": "/vendedor/lista", id: 6},
     {"icon": "flag", "label": "Prefeitura", "route": "/prefeitura/lista", id: 7},
     {"icon": "gavel", "label": "Cartório", "route": "/cartorio/lista", id: 8},
-    {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista", id: 9}
+    {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista", id: 9},
+    {"icon": "touch_app", "label": "Status", "route": "/status/lista", id: 10},
+    {"icon": "attach_money", "label": "Planos", "route": "/planos/lista", id: 11},
+    {"icon": "local_atm", "label": "Vendas e Comissão", "route": "/vendasComissao/lista", id: 12},
+    {"icon": "credit_card", "label": "Núcleos", "route": "/nucleos/lista", id: 13}
+
   ]
   constructor(private firestore: AngularFirestore) {}
 
