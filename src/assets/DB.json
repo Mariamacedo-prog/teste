@@ -56,7 +56,7 @@
     {"icon": "account_box", "label": "Funcionários", "route": "/funcionario/lista"},
     {"icon": "tag_faces", "label": "Contratante", "route": "/contratante/lista"},
     {"icon": "location_city", "label": "Imóvel", "route": "/imovel/lista"},
-    {"icon": "nature_people", "label": "Vendedores", "route": "/vendedor/lista"},
+    {"icon": "nature_people", "label": "Vendedores/Corretores", "route": "/vendedor/lista"},
     {"icon": "flag", "label": "Prefeitura", "route": "/prefeitura/lista"},
     {"icon": "gavel", "label": "Cartório", "route": "/cartorio/lista"},
     {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista"}

@@ -40,8 +40,9 @@ export class PagamentoCalculoComponent {
   idParcelamento = 0;
   planos: TypeSelectValue[] = [
     {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Por imóvel de habitação'},
-    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 – Loteamento Lagos de San José'},
-    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 –  Associação recreativa Canto dos Pássaros'},
+    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Loteamento Lagos de San José'},
+    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Associação recreativa Canto dos Pássaros'},
+    {value: 6000, quant: 1, viewValue: 'Valor: R$6.000,00 - Condomínio Veneza II'},
     {value: 10000, quant: 1 ,viewValue: 'Valor: R$10.000,00 - Comercio'},
     {value: 12000, quant: 1 ,viewValue: 'Valor: R$12.000,00 - Indústria'},
     {value: 600, quant: 1, viewValue: 'Valor: R$600,00'},
