@@ -46,6 +46,7 @@ export class PagamentoCalculoComponent {
     {value: 10000, quant: 1 ,viewValue: 'Valor: R$10.000,00 - Comercio'},
     {value: 12000, quant: 1 ,viewValue: 'Valor: R$12.000,00 - Indústria'},
     {value: 600, quant: 1, viewValue: 'Valor: R$600,00'},
+    
   ];
   formControls!: FormGroup;
   optionsEntrada: TypeSelectValue[] = [];
