@@ -40,6 +40,8 @@ const routes: Routes = [
   // Rotas de planos
   { path: 'planos', loadChildren: () => import('./pages/planos/planos.module').then(m => m.PlanosModule) },
 
+  // Rotas de Status
+  { path: 'status', loadChildren: () => import('./pages/status/status.module').then(m => m.StatusModule) },
 ];
 
 

@@ -12,17 +12,17 @@ import { Router } from '@angular/router';
 @Injectable({
   providedIn: 'root' 
 })
-export class PlanosService {
+export class StatusService {
   private itemsCollection!: AngularFirestoreCollection<any>; 
 
   constructor(private firestore: AngularFirestore, private toolboxService: ToolboxService, private router: Router) {
-    this.itemsCollection = this.firestore.collection('planos');
+    this.itemsCollection = this.firestore.collection('status');
   }
 
   getItems(): Observable<any[]> {
-    return this.firestore.collection('planos').valueChanges({ idField: 'id' });
+    return this.itemsCollection.valueChanges({ idField: 'id' });
   }
-  
+
   async save(user: any): Promise<void> { 
     return await this.itemsCollection.add(user).then(() => undefined);
   }
@@ -35,7 +35,7 @@ export class PlanosService {
     try {
       await this.itemsCollection.doc(id).update(newData);
       this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/planos/lista']);
+      this.router.navigate(['/status/lista']);
     } catch (error) {
       this.toolboxService.showTooltip('error', 'Ocorreu um erro ao atualizar', 'ERROR!');
     }

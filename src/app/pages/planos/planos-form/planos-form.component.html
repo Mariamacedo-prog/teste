@@ -1,103 +1,99 @@
-  <!-- Cadastro de Planos de Pagamento
-		Ativar/inativar -->
+<div class="container-form ">
+  <mat-card class="card-form ">
+    <mat-card-header>
+      <mat-card-title>Cadastro de Plano</mat-card-title>
+    </mat-card-header>
 
+    <mat-card-content>
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input [readonly]="view" matInput [formControl]="nomeFormControl" />
+        <mat-error *ngIf="nomeFormControl.hasError('required')">
+          Este campo é <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
 
-    <div class="container-form ">
-      <mat-card class="card-form ">
-        <mat-card-header>
-          <mat-card-title>Cadastro de Plano</mat-card-title>
-        </mat-card-header>
-    
-        <mat-card-content>
-          <mat-form-field>
-            <mat-label>Nome</mat-label>
-            <input [readonly]="view" matInput [formControl]="nomeFormControl" />
-            <mat-error *ngIf="nomeFormControl.hasError('required')">
-              Este campo é <strong>obrigatório</strong>
-            </mat-error>
-          </mat-form-field>
-    
-          <div class="inputs-row-form">
-            <mat-form-field>
-              <mat-label >Forma de Pagamento</mat-label>
-              <mat-select required [disabled]="view" [formControl]="formaPagamentoFormControl" (selectionChange)="formaPagamentoSelected($event)" >
-                <mat-option value="debito">Débito</mat-option>
-                <mat-option value="credito">Crédito</mat-option>
-                <mat-option value="pix">Pix</mat-option>
-                <mat-option value="dinheiro">Dinheiro</mat-option>
-              </mat-select>
-              @if (formaPagamentoFormControl.hasError('required')) {
-                <mat-error>Este campo é <strong>obrigatório</strong></mat-error>
-              }
-            </mat-form-field>
-      
-            <mat-form-field>
-              <mat-label>Valor Total</mat-label>
-              <input [readonly]="view" type="text" matInput [formControl]="valorFormControl"  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');" />
-        
-              <mat-error *ngIf="valorFormControl.hasError('required')">
-                Este campo é <strong>obrigatório</strong>
-              </mat-error>
-            </mat-form-field> 
-          </div>
-
-          <div class="inputs-row-form">
-            <mat-form-field>
-              <mat-label >Porcentagem da Entrada</mat-label>
-              <mat-select [formControl]="entradaFormControl" >
-                <mat-option value="5"> 5% </mat-option>
-                <mat-option value="10"> 10% </mat-option>
-                <mat-option value="15"> 15% </mat-option>
-                <mat-option value="20"> 20% </mat-option>
-                <mat-option value="25"> 25% </mat-option>
-                <mat-option value="30"> 30% </mat-option>
-                <mat-option value="35"> 35% </mat-option>
-                <mat-option value="40"> 40% </mat-option>
-                <mat-option value="45"> 45% </mat-option>
-                <mat-option value="50"> 50% </mat-option>
-                <mat-option value="55"> 55% </mat-option>
-                <mat-option value="60"> 60% </mat-option>
-                <mat-option value="65"> 65% </mat-option>
-                <mat-option value="70"> 70% </mat-option>
-                <mat-option value="75"> 75% </mat-option>
-                <mat-option value="80"> 80% </mat-option>
-                <mat-option value="85"> 85% </mat-option>
-                <mat-option value="90"> 90% </mat-option>
-                <mat-option value="95"> 95% </mat-option>
-              </mat-select>
-              @if (entradaFormControl.hasError('required')) {
-                <mat-error>Este campo é <strong>obrigatório</strong></mat-error>
-              }
-            </mat-form-field>
-      
-            <mat-form-field>
-              <mat-label>Máximo de parcelas</mat-label>
-              <input [readonly]="view" type="number" matInput [formControl]="numeroParcelasFormControl" />
-              <mat-error *ngIf="numeroParcelasFormControl.hasError('required')">
-                Este campo é <strong>obrigatório</strong>
-              </mat-error>
-            </mat-form-field> 
-          </div>
-
-          <div class="inputs-row-form">
-              <mat-slide-toggle
-                  [formControl]="statusFormControl" 
-                  [checked]="this.statusFormControl"
-                  >
-                Status!
-              </mat-slide-toggle>
-          </div>
-    
-          <div class="area-botao-form " *ngIf="this.planoId === '' || this.planoId === undefined">
-            <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
-            <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
-            <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/planos/lista">Voltar</button>
-          </div>
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label >Forma de Pagamento</mat-label>
+          <mat-select required [disabled]="view" [formControl]="formaPagamentoFormControl" (selectionChange)="formaPagamentoSelected($event)" >
+            <mat-option value="debito">Débito</mat-option>
+            <mat-option value="credito">Crédito</mat-option>
+            <mat-option value="pix">Pix</mat-option>
+            <mat-option value="dinheiro">Dinheiro</mat-option>
+          </mat-select>
+          @if (formaPagamentoFormControl.hasError('required')) {
+            <mat-error>Este campo é <strong>obrigatório</strong></mat-error>
+          }
+        </mat-form-field>
   
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.planoId !== '' && this.planoId !== undefined">
-            <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
-            <button mat-raised-button color="link" routerLink="/planos/lista">Voltar</button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+        <mat-form-field>
+          <mat-label>Valor Total</mat-label>
+          <input [readonly]="view" type="text" matInput [formControl]="valorFormControl"  oninput="this.value = this.value.replace(/[^0-9]/g, '').replace(/(\..*?)\..*/g, '$1');" />
+    
+          <mat-error *ngIf="valorFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field> 
+      </div>
+
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label >Porcentagem da Entrada</mat-label>
+          <mat-select [formControl]="entradaFormControl" >
+            <mat-option value="5"> 5% </mat-option>
+            <mat-option value="10"> 10% </mat-option>
+            <mat-option value="15"> 15% </mat-option>
+            <mat-option value="20"> 20% </mat-option>
+            <mat-option value="25"> 25% </mat-option>
+            <mat-option value="30"> 30% </mat-option>
+            <mat-option value="35"> 35% </mat-option>
+            <mat-option value="40"> 40% </mat-option>
+            <mat-option value="45"> 45% </mat-option>
+            <mat-option value="50"> 50% </mat-option>
+            <mat-option value="55"> 55% </mat-option>
+            <mat-option value="60"> 60% </mat-option>
+            <mat-option value="65"> 65% </mat-option>
+            <mat-option value="70"> 70% </mat-option>
+            <mat-option value="75"> 75% </mat-option>
+            <mat-option value="80"> 80% </mat-option>
+            <mat-option value="85"> 85% </mat-option>
+            <mat-option value="90"> 90% </mat-option>
+            <mat-option value="95"> 95% </mat-option>
+          </mat-select>
+          @if (entradaFormControl.hasError('required')) {
+            <mat-error>Este campo é <strong>obrigatório</strong></mat-error>
+          }
+        </mat-form-field>
+  
+        <mat-form-field>
+          <mat-label>Máximo de parcelas</mat-label>
+          <input [readonly]="view" type="number" matInput [formControl]="numeroParcelasFormControl" />
+          <mat-error *ngIf="numeroParcelasFormControl.hasError('required')">
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field> 
+      </div>
+
+      <div class="inputs-row-form">
+          <mat-slide-toggle
+              [formControl]="statusFormControl" 
+              [checked]="this.statusFormControl"
+              >
+            Status!
+          </mat-slide-toggle>
+      </div>
+
+      <div class="area-botao-form " *ngIf="this.planoId === '' || this.planoId === undefined">
+        <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
+        <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
+        <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/planos/lista">Voltar</button>
+      </div>
+
+      <div class="area-botao-form " *ngIf="isLoggedIn && this.planoId !== '' && this.planoId !== undefined">
+        <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+        <button mat-raised-button color="link" routerLink="/planos/lista">Voltar</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

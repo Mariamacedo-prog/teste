@@ -17,8 +17,7 @@ export class MenuService {
     {"icon": "gavel", "label": "Cartório", "route": "/cartorio/lista", id: 8},
     {"icon": "border_color", "label": "Contratos", "route": "/contrato/lista", id: 9},
     {"icon": "attach_money", "label": "Planos", "route": "/planos/lista", id: 11},
-
-    // {"icon": "touch_app", "label": "Status", "route": "/status/lista", id: 10},
+    {"icon": "touch_app", "label": "Status", "route": "/status/lista", id: 10},
     // {"icon": "local_atm", "label": "Vendas e Comissão", "route": "/vendasComissao/lista", id: 12},
     // {"icon": "credit_card", "label": "Núcleos", "route": "/nucleos/lista", id: 13}
   ]
