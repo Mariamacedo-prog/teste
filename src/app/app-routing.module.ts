@@ -42,6 +42,9 @@ const routes: Routes = [
 
   // Rotas de Status
   { path: 'status', loadChildren: () => import('./pages/status/status.module').then(m => m.StatusModule) },
+
+  // Rotas de Nucleos
+  { path: 'nucleos', loadChildren: () => import('./pages/nucleos/nucleos.module').then(m => m.NucleosModule) },
 ];
 
 

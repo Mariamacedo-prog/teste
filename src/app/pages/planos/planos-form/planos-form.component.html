@@ -86,7 +86,6 @@
 
       <div class="area-botao-form " *ngIf="this.planoId === '' || this.planoId === undefined">
         <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
-        <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
         <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/planos/lista">Voltar</button>
       </div>
 

@@ -1,0 +1,75 @@
+<div class="container-form ">
+  <mat-card class="card-form ">
+
+    <mat-card-content>
+      <mat-card-subtitle>Digite o CEP para localizar o Bairro, Cidade e UF</mat-card-subtitle>  
+      @if (!view) {
+        <div class="inputs-row-form">
+          <mat-form-field>
+            <mat-label>CEP</mat-label>
+            <input [formControl]="cepFormControl"  (keyup)="findAddress()" maxlength="8" type="text" matInput />
+          </mat-form-field>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+      }
+
+      <mat-card-header>
+        <mat-card-title>Cadastro de Núcleo</mat-card-title>
+      </mat-card-header>
+  
+      <mat-form-field>
+        <mat-label>Nome</mat-label>
+        <input [readonly]="view" matInput [formControl]="nomeFormControl" />
+        <mat-error *ngIf="nomeFormControl.hasError('required')">
+          Este campo é <strong>obrigatório</strong>
+        </mat-error>
+      </mat-form-field>
+
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label>Bairro</mat-label>
+          <input [readonly]="view"  type="text" matInput [formControl]="bairroFormControl" />
+          <mat-error *ngIf="bairroFormControl.hasError('required')" >
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Cidade</mat-label>
+          <input [readonly]="view"  type="text" matInput [formControl]="cidadeFormControl" />
+          <mat-error *ngIf="cidadeFormControl.hasError('required')" >
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>UF</mat-label>
+          <input [readonly]="view"  type="text" matInput [formControl]="ufFormControl" />
+          <mat-error *ngIf="ufFormControl.hasError('required')" >
+            Este campo é <strong>obrigatório</strong>
+          </mat-error>
+        </mat-form-field>
+      </div>
+
+      <mat-form-field>
+        <mat-label>Planos</mat-label>
+        <mat-select [formControl]="planosFormControl" multiple>
+          @for (plano of planosList; track plano) {
+            <mat-option [value]="plano.id">{{plano.nome}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+      
+
+      <div class="area-botao-form " *ngIf="this.itemId === '' || this.itemId === undefined">
+        <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
+        <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/nucleos/lista">Voltar</button>
+      </div>
+
+      <div class="area-botao-form " *ngIf="isLoggedIn && this.itemId !== '' && this.itemId !== undefined">
+        <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+        <button mat-raised-button color="link" routerLink="/nucleos/lista">Voltar</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

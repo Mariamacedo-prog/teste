@@ -10,7 +10,6 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrl: './status-form.component.css'
 })
 export class StatusFormComponent {
-
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private service: StatusService) {}
 
