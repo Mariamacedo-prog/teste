@@ -37,6 +37,10 @@ export class StatusGridComponent {
     this.router.navigate(["/status/novo"]);
   }
 
+  updateAllByNucleo(){
+    this.router.navigate(["/status/atualizar/todos"]);
+  }
+
   search() {
     this.dataSourceFilter = this.dataSource.filter((item: any) => item.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || item.descricao.toLowerCase().includes(this.searchTerm.toLowerCase()));
     if(this.searchTerm.length == 0){

@@ -7,6 +7,9 @@ import { ContratosService } from '../../../services/contratos.service';
 import { ContratantesService } from '../../../services/contratantes.service';
 import { EmpresasService } from '../../../services/empresas.service';
 import { ImoveisService } from '../../../services/imoveis.service';
+import { VendedoresService } from '../../../services/vendedores.service';
+import { StatusService } from '../../../services/status.service';
+import { NucleoService } from '../../../services/nucleo.service';
 
 @Component({
   selector: 'app-contratos-form',
@@ -32,9 +35,20 @@ export class ContratosFormComponent {
   contratantes: any[] = [];
   filteredContratantes: any[] = [];
   loadingCpf: boolean = false;
+
+  vendedores: any[] = [];
+  filteredVendedores: any[] = [];
+  loadingVendedor: boolean = false;
+
+  status: any[] = [];
+
+  nucleos: any[] = [];
+  filteredNucleos: any[] = [];
+  loadingNucleo: boolean = false;
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private formBuilder: FormBuilder, private wordService: WordService, private contratosService: ContratosService, 
     private contratantesService: ContratantesService, private empresaService: EmpresasService, 
+    private vendedoresService: VendedoresService,  private statusService: StatusService, private nucleoService: NucleoService, 
     private imoveisService: ImoveisService) {
     }
 
@@ -83,13 +97,18 @@ export class ContratosFormComponent {
       assinaturaContratada: [''],
       assinaturaTesteminha1: [''],
       assinaturaTesteminha2: [''],
+      vendedor: [""],
+      vendedor_nome: [""],
+      nucleo: [""],
+      nucleo_nome: [""],
+      status: [""],
       imovelId: [''],
       contratante: this.contratanteFormControls,
       crf: this.crfFormControls,
       cartorio: this.cartorioFormControls,
       empresa: this.empresaFormControls
     });
-   
+
     this.route.params.subscribe(params => {
        this.contratoId = params['id'];
        if(params['tela'] == 'visualizar'){
@@ -103,6 +122,12 @@ export class ContratosFormComponent {
 
     this.findEmpresa();
 
+    this.findVendedores();
+
+    this.findStatus();
+
+    this.findNucleos();
+    
     if(this.contratoId){
       this.contratosService.findById(this.contratoId).subscribe(contrato => {
         this.formControls?.get('id')?.setValue(contrato.id);
@@ -111,6 +136,20 @@ export class ContratosFormComponent {
         this.formControls?.get('assinaturaContratada')?.setValue(contrato.assinaturaContratada);
         this.formControls?.get('assinaturaTesteminha1')?.setValue(contrato.assinaturaTesteminha1);
         this.formControls?.get('assinaturaTesteminha2')?.setValue(contrato.assinaturaTesteminha2);
+
+        if(contrato.vendedor){
+          this.formControls?.get('vendedor')?.setValue(contrato.vendedor);
+          this.formControls?.get('vendedor_nome')?.setValue(contrato.vendedor.nome);  
+        }
+
+        if(contrato.nucleo){
+          this.formControls?.get('nucleo')?.setValue(contrato.nucleo);
+          this.formControls?.get('nucleo_nome')?.setValue(contrato.nucleo.nome);  
+        }
+
+        if(contrato.status){
+          this.formControls?.get('status')?.setValue(contrato.status);
+        }
 
         this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
         this.formControls?.get('crf')?.get('crfentregue')?.setValue(contrato.crf.crfentregue);
@@ -136,12 +175,17 @@ export class ContratosFormComponent {
         this.findImovel();
       });
     }
-
   }
 
   findContratantes(){
     this.contratantesService.getItems().subscribe((contratantes)=>{
       this.contratantes = contratantes;
+    });
+  }
+
+  findVendedores(){
+    this.vendedoresService.getItems().subscribe((vendedores)=>{
+      this.vendedores = vendedores;
     });
   }
 
@@ -183,19 +227,37 @@ export class ContratosFormComponent {
     }
   }
 
+  findStatus(){
+    this.statusService.getItems().subscribe((status)=>{
+      this.status = status;
+    });
+  }
+
+  findNucleos(){
+    this.nucleoService.getItems().subscribe((nucleos)=>{
+      this.nucleos = nucleos;
+    });
+  }
+
   changeImovel(event: any){
     this.imovelDoContratante = event.value;
     this.formControls?.get('imovelId')?.setValue(event.value.id);
   }
 
-
   create() {
+    let nucleo = this.formControls?.get('nucleo')?.value;
+    this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
+    console.log(this.formControls.getRawValue())
+    
     this.contratosService.save(this.formControls.getRawValue());
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
     this.router.navigate(['/contrato/lista']);
   }
 
   update(){
+    let nucleo = this.formControls?.get('nucleo')?.value;
+    this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
+    console.log(this.formControls.getRawValue())
     this.contratosService.updateItem(this.contratoId, this.formControls.getRawValue())
   }
 
@@ -220,6 +282,7 @@ export class ContratosFormComponent {
       this.isLoggedIn = false;
     }
   }
+
 
   handleKeyUpContratante(event: any) {
     this.loadingCpf = true;
@@ -260,6 +323,69 @@ export class ContratosFormComponent {
     this.filteredContratantes = [];
     this.loadingCpf = false;
     this.findImovel();
+  }
+
+
+
+  handleKeyUpVendedor(event: any) {
+    this.loadingVendedor = true;
+    clearTimeout(this.timeoutId); 
+    const nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.searchVendedor(nome);
+      }, 2000); 
+    } else {
+      this.filteredVendedores = [];
+      this.loadingVendedor = false;
+    }
+  }
+  
+  searchVendedor(nome: string) {
+    this.vendedores.filter((item: any) => {
+      if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
+         this.filteredVendedores.push(item);
+      }  
+    });
+    this.loadingVendedor = false;
+  }
+
+  selectVendedor(item: any){
+    this.formControls?.get('vendedor')?.setValue(item);
+    this.formControls?.get('vendedor_nome')?.setValue(item.nome);
+    this.loadingVendedor = false;
+    console.log(this.formControls.getRawValue())
+  }
+
+
+  handleKeyUpNucleo(event: any) {
+    this.loadingNucleo = true;
+    clearTimeout(this.timeoutId); 
+    const nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.searchNucleo(nome);
+      }, 2000); 
+    } else {
+      this.filteredNucleos = [];
+      this.loadingNucleo = false;
+    }
+  }
+  
+  searchNucleo(nome: string) {
+    this.nucleos.filter((item: any) => {
+      if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
+         this.filteredNucleos.push(item);
+      }  
+    });
+    this.loadingNucleo = false;
+  }
+
+  selectNucleo(item: any){
+    this.formControls?.get('nucleo')?.setValue(item);
+    this.formControls?.get('nucleo_nome')?.setValue(item.nome);
+    this.loadingNucleo = false;
+    console.log(this.formControls.getRawValue())
   }
 
   receiveDataFromChild(data: any) {

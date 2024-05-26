@@ -53,7 +53,7 @@ export class NucleosFormComponent {
       });
     }
 
-    this.planoService.getItems().subscribe(planos => {
+    this.planoService.getActiveItems().subscribe(planos => {
       if (planos.length >= 0) {
         this.planosList = planos;
       }

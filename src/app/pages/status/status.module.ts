@@ -12,20 +12,25 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { MatCardModule } from '@angular/material/card';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSelectModule } from '@angular/material/select';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { AtualizarStatusNucleoFormComponent } from './atualizar-status-nucleo-form/atualizar-status-nucleo-form.component';
 
 const routes: Routes = [
   { path: 'form/:id', component: StatusFormComponent, canActivate: [authGuard] },
   { path: 'form/:id/:tela', component: StatusFormComponent, canActivate: [authGuard] },
   { path: 'novo', component: StatusFormComponent, canActivate: [authGuard] },
-  { path: 'lista', component:  StatusGridComponent, canActivate: [authGuard] }
+  { path: 'lista', component:  StatusGridComponent, canActivate: [authGuard] },
+  { path: 'atualizar/todos', component: AtualizarStatusNucleoFormComponent, canActivate: [authGuard] }
 ];
 
 
 @NgModule({
   declarations: [
     StatusFormComponent,
-    StatusGridComponent 
+    StatusGridComponent,
+    AtualizarStatusNucleoFormComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +39,9 @@ const routes: Routes = [
     MatInputModule,
     MatIconModule,
     MatButtonModule,
-    FormsModule, 
+    MatAutocompleteModule,
+    FormsModule,
+    MatProgressBarModule,
     ReactiveFormsModule,
     MatSlideToggleModule,
     MatCardModule,

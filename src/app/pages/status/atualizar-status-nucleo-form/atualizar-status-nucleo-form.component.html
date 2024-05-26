@@ -1,0 +1,39 @@
+<div class="container-form ">
+  <mat-card class="card-form ">
+    <mat-card-header>
+      <mat-card-title>Atualizar Status por Núcleo: </mat-card-title>
+      <mat-card-subtitle>Atualizar os status de todos os contratos que possuem o mesmo núcleo</mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <mat-form-field > 
+        <mat-label>Nucleo</mat-label>
+        <input type="text"
+                matInput
+                [formControl]="nucleoNomeFormControl"
+                [matAutocomplete]="autoNucleo"
+                (keyup)="handleKeyUpNucleo($event)">
+        <mat-autocomplete autoActiveFirstOption #autoNucleo="matAutocomplete">
+            <mat-option *ngFor="let option of filteredNucleos" [value]="option" (onSelectionChange)="selectNucleo(option)">
+              {{option.nome}}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-progress-bar *ngIf="loadingNucleo" mode="indeterminate"></mat-progress-bar>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-label>Status</mat-label>
+        <mat-select   [formControl]="statusFormControl">
+          @for (statusItem of status; track statusItem) {
+            <mat-option [value]="statusItem.id">{{statusItem.nome}}</mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+
+      <div class="area-botao-form ">
+        <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+        <button mat-raised-button color="link" routerLink="/status/lista">Voltar</button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

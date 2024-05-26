@@ -3,8 +3,6 @@
     <mat-card-header>
       <mat-card-title>Cadastro de Contrato</mat-card-title>
     </mat-card-header>
-
-
     <form [formGroup]="formControls">
       <mat-card-content >
         <div formGroupName="contratante">
@@ -56,6 +54,8 @@
           </mat-form-field>
         </div>
 
+       
+
         <mat-form-field *ngIf="imoveisList.length > 0 && (this.contratoId === '' || this.contratoId === undefined)">
           <mat-label>Escolha o imovel</mat-label>
           <mat-select (selectionChange)="changeImovel($event)">
@@ -92,34 +92,73 @@
           />
         </mat-form-field>
 
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
-            <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
-            <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
-          </div>
+
+          <mat-form-field > 
+            <mat-label>Vendedor</mat-label>
+            <input type="text"
+                    [readonly]="visualizar"
+                    matInput
+                    formControlName="vendedor_nome"
+                    [matAutocomplete]="autoVendedor"
+                    (keyup)="handleKeyUpVendedor($event)">
+            <mat-autocomplete autoActiveFirstOption #autoVendedor="matAutocomplete">
+                <mat-option *ngFor="let option of filteredVendedores" [value]="option" (onSelectionChange)="selectVendedor(option)">
+                  {{option.nome}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingVendedor" mode="indeterminate"></mat-progress-bar>
+          </mat-form-field>
+
+          <mat-form-field > 
+            <mat-label>Nucleo</mat-label>
+            <input type="text"
+                    [readonly]="visualizar"
+                    matInput
+                    formControlName="nucleo_nome"
+                    [matAutocomplete]="autoNucleo"
+                    (keyup)="handleKeyUpNucleo($event)">
+            <mat-autocomplete autoActiveFirstOption #autoNucleo="matAutocomplete">
+                <mat-option *ngFor="let option of filteredNucleos" [value]="option" (onSelectionChange)="selectNucleo(option)">
+                  {{option.nome}}
+                </mat-option>
+            </mat-autocomplete>
+            <mat-progress-bar *ngIf="loadingNucleo" mode="indeterminate"></mat-progress-bar>
+          </mat-form-field>
   
+          <mat-form-field>
+            <mat-label>Status</mat-label>
+            <mat-select formControlName="status">
+              @for (statusItem of status; track statusItem) {
+                <mat-option [value]="statusItem.id">{{statusItem.nome}}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+
           <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
-     
             <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
             <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
           </div>
       </mat-card-content>
       <br/> <br/> <br/>
+
+      
       <div *ngIf="contratoId" style="padding-right:20px;">
         <app-pagamento-calculo [dataImovelInfo]="this.formControls.get('imovelId')?.value"  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
       </div>
     </form>
-
-
-
-   
-    <br/> <br/> <br/>
-    
+    <br/>
+    <br/>
     <div *ngIf="showSignature" style="display: flex; align-items: center; justify-content: center;">
       <app-signature-pad [active]="signButtomActive" (dataEvent)="receiveSignImage($event)" ></app-signature-pad>
     </div>
 
+    
+    <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
+      <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+      <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+    </div>
 
-    <div style="display: flex; justify-content: space-between;" class="inputs-row-form">
+    <div style=" display: flex; justify-content: space-between;" class="inputs-row-form">
       <button [disabled]="formControls.get('assinaturaContratante')?.value != ''" 
       mat-raised-button [color]="this.signButtomActive == 'assinaturaContratante' ? 'primary' : 'link'" 
       (click)="generateSign('assinaturaContratante')" > Assinatura CONTRATANTE</button>
@@ -138,9 +177,6 @@
     </div>
     <br/>
     <br/>
-    <br/>
-
-
     <button *ngIf="contratoId" [disabled]="!formValid() || !showDownloadContrato || !parcelamentoInfo.id" mat-stroked-button  color="primary" (click)="generateWordFile()">
       <!-- <mat-icon>download</mat-icon> -->
       Download Contrato

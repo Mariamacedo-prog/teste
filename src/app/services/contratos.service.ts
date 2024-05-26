@@ -1,13 +1,12 @@
-
 import { Injectable } from '@angular/core';
 import 'firebase/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, from } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { firstValueFrom } from 'rxjs';
+import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 
 
 @Injectable({
@@ -56,4 +55,33 @@ export class ContratosService {
   deleteItem(id: any): Promise<void> {
     return this.itemsCollection.doc(id).delete();
   }
+
+  updateAllStatusByNucleo(nucleo: any, newStatus: any): Promise<void> {
+    try {
+      return this.firestore.collection('contratos', ref => ref.where('nucleo_nome', '==', nucleo.nome))
+        .get()
+        .toPromise()
+        .then((resp: any) => {
+  
+        let batch = this.firestore.firestore.batch();
+        resp.docs.forEach((userDocRef: any) => {
+          console.log("userDocRef", userDocRef.ref)
+          batch.update(userDocRef.ref, {'status': newStatus});
+          this.toolboxService.showTooltip('success', 'Atualizado com sucesso!', 'Sucesso!');
+          this.router.navigate(['/status/lista']);
+        })
+        batch.commit().catch(err => {
+          this.toolboxService.showTooltip('error', 'Não foi possível atualizar, verifique os dados e tente novamente!', 'ERROR!');
+          console.error(err)
+        });
+      }).catch((error: any) =>{ 
+        this.toolboxService.showTooltip('error', 'Não foi possível atualizar, verifique os dados e tente novamente!', 'ERROR!');
+        console.error(error)
+      })
+    } catch (error) {
+      this.toolboxService.showTooltip('error', 'Não foi possível atualizar, verifique os dados e tente novamente!', 'ERROR!');
+      throw new Error('Não foi possível atualizar, verifique os dados e tente novamente!');
+    }
+  }
 }
+

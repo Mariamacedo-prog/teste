@@ -20,8 +20,14 @@ export class PlanosService {
   }
 
   getItems(): Observable<any[]> {
-    return this.firestore.collection('planos').valueChanges({ idField: 'id' });
+    return this.itemsCollection.valueChanges({ idField: 'id' });
   }
+
+  getActiveItems(): Observable<any[]> {
+    return this.firestore.collection<any>('planos', ref => ref.where('status', '==', true))
+    .valueChanges({ idField: 'id' });
+  }
+
   
   async save(user: any): Promise<void> { 
     return await this.itemsCollection.add(user).then(() => undefined);

@@ -85,9 +85,11 @@
     
                   <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('quantidade')?.value > 1" >
                     <mat-label>Data da Final da Entrada</mat-label>
-                    <input [disabled]="true" [min]="minDate" matInput [matDatepicker]="picker"
-                 
-                    formControlName="dataUltimoPagamento" 
+                    <input 
+                      disabled [min]="minDate" 
+                      matInput 
+                      [matDatepicker]="picker"
+                      [value]="this.formControls.get('entrada')?.get('dataUltimoPagamento')?.value"
                       placeholder="dd/mm/yyyy">
                     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                     <mat-datepicker #picker ></mat-datepicker>
@@ -114,7 +116,7 @@
                   </mat-form-field>
                   <mat-form-field *ngIf="this.formControls?.get('parcelas')?.get('quantidade')?.value > 1" >
                     <mat-label>Data da Final da Parcela</mat-label>
-                    <input [disabled]="true" [min]="minDate"  matInput 
+                    <input disabled  [min]="minDate"  matInput 
                     [matDatepicker]="pickerParcela" 
                     [value]="this.formControls.get('parcelas')?.get('dataUltimoPagamento')?.value"  
                     placeholder="dd/mm/yyyy">
