@@ -36,7 +36,8 @@ export class VendedorFormComponent {
     agencia:'',
     conta: '',
     digito: '',
-    banco: ''
+    banco: '',
+    tipo: 0
   }
 
   nomeFormControl = new FormControl('', Validators.required);
@@ -58,7 +59,8 @@ export class VendedorFormComponent {
     agencia:'',
     conta: '',
     digito: '',
-    banco: ''
+    banco: '',
+    tipo: 0
   });
 
   ngOnInit(): void {

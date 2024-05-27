@@ -82,13 +82,13 @@
               }
             </mat-select>
           </mat-form-field>
-
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Banco</mat-label>
               <input [readonly]="visualizar" matInput [(ngModel)]="teste.banco" placeholder="Nome do banco" />
             </mat-form-field>
-      
+          </div>
+          <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Agencia</mat-label>
               <input [readonly]="visualizar" matInput [(ngModel)]="teste.agencia" placeholder="Agencia" />
@@ -104,7 +104,23 @@
               <input [readonly]="visualizar" matInput [(ngModel)]="teste.digito" placeholder="Digito" />
             </mat-form-field>
           </div>
-          
+          <div class="inputs-row-form">
+            <mat-form-field>
+              <mat-label>Banco</mat-label>
+              <input [readonly]="visualizar" matInput [(ngModel)]="teste.banco" placeholder="Nome do banco" />
+            </mat-form-field>
+
+            <mat-form-field>
+              <mat-label>Tipo: </mat-label>
+              <mat-select [(ngModel)]="teste.tipo">
+                <mat-option [value]="1">Conta Corrente</mat-option>
+                <mat-option [value]="2">Conta Poupança</mat-option>
+              </mat-select>
+              <mat-error *ngIf="perfilFormControl.hasError('required')">
+                Este campo é <strong>obrigatório</strong>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </mat-tab>
         <mat-tab label="Endereço"> 
           <mat-form-field>
