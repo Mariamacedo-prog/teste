@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ export class VendedorFormComponent {
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
-    private vendedoresService: VendedoresService) {}
+    private vendedoresService: VendedoresService,  private formBuilder: FormBuilder) {}
 
   vendedorId = "";
   isLoggedIn: boolean = false;
@@ -24,7 +24,20 @@ export class VendedorFormComponent {
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
-  
+  pagList: any[] = [
+    { id: 1, nome: 'Cartão de Crédito' },
+    { id: 2, nome: 'Boleto Bancário' },
+    { id: 3, nome: 'Carteira Digital' },
+    { id: 4, nome: 'PIX' },
+    { id: 5, nome: 'Transferência Bancária' }
+  ]
+
+  teste = {
+    agencia:'',
+    conta: '',
+    digito: '',
+    banco: ''
+  }
 
   nomeFormControl = new FormControl('', Validators.required);
   cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
@@ -38,7 +51,15 @@ export class VendedorFormComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
   fotoFormControl = new FormControl({base64: '',type: ''});
+  perfilFormControl = new FormControl('', Validators.required);
+  formaPagamentoFormControl = new FormControl([], Validators.required);
 
+  dadosBancariosFormControls = new FormControl({
+    agencia:'',
+    conta: '',
+    digito: '',
+    banco: ''
+  });
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -53,7 +74,7 @@ export class VendedorFormComponent {
 
     if(this.vendedorId){
       this.vendedoresService.findById(this.vendedorId).subscribe(vendedor => {
-        this.nomeFormControl.setValue(vendedor.nome);
+            this.nomeFormControl.setValue(vendedor.nome);
             this.cpfFormControl.setValue(vendedor.cpf);
             this.emailFormControl.setValue(vendedor.email);
             this.telefoneFormControl.setValue(vendedor.telefone);
@@ -65,6 +86,13 @@ export class VendedorFormComponent {
             this.cidadeUfFormControl.setValue(vendedor.cidadeUf);
             this.cepFormControl.setValue(vendedor.cep);
             this.fotoFormControl.patchValue(vendedor.foto);
+            this.perfilFormControl.setValue(vendedor.perfil);
+            this.formaPagamentoFormControl.setValue(vendedor.formaPagamento);
+      
+            if(vendedor.dadosBancarios){
+              this.dadosBancariosFormControls.setValue(vendedor.dadosBancarios);
+              this.teste = vendedor.dadosBancarios;
+            }
       });
     }
   }
@@ -82,7 +110,10 @@ export class VendedorFormComponent {
       "email": this.emailFormControl.value,
       "telefone":this.telefoneFormControl.value,
       "cep": this.cepFormControl.value,
-      "foto": this.fotoFormControl.value
+      "foto": this.fotoFormControl.value,
+      "perfil": this.perfilFormControl.value,
+      "formaPagamento": this.formaPagamentoFormControl.value,
+      "dadosBancarios": this.teste
     };
  
     if(item.cpf){
@@ -115,7 +146,10 @@ export class VendedorFormComponent {
           "complemento": this.complementoFormControl.value,
           "cidadeUf": this.cidadeUfFormControl.value,
           "cep": this.cepFormControl.value,
-          "foto": this.fotoFormControl.value
+          "foto": this.fotoFormControl.value,
+          "perfil": this.perfilFormControl.value,
+          "formaPagamento": this.formaPagamentoFormControl.value,
+          "dadosBancarios": this.teste
         };
     if(item.cpf){
       this.vendedoresService.updateItem(this.vendedorId, item)
@@ -131,7 +165,9 @@ export class VendedorFormComponent {
         this.bairroFormControl.valid &&
         this.cidadeUfFormControl.valid &&
         this.emailFormControl.valid &&
-        this.telefoneFormControl.valid
+        this.telefoneFormControl.valid &&
+        this.perfilFormControl.valid &&
+        this.formaPagamentoFormControl.valid
     );
   }
 

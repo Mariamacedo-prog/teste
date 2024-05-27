@@ -86,29 +86,31 @@ export class PagamentoCalculoComponent {
       isAvista: false,
       valorAvista: [null, Validators.required],
     });
-    
-    setTimeout(() => {
-      if(this.dataPlanos.planos && this.dataPlanos.planos.length > 0) {
-        this.planosFiltered = [];
-        for(let i = 0; i < this.dataPlanos.planos.length; i++) {
-          this.planos.find((item) => {
-            if(item.id === this.dataPlanos.planos[i]){
-              this.planosFiltered.push(item)
-            }
-          })
-        }
-      }
-    }, 3000);
 
     this.findPlanos();
     this.verificarContratante();
-    this.calculateDataFinalEntrada();
   }
 
   findPlanos(){
     this.planosService.getItems().subscribe((planos: any)=>{
       this.planos = planos;
       this.planosFiltered = planos;
+
+      setTimeout(() => {
+        
+        this.registrarValores();
+        this.calculateDataFinalEntrada();
+        if(this.dataPlanos.planos && this.dataPlanos.planos.length > 0) {
+          this.planosFiltered = [];
+          for(let i = 0; i < this.dataPlanos.planos.length; i++) {
+            this.planos.find((item) => {
+              if(item.id === this.dataPlanos.planos[i]){
+                this.planosFiltered.push(item)
+              }
+            })
+          }
+        }
+      }, 3000);
     });
   }
 
@@ -146,7 +148,6 @@ export class PagamentoCalculoComponent {
               this.formControls?.get('maxParcelas')?.setValue(venda.maxParcelas);
             }
             
-            this.registrarValores();
             this.formControls?.get('id')?.setValue(venda.id);
             this.formControls?.get('isAvista')?.setValue(venda.isAvista);
             this.formControls?.get('valorAvista')?.setValue(venda.valorAvista);
@@ -186,6 +187,7 @@ export class PagamentoCalculoComponent {
               this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(data);
             }
             this.formControls?.get('entrada')?.get('quantidade')?.setValue(venda?.entrada?.quantidade);
+            console.log(venda?.entrada?.valor)
             this.formControls?.get('entrada')?.get('valor')?.setValue(venda?.entrada?.valor);
             this.formControls?.get('entrada')?.get('valorTotal')?.setValue(venda?.entrada?.valorTotal);
     

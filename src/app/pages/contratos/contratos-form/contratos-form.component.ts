@@ -102,6 +102,8 @@ export class ContratosFormComponent {
       nucleo: [""],
       nucleo_nome: [""],
       status: [""],
+      createdAt: [null],
+      updatedAt: [null],
       imovelId: [''],
       contratante: this.contratanteFormControls,
       crf: this.crfFormControls,
@@ -149,6 +151,14 @@ export class ContratosFormComponent {
 
         if(contrato.status){
           this.formControls?.get('status')?.setValue(contrato.status);
+        }
+
+        if(contrato.createdAt){
+          this.formControls?.get('createdAt')?.setValue(contrato.createdAt);
+        }
+        
+        if(contrato.updatedAt){
+          this.formControls?.get('updatedAt')?.setValue(contrato.updatedAt); 
         }
 
         this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
@@ -249,7 +259,7 @@ export class ContratosFormComponent {
     if(nucleo){
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
-    
+    this.formControls?.get('createdAt')?.setValue(new Date());
     this.contratosService.save(this.formControls.getRawValue());
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
     this.router.navigate(['/contrato/lista']);
@@ -260,6 +270,7 @@ export class ContratosFormComponent {
     if(nucleo){
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
+    this.formControls?.get('updatedAt')?.setValue(new Date());
     this.contratosService.updateItem(this.contratoId, this.formControls.getRawValue())
   }
 

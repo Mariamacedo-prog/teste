@@ -13,7 +13,7 @@ import { DialogComponent } from '../../../components/dialog/dialog.component';
   styleUrl: './contratos-grid.component.css'
 })
 export class ContratosGridComponent {
-  displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'statusEntrega', 'cartorio','crfEntregue','nCrf', 'actions'];
+  displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'statusEntrega', 'cartorio', 'vendedor', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
@@ -51,7 +51,7 @@ export class ContratosGridComponent {
       this.dataSourceFilter = this.dataSource;
     }
 
-    this.dataSourceFilter = this.dataSource.filter((contrato: any) => contrato.contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contrato.contratante.cpf.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((contrato: any) => contrato.contratante.nome.toLowerCase().includes(this.searchTerm.toLowerCase()) || contrato.contratante.cpf.includes(this.searchTerm) || (contrato?.vendedor?.nome?.toLowerCase().includes(this.searchTerm.toLowerCase())));
  
     if(this.cartorioSearch != ''){
       this.dataSourceFilter = this.dataSourceFilter.filter((contrato: any) => contrato.cartorio.nome.toLowerCase().includes(this.cartorioSearch.toLowerCase()));

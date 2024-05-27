@@ -48,7 +48,7 @@
 
     <div class="inputs-row-form">
       <mat-form-field class="search-field">
-        <input matInput placeholder="Pesquisar por Nome, CPF, CRF e Contatante" [(ngModel)]="searchTerm" (keyup)="search()" />
+        <input matInput placeholder="Pesquisar por Nome, CPF, Vendedor e Contatante" [(ngModel)]="searchTerm" (keyup)="search()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
       
@@ -80,7 +80,12 @@
       <td mat-cell *matCellDef="let element" > {{element.cartorio.nome}} </td>
     </ng-container>
 
-    <ng-container matColumnDef="crfEntregue" >
+    <ng-container matColumnDef="vendedor" >
+      <th mat-header-cell *matHeaderCellDef >Vendedor</th>
+      <td mat-cell *matCellDef="let element" > {{element?.vendedor?.nome }} </td>
+    </ng-container>
+
+    <!-- <ng-container matColumnDef="crfEntregue" >
       <th mat-header-cell *matHeaderCellDef >CRF Entregue</th>
       <td mat-cell *matCellDef="let element" > {{element.crf.crfentregue}} </td>
     </ng-container>
@@ -88,7 +93,7 @@
     <ng-container matColumnDef="nCrf" >
       <th mat-header-cell *matHeaderCellDef >nº da CRF</th>
       <td mat-cell *matCellDef="let element" > {{element.crf.numerocrf}} </td>
-    </ng-container>
+    </ng-container> -->
 
     <ng-container matColumnDef="actions" class="">
       <th mat-header-cell *matHeaderCellDef > Ações </th>
