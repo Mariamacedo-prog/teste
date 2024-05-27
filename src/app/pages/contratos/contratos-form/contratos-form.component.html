@@ -93,57 +93,57 @@
         </mat-form-field>
 
 
-          <mat-form-field > 
-            <mat-label>Vendedor</mat-label>
-            <input type="text"
-                    [readonly]="visualizar"
-                    matInput
-                    formControlName="vendedor_nome"
-                    [matAutocomplete]="autoVendedor"
-                    (keyup)="handleKeyUpVendedor($event)">
-            <mat-autocomplete autoActiveFirstOption #autoVendedor="matAutocomplete">
-                <mat-option *ngFor="let option of filteredVendedores" [value]="option" (onSelectionChange)="selectVendedor(option)">
-                  {{option.nome}}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-progress-bar *ngIf="loadingVendedor" mode="indeterminate"></mat-progress-bar>
-          </mat-form-field>
+        <mat-form-field > 
+          <mat-label>Vendedor</mat-label>
+          <input type="text"
+                  [readonly]="visualizar"
+                  matInput
+                  formControlName="vendedor_nome"
+                  [matAutocomplete]="autoVendedor"
+                  (keyup)="handleKeyUpVendedor($event)">
+          <mat-autocomplete autoActiveFirstOption #autoVendedor="matAutocomplete">
+              <mat-option *ngFor="let option of filteredVendedores" [value]="option" (onSelectionChange)="selectVendedor(option)">
+                {{option.nome}}
+              </mat-option>
+          </mat-autocomplete>
+          <mat-progress-bar *ngIf="loadingVendedor" mode="indeterminate"></mat-progress-bar>
+        </mat-form-field>
 
-          <mat-form-field > 
-            <mat-label>Nucleo</mat-label>
-            <input type="text"
-                    [readonly]="visualizar"
-                    matInput
-                    formControlName="nucleo_nome"
-                    [matAutocomplete]="autoNucleo"
-                    (keyup)="handleKeyUpNucleo($event)">
-            <mat-autocomplete autoActiveFirstOption #autoNucleo="matAutocomplete">
-                <mat-option *ngFor="let option of filteredNucleos" [value]="option" (onSelectionChange)="selectNucleo(option)">
-                  {{option.nome}}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-progress-bar *ngIf="loadingNucleo" mode="indeterminate"></mat-progress-bar>
-          </mat-form-field>
+        <mat-form-field > 
+          <mat-label>Nucleo</mat-label>
+          <input type="text"
+                  [readonly]="visualizar"
+                  matInput
+                  formControlName="nucleo_nome"
+                  [matAutocomplete]="autoNucleo"
+                  (keyup)="handleKeyUpNucleo($event)">
+          <mat-autocomplete autoActiveFirstOption #autoNucleo="matAutocomplete">
+              <mat-option *ngFor="let option of filteredNucleos" [value]="option" (onSelectionChange)="selectNucleo(option)">
+                {{option.nome}}
+              </mat-option>
+          </mat-autocomplete>
+          <mat-progress-bar *ngIf="loadingNucleo" mode="indeterminate"></mat-progress-bar>
+        </mat-form-field>
   
-          <mat-form-field>
-            <mat-label>Status</mat-label>
-            <mat-select formControlName="status">
-              @for (statusItem of status; track statusItem) {
-                <mat-option [value]="statusItem.id">{{statusItem.nome}}</mat-option>
-              }
-            </mat-select>
-          </mat-form-field>
+        <mat-form-field>
+          <mat-label>Status</mat-label>
+          <mat-select formControlName="status">
+            @for (statusItem of status; track statusItem) {
+              <mat-option [value]="statusItem.id">{{statusItem.nome}}</mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
 
-          <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
-            <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
-            <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
-          </div>
+        <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
+          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
+        </div>
       </mat-card-content>
       <br/> <br/> <br/>
 
       
-      <div *ngIf="contratoId" style="padding-right:20px;">
-        <app-pagamento-calculo [dataImovelInfo]="this.formControls.get('imovelId')?.value"  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
+      <div *ngIf="contratoId && !loadingNucleo" style="padding-right:20px;">
+        <app-pagamento-calculo [dataPlanos]="formControls.get('nucleo')?.getRawValue()" [dataImovelInfo]="this.formControls.get('imovelId')?.value"  [dataContratanteInfo]="formControls.get('contratante')?.getRawValue()" (dataEvent)="receiveDataFromChild($event)"></app-pagamento-calculo>
       </div>
     </form>
     <br/>

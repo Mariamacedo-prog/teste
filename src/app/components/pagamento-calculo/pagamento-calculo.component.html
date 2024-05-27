@@ -30,24 +30,24 @@
                 <mat-form-field >
                   <mat-label>Tipo De Plano</mat-label>
                   <mat-select  (selectionChange)="changePlano($event)" formControlName="plano" >
-                    <mat-option *ngFor="let plano of planos;" [value]="plano.value" >
-                      {{ plano.viewValue }}
+                    <mat-option *ngFor="let plano of planosFiltered;" [value]="plano.id" >
+                      {{ plano.valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' }) + " - " + plano.nome}}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
        
                 <mat-slide-toggle
-                *ngIf="formControls.get('plano')?.value > 600"
-                color="primary"
-                formControlName="isAvista"
-                (change)="pagamentoAvista($event)"
-                style="margin-bottom: 50px;"
-                >Pagamento à vista</mat-slide-toggle>
+                  *ngIf="formControls.get('plano_valor')?.value > 600"
+                  color="primary"
+                  formControlName="isAvista"
+                  (change)="pagamentoAvista($event)"
+                  style="margin-bottom: 50px;"
+                  >Pagamento à vista</mat-slide-toggle>
 
-                <div class="inputs-row-form" *ngIf="this.formControls?.get('isAvista')?.value ==true && this.formControls.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+                <div class="inputs-row-form" *ngIf="this.formControls?.get('isAvista')?.value ==true && this.formControls.get('plano_valor')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
                     <mat-form-field  >
                       <mat-label>Valor à vista</mat-label>
-                      <input matInput [value]="(this.formControls.get('plano')?.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
+                      <input matInput [value]="(this.formControls.get('plano_valor')?.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
                     </mat-form-field>
                     <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
                       <mat-label>Data do Pagamento</mat-label>
@@ -60,15 +60,17 @@
                     </mat-form-field>
                 </div>
             
-              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('plano')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
+              <div *ngIf="this.formControls?.get('isAvista')?.value ==false && this.formControls?.get('plano_valor')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
                 <mat-form-field  >
                   <mat-label>Entrada</mat-label>
                   <mat-select  (selectionChange)="changeEntrada($event)" formControlName="valor">
-                    <mat-option *ngFor="let entrada of optionsEntrada;" [value]="entrada.value" >
+                    <mat-option *ngFor="let entrada of optionsEntrada;" [value]="entrada.valor" >
                       {{ entrada.viewValue }}
                     </mat-option>
                   </mat-select>
                 </mat-form-field>
+                <div>
+                </div>
                 <div class="inputs-row-form">
                   <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
                     <mat-label>Data da Primeira parcela da Entrada</mat-label>
@@ -101,7 +103,7 @@
                 <mat-form-field  >
                   <mat-label>Parcelas</mat-label>
                   <mat-select (selectionChange)="changeParcela($event)" formControlName="valor">
-                    <mat-option *ngFor="let parcela of optionsParcelas;" [value]="parcela.value"  >
+                    <mat-option *ngFor="let parcela of optionsParcelas;" [value]="parcela.valor"  >
                       {{ parcela.viewValue }}
                     </mat-option>
                   </mat-select>

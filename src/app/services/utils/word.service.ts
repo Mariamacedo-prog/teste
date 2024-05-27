@@ -465,7 +465,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                   size:25, 
                   font: "Arial"
                 },
-                { text: `${parcelamentoInfo?.plano?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`, 
+                { text: `${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`, 
                   bold:true, 
                   size:25, 
                   font: "Arial"
@@ -485,7 +485,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 font: "Arial"
               }]),
               this.gerarParagrafo(
-                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ?"        • 10% (dez por cento) de entrada, ": "",
+                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ? `        • ${parcelamentoInfo?.entrada?.porcentagem ? (parcelamentoInfo?.entrada?.porcentagem * 100) + '%' : '10% (dez por cento)'} de entrada, `: "",
                   bold:true,
                   size:25, 
                   font: "Arial"
@@ -510,7 +510,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                 }
               ]),
               this.gerarParagrafo(
-                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ? "        • O restante, equivalente a 90% (noventa por cento), " : "",
+                [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 ? `        • O restante, equivalente a ${parcelamentoInfo?.parcelas?.porcentagem ? (parcelamentoInfo?.parcelas?.porcentagem * 100 + '%'): '90%  (noventa por cento)'}, ` : "",
                     bold:true,
                     size:25, 
                     font: "Arial"
@@ -519,7 +519,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                     size:25, 
                     font: "Arial"
                   },
-                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `30 (trinta) `: "", 
+                  { text:parcelamentoInfo?.parcelas?.quantidade > 0 ? `${parcelamentoInfo?.parcelas?.quantidade} `: "", 
                     bold:true,
                     size:25, 
                     font: "Arial"

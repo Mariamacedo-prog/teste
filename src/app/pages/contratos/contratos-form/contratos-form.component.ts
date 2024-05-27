@@ -246,8 +246,9 @@ export class ContratosFormComponent {
 
   create() {
     let nucleo = this.formControls?.get('nucleo')?.value;
-    this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
-    console.log(this.formControls.getRawValue())
+    if(nucleo){
+      this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
+    }
     
     this.contratosService.save(this.formControls.getRawValue());
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
@@ -256,8 +257,9 @@ export class ContratosFormComponent {
 
   update(){
     let nucleo = this.formControls?.get('nucleo')?.value;
-    this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
-    console.log(this.formControls.getRawValue())
+    if(nucleo){
+      this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
+    }
     this.contratosService.updateItem(this.contratoId, this.formControls.getRawValue())
   }
 
@@ -296,7 +298,6 @@ export class ContratosFormComponent {
       this.filteredContratantes = [];
     }
   }
-  
   searchContratantes(cpf: string) {
     this.contratantes.filter((item: any) => {
       if(item.cpf?.includes(cpf)){
@@ -305,7 +306,6 @@ export class ContratosFormComponent {
     });
     this.loadingCpf = false;
   }
-
   selectContratante(item: any){
     this.formControls?.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
     this.formControls?.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
@@ -340,7 +340,6 @@ export class ContratosFormComponent {
       this.loadingVendedor = false;
     }
   }
-  
   searchVendedor(nome: string) {
     this.vendedores.filter((item: any) => {
       if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
@@ -349,7 +348,6 @@ export class ContratosFormComponent {
     });
     this.loadingVendedor = false;
   }
-
   selectVendedor(item: any){
     this.formControls?.get('vendedor')?.setValue(item);
     this.formControls?.get('vendedor_nome')?.setValue(item.nome);
@@ -362,7 +360,7 @@ export class ContratosFormComponent {
     this.loadingNucleo = true;
     clearTimeout(this.timeoutId); 
     const nome = event.target.value.trim();
-    if (nome.length >= 3) {
+    if (nome.length >= 1) {
       this.timeoutId = setTimeout(() => {
         this.searchNucleo(nome);
       }, 2000); 
@@ -371,7 +369,6 @@ export class ContratosFormComponent {
       this.loadingNucleo = false;
     }
   }
-  
   searchNucleo(nome: string) {
     this.nucleos.filter((item: any) => {
       if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
@@ -380,8 +377,8 @@ export class ContratosFormComponent {
     });
     this.loadingNucleo = false;
   }
-
   selectNucleo(item: any){
+    this.filteredNucleos = []
     this.formControls?.get('nucleo')?.setValue(item);
     this.formControls?.get('nucleo_nome')?.setValue(item.nome);
     this.loadingNucleo = false;
