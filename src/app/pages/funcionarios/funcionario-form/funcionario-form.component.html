@@ -42,9 +42,11 @@
           </div>
     
           <mat-form-field>
-            <mat-label>CPF</mat-label>
+            <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length <= 11">CPF</mat-label>
+            <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length > 11">CNPJ</mat-label>
             <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
             <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+            <mat-error *ngIf="cpfFormControl.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
           </mat-form-field>
     
           <mat-form-field>

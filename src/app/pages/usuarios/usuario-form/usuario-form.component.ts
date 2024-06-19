@@ -24,7 +24,7 @@ export class UsuarioFormComponent {
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   nomeFormControl = new FormControl('', Validators.required);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-  loginCpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
+  loginCpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPForCNPJ]);
   senhaFormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)]);
   confirmSenhaFormControl = new FormControl('', [Validators.required, this.comparePasswords.bind(this)]);
 

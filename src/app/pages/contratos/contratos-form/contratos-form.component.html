@@ -10,11 +10,11 @@
           <button (click)="generateMatricula()" style="margin-left: 10px;" *ngIf="formControls.get('crf.numerocrf')?.value == 0" mat-stroked-button color="accent">Adicionar Matricula</button>
           <mat-form-field>
             <mat-label>CRF</mat-label>
-            <input disabled [readonly]="visualizar" matInput [value]="formControls.get('crf.numerocrf')?.value"/>
+            <input disabled matInput [value]="formControls.get('crf.numerocrf')?.value"/>
           </mat-form-field>
 
           <mat-form-field > 
-            <mat-label>CPF do Contratante</mat-label>
+            <mat-label>CPF/CNPJ do Contratante</mat-label>
             <input type="text"
                   [readonly]="visualizar"
                     matInput
@@ -32,12 +32,12 @@
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Nome</mat-label>
-              <input disabled [readonly]="visualizar"  matInput [value]="formControls.get('contratante.nome')?.value"/>
+              <input disabled matInput [value]="formControls.get('contratante.nome')?.value"/>
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>RG</mat-label>
-              <input [readonly]="visualizar"  matInput disabled  [value]="formControls.get('contratante.rg')?.value" />
+              <input matInput disabled  [value]="formControls.get('contratante.rg')?.value" />
             </mat-form-field> 
           </div>
         </div>
@@ -67,7 +67,7 @@
 
         <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoPorta && imovelDoContratante.enderecoPorta.rua != '' ">
           <mat-label>Endereço Porta</mat-label>
-          <input disabled [readonly]="visualizar" matInput 
+          <input disabled matInput 
           [value]="imovelDoContratante.enderecoPorta.rua + ', n '+ 
           imovelDoContratante.enderecoPorta.numero + ' ' + imovelDoContratante.enderecoPorta.complemento + ', ' +
           imovelDoContratante.enderecoPorta.bairro + ', ' + imovelDoContratante.enderecoPorta.cidadeUf + ' '"
@@ -76,7 +76,7 @@
 
         <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoDefinitivo && imovelDoContratante.enderecoDefinitivo.rua != ''">
           <mat-label>Endereço Definitivo</mat-label>
-          <input disabled [readonly]="visualizar" matInput 
+          <input disabled matInput 
           [value]="imovelDoContratante.enderecoDefinitivo.rua + ', n '+ 
           imovelDoContratante.enderecoDefinitivo.numero + ' ' + imovelDoContratante.enderecoDefinitivo.complemento + ', ' +
           imovelDoContratante.enderecoDefinitivo.bairro + ', ' + imovelDoContratante.enderecoDefinitivo.cidadeUf + ' '"
@@ -85,7 +85,7 @@
 
         <mat-form-field *ngIf="existeImovel && imovelDoContratante.enderecoProjeto && imovelDoContratante.enderecoProjeto.rua != ''">
           <mat-label>Endereço Projeto</mat-label>
-          <input disabled [readonly]="visualizar" matInput 
+          <input disabled  matInput 
           [value]="imovelDoContratante.enderecoProjeto.rua + ', n '+ 
           imovelDoContratante.enderecoProjeto.numero + ' ' + imovelDoContratante.enderecoProjeto.complemento + ', ' +
           imovelDoContratante.enderecoProjeto.bairro + ', ' + imovelDoContratante.enderecoProjeto.cidadeUf + ' '"

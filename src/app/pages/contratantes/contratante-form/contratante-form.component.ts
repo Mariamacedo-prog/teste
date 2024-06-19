@@ -53,12 +53,11 @@ export class ContratanteFormComponent {
     cidadeUf:  ['', Validators.required]
   });
 
-
   ngOnInit(): void {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
-      cpf: ['', [Validators.required, this.validateService.validateCPF]],
+      cpf: ['', [Validators.required, this.validateService.validateCPForCNPJ]],
       rg: [''],
       email: ['', [Validators.required, Validators.email]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
@@ -71,6 +70,8 @@ export class ContratanteFormComponent {
       nacionalidadeConjugue: [''],
       estrangeiro: [false],
       rne: [''],
+      razao_social: [''],
+      pessoa_juridica: [''],
       cartorio: this.cartorioFormControls,
       anexos: this.anexosFormControl
     });
@@ -105,6 +106,16 @@ export class ContratanteFormComponent {
           this.formControls?.get('rne')?.setValue(contratante.rne);
         }
 
+        if(contratante.cpf > 11){
+          if(contratante.razao_social){
+            this.formControls?.get('razao_social')?.setValue(contratante.razao_social);
+          }
+          
+          if(contratante.pessoa_juridica){
+            this.formControls?.get('pessoa_juridica')?.setValue(contratante.pessoa_juridica);
+          }
+        }
+
         if(contratante.dataExpedicao){
           const dataEmMilliseconds = contratante.dataExpedicao.seconds * 1000 + Math.floor(contratante.dataExpedicao.nanoseconds / 1000000);
             const data = new Date(dataEmMilliseconds);
@@ -128,6 +139,7 @@ export class ContratanteFormComponent {
         if(contratante.estadoCivil == 'Casado' || contratante.estadoCivil == 'União Estável'){
           this.isMarried = true;
         }
+
         this.showAnexos = true;
       });        
     }else{
@@ -151,6 +163,11 @@ export class ContratanteFormComponent {
   async create() {
     const cpf = this.formControls?.get('cpf')?.getRawValue(); 
 
+    if(cpf.length == 11 ){
+        this.formControls?.get('razao_social')?.setValue("");
+        this.formControls?.get('pessoa_juridica')?.setValue("");
+    }
+
     if (cpf) {
       try {
         const cpfExists = await this.contratantesService.checkIfCPFExists(cpf).toPromise(); 
@@ -168,7 +185,13 @@ export class ContratanteFormComponent {
     }
   }
 
-  async update(){
+  async update(){4
+    const cpf = this.formControls?.get('cpf')?.getRawValue(); 
+    if(cpf.length == 11 ){
+        this.formControls?.get('razao_social')?.setValue("");
+        this.formControls?.get('pessoa_juridica')?.setValue("");
+    }
+
     if (this.formControls?.get('cpf')?.getRawValue()) {
       await this.contratantesService.updateItem(this.contratanteId, this.formControls.getRawValue())
     }

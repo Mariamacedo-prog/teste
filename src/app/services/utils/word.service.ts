@@ -190,7 +190,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
                    font: "Arial",
                  },
                  { 
-                   text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante),
+                   text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no ${formControls?.get('contratante')?.get('cpf')?.value.length <= 11 ? 'CPF ': 'CNPJ '} sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante),
                    size:25, 
                    font: "Arial",
                    outlineLevel: 2,

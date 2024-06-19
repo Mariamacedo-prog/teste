@@ -38,9 +38,11 @@
       </div>
 
       <mat-form-field>
-        <mat-label>CPF</mat-label>
+        <mat-label *ngIf="loginCpfFormControl.value && loginCpfFormControl.value.length <= 11">CPF</mat-label>
+        <mat-label *ngIf="loginCpfFormControl.value && loginCpfFormControl.value.length > 11">CNPJ</mat-label>
         <input [readonly]="view" matInput [formControl]="loginCpfFormControl" />
         <mat-error *ngIf="loginCpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
+        <mat-error *ngIf="loginCpfFormControl.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
       </mat-form-field>
 
       <div class="inputs-row-form">

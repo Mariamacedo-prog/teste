@@ -31,7 +31,7 @@ export class FuncionarioFormComponent {
   loadingUsuario: boolean = false;
 
   nomeFormControl = new FormControl('', Validators.required);
-  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPF]);
+  cpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPForCNPJ]);
   ruaFormControl = new FormControl('', [Validators.required]);
   numeroFormControl = new FormControl('', [Validators.required]);
   bairroFormControl = new FormControl('', [Validators.required]);
