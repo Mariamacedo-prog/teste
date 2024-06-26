@@ -12,6 +12,8 @@ import { MatTableModule } from '@angular/material/table';
 import { authGuard } from '../../auth/auth.guard';
 import { NucleosFormComponent } from './nucleos-form/nucleos-form.component';
 import { NucleosGridComponent } from './nucleos-grid/nucleos-grid.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 
 const routes: Routes = [
   { path: 'form/:id', component: NucleosFormComponent, canActivate: [authGuard] },
@@ -30,6 +32,8 @@ const routes: Routes = [
     MatButtonModule,
     FormsModule, 
     ReactiveFormsModule,
+    MatAutocompleteModule,
+    MatProgressBarModule,
     MatIconModule,
     MatCardModule,
     MatSelectModule,

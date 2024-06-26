@@ -18,7 +18,7 @@
       <mat-card-header>
         <mat-card-title>Cadastro de Núcleo</mat-card-title>
       </mat-card-header>
-  
+
       <mat-form-field>
         <mat-label>Nome</mat-label>
         <input [readonly]="view" matInput [formControl]="nomeFormControl" />
@@ -26,6 +26,23 @@
           Este campo é <strong>obrigatório</strong>
         </mat-error>
       </mat-form-field>
+
+      <div class="inputs-row-form">
+        <mat-form-field>
+          <mat-label>Sigla</mat-label>
+          <input [readonly]="view" matInput [formControl]="siglaFormControl" (keyup)="handleKeyUpSigla($event)"/>
+          <mat-error *ngIf="siglaFormControl.hasError('siglaInvalid')" >
+            Sigla já localizada no banco de dados.
+          </mat-error>
+        </mat-form-field>
+        <mat-form-field>
+          <mat-label>Espécie</mat-label>
+          <mat-select [formControl]="especieFormControl">
+            <mat-option value="social">Social</mat-option>
+            <mat-option value="especial">Especial</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
 
       <div class="inputs-row-form">
         <mat-form-field>

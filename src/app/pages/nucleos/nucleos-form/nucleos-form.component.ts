@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NucleoService } from '../../../services/nucleo.service';
-import { FormControl, Validators } from '@angular/forms';
+import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { CepService } from '../../../services/utils/cep.service';
 import { PlanosService } from '../../../services/planos.service';
 
@@ -15,7 +15,7 @@ export class NucleosFormComponent {
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private service: NucleoService, private planoService: PlanosService, private cepService: CepService,) {}
     
-   
+  nucleos: any[] = [];
 
   itemId = '';
   view: boolean = false;
@@ -31,8 +31,16 @@ export class NucleosFormComponent {
   ufFormControl = new FormControl('', [Validators.required]);
   planosFormControl = new FormControl('');
   nomeFormControl = new FormControl('', Validators.required);
+  especieFormControl = new FormControl('');
+  siglaFormControl = new FormControl('', [
+    this.validateSigla(this.nucleos)
+  ]);
+  
 
   ngOnInit(): void {
+    this.findNucleos();
+ 
+         
     this.route.params.subscribe(params => {
         this.itemId = params['id'];
         
@@ -44,14 +52,24 @@ export class NucleosFormComponent {
     this.isAuthenticated();
 
     if(this.itemId){
-      this.service.findById(this.itemId).subscribe(user => {
-        this.nomeFormControl.setValue(user.nome);
-        this.bairroFormControl.setValue(user.bairro);
-        this.cidadeFormControl.setValue(user.cidade);
-        this.ufFormControl.setValue(user.uf);
-        this.planosFormControl.setValue(user.planos);
+      this.service.findById(this.itemId).subscribe(nucleo => {
+        this.nomeFormControl.setValue(nucleo.nome);
+        this.bairroFormControl.setValue(nucleo.bairro);
+        this.cidadeFormControl.setValue(nucleo.cidade);
+        this.ufFormControl.setValue(nucleo.uf);
+        this.planosFormControl.setValue(nucleo.planos);
+
+        if(nucleo.especie){
+          this.especieFormControl.setValue(nucleo.especie);
+        }
+
+        if(nucleo.sigla){
+
+          this.siglaFormControl.setValue(nucleo.sigla);
+        }
       });
     }
+
 
     this.planoService.getActiveItems().subscribe(planos => {
       if (planos.length >= 0) {
@@ -68,6 +86,15 @@ export class NucleosFormComponent {
     }
   }
 
+  findNucleos(){
+    this.service.getItems().subscribe((nucleos)=>{
+      this.nucleos = nucleos;
+      this.siglaFormControl = new FormControl('', [
+        this.validateSigla(this.nucleos)
+      ]);
+    });
+  }
+
   create() {
     const item = {
       "nome":this.nomeFormControl.value,
@@ -75,7 +102,10 @@ export class NucleosFormComponent {
       "cidade":this.cidadeFormControl.value,
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
+      "especie": this.especieFormControl.value,
+      "sigla": this.siglaFormControl.value
     }
+
     if(item){
       this.service.save(item);
       this.toolboxService.showTooltip('success', 'Status cadastrado com sucesso!', 'Sucesso!');
@@ -90,6 +120,8 @@ export class NucleosFormComponent {
       "cidade":this.cidadeFormControl.value,
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
+      "especie": this.especieFormControl.value,
+      "sigla": this.siglaFormControl.value
     }
     this.service.updateItem(this.itemId, item)
   }
@@ -100,6 +132,7 @@ export class NucleosFormComponent {
         this.nomeFormControl.valid &&
         this.cidadeFormControl.valid &&
         this.planosFormControl.valid &&
+        this.siglaFormControl.valid &&
         this.ufFormControl.valid
     );
   }
@@ -133,5 +166,22 @@ export class NucleosFormComponent {
           );
       }
     }
+  }
+
+
+  handleKeyUpSigla(event: any) {
+    this.siglaFormControl.updateValueAndValidity();
+  }
+  
+  // Validador personalizado para verificar se o valor já existe em `nucleos`
+  validateSigla(nucleos: any[]): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (nucleos.some(item => item?.sigla?.toLowerCase() === value?.toLowerCase())) {
+    
+        return { 'siglaInvalid': true };
+      }
+      return null;
+    };
   }
 }

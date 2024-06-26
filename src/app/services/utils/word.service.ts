@@ -36,17 +36,17 @@ export class WordService {
       });
     });
   }
-  obterData() {
+  obterData(data = new Date()) {
     const meses = [
         "Janeiro", "Fevereiro", "Março", "Abril",
         "Maio", "Junho", "Julho", "Agosto",
         "Setembro", "Outubro", "Novembro", "Dezembro"
     ];
 
-    const dataAtual = new Date();
-    const dia = String(dataAtual.getDate()).padStart(2, '0');
-    const mes = meses[dataAtual.getMonth()];
-    const ano = dataAtual.getFullYear();
+    
+    const dia = String(data.getDate()).padStart(2, '0');
+    const mes = meses[data.getMonth()];
+    const ano = data.getFullYear();
 
     return `${dia} de ${mes} de ${ano}`;
   }
@@ -706,7 +706,7 @@ async generateWordContratoFile(formControls: FormGroup,  imovelDoContratante: an
               }]),
               space, space,
               this.gerarParagrafo(
-              [{ text: formControls?.get('cartorio')?.get('cidadeUf')?.value + ", " + this.obterData(),  
+              [{ text: formControls?.get('cartorio')?.get('cidadeUf')?.value + ", " + (formControls?.get('createdAt')?.value !== null ? this.obterData(new Date(formControls?.get('createdAt')?.value.seconds * 1000 + formControls?.get('createdAt')?.value.nanoseconds / 1e6)): this.obterData()),  
                 bold:true, 
                 size:25, 
                 font: "Arial"
