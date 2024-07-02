@@ -7,7 +7,7 @@
     <mat-card-content >
       <mat-tab-group >
         <mat-tab  label="Dados Pessoais"> 
-          <div class="inputs-row-form">
+        <div class="inputs-row-form" *ngIf="showAnexos">
             <app-file-input [nome]="'Foto: '" 
                             [accept]="'.jpg'"
                             [fileInput]="this.fotoFormControl.value ? this.fotoFormControl.value : {base64: '',type: ''}"

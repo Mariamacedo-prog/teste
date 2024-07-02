@@ -9,12 +9,16 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTabsModule } from '@angular/material/tabs';
 import { MatCardModule } from '@angular/material/card';
+import {MatSelectModule} from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSelectModule } from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { InputfileModule } from '../../components/inputfile/inputfile.module';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
+import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
 import { DialogModule } from '@angular/cdk/dialog';
-
 const routes: Routes = [
     { path: 'form/:id', component: PrefeituraFormComponent, canActivate: [authGuard] },
     { path: 'form/:id/:tela', component: PrefeituraFormComponent, canActivate: [authGuard] },
@@ -23,24 +27,25 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  declarations: [
-    PrefeituraFormComponent,
-    PrefeituraGridComponent
-  ],
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    MatTableModule,
-    MatIconModule,
-    MatTabsModule,
-    DialogModule,
-    MatCardModule,
-    MatAutocompleteModule,
-    MatSelectModule,
-    RouterModule.forChild(routes)
-  ]
+    declarations: [
+        PrefeituraFormComponent,
+        PrefeituraGridComponent
+    ],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        MatTableModule,
+        MatIconModule,
+        MatTabsModule,
+        DialogModule,
+        MatCardModule,
+        MatAutocompleteModule,
+        MatSelectModule,
+        RouterModule.forChild(routes),
+        InputfileModule
+    ]
 })
 export class PrefeituraModule { }

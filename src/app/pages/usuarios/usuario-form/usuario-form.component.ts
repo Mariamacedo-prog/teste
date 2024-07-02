@@ -46,10 +46,13 @@ export class UsuarioFormComponent {
         this.emailFormControl.setValue(user.email);
         this.nomeFormControl.setValue(user.nome);
         this.telefoneFormControl.setValue(user.telefone);
-        this.loginCpfFormControl.setValue(user.cpf);
+        this.loginCpfFormControl.setValue(user.cpf.replace(/\D/g, ''));
         this.senhaFormControl.setValue(user.senha);
         this.confirmSenhaFormControl.setValue(user.senha);
+        this.maskCpfCnpj();
       });
+
+
     }
   }
 
@@ -87,12 +90,13 @@ export class UsuarioFormComponent {
 
 
   create() {
+    const cpf = this.loginCpfFormControl?.value || '';
     const item = {
       "email":this.emailFormControl.value,
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
-      "cpf":this.loginCpfFormControl.value
+      "cpf": cpf.replace(/\D/g, '')
     }
 
     if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
@@ -118,6 +122,7 @@ export class UsuarioFormComponent {
   }
 
   async update(){
+    const cpf = this.loginCpfFormControl?.value || '';
     if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
       this.toolboxService.showTooltip('error', 'Senhas divergentes!', 'ERRO!');
     }
@@ -127,7 +132,7 @@ export class UsuarioFormComponent {
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
-      "cpf":this.loginCpfFormControl.value
+      "cpf": cpf.replace(/\D/g, '')
     }
 
     if(item.cpf){
@@ -145,5 +150,15 @@ export class UsuarioFormComponent {
         this.senhaFormControl.valid &&
         this.confirmSenhaFormControl.valid
     );
+  }
+
+  cpfCnpjLength() {
+    const value = this.loginCpfFormControl?.value || '';
+    return value.replace(/\D/g, '').length;
+  }
+
+  maskCpfCnpj(){
+    const value = this.loginCpfFormControl?.value || '';
+    this.loginCpfFormControl?.setValue(this.validateService.formatCpfCnpj(value))
   }
 }

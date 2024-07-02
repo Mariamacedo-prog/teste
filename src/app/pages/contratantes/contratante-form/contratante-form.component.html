@@ -29,27 +29,18 @@
                 <input  disabled matInput [value]="formControls.get('cartorio.cns')?.value"  />
               </mat-form-field>
             </div>
-                
 
             <div class="inputs-row-form">
               <mat-form-field>
-                <mat-label>Nome</mat-label>
-                <input [readonly]="visualizar"  matInput formControlName="nome" />
-                <mat-error *ngIf="formControls?.get('nome')?.hasError('required')">
-                  Este campo é <strong>obrigatório</strong>
-                </mat-error>
-              </mat-form-field>
-              <mat-form-field>
-                <mat-label *ngIf="formControls?.get('cpf')?.value.length <= 11">CPF</mat-label>
-                <mat-label *ngIf="formControls?.get('cpf')?.value.length > 11">CNPJ</mat-label>
-                <input [readonly]="visualizar"  matInput formControlName="cpf" />
+                <mat-label *ngIf="cpfCnpjLength() <= 11">CPF</mat-label>
+                <mat-label *ngIf="cpfCnpjLength() > 11"> CNPJ</mat-label>
+                <input [readonly]="visualizar" matInput formControlName="cpf" (input)="maskCpfCnpj('cpf')" />
                 <mat-error *ngIf="formControls?.get('cpf')?.hasError('cpfInvalido')">CPF inválido</mat-error>
                 <mat-error *ngIf="formControls?.get('cpf')?.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
-                
               </mat-form-field>
             </div>
 
-            <div class="input-file-row" *ngIf="formControls?.get('cpf')?.value.length > 11">
+            <div class="input-file-row" *ngIf="cpfCnpjLength() > 11">
               <mat-form-field>
                 <mat-label>Razão Social</mat-label>
                 <input [readonly]="visualizar"  matInput formControlName="razao_social" />
@@ -63,6 +54,25 @@
                 </mat-select>
               </mat-form-field>
             </div>
+
+            <div class="inputs-row-form">
+              <mat-form-field>
+                <mat-label *ngIf="cpfCnpjLength() > 11">Nome Sócio</mat-label>
+                <mat-label *ngIf="cpfCnpjLength() <= 11">Nome</mat-label>
+                <input [readonly]="visualizar"  matInput formControlName="nome" />
+                <mat-error *ngIf="formControls?.get('nome')?.hasError('required')">
+                  Este campo é <strong>obrigatório</strong>
+                </mat-error>
+              </mat-form-field>
+ 
+              <mat-form-field *ngIf="cpfCnpjLength() > 11">
+                  <mat-label>CPF Sócio</mat-label>
+                  <input [readonly]="visualizar"  matInput formControlName="cpf_socio" (input)="maskCpfCnpj('cpf_socio')" />
+                  <mat-error *ngIf="formControls?.get('cpf_socio')?.hasError('cpfInvalido')">CPF inválido</mat-error>
+              </mat-form-field>
+            </div>
+
+            
     
       
             <div class="inputs-row-form">

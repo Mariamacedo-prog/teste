@@ -19,9 +19,10 @@ export class PrefeituraFormComponent {
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
   visualizar: boolean = false;
-  formControls!: FormGroup; 
+  formControls!: FormGroup;
+  showAnexos: boolean  = false;
 
-  constructor(private toolboxService: ToolboxService, private router: Router, 
+  constructor(private toolboxService: ToolboxService, private router: Router,
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
     private validateService: ValidateService, private prefeiturasService: PrefeiturasService
     ) {}
@@ -56,7 +57,10 @@ export class PrefeituraFormComponent {
       nome: ['', Validators.required],
       cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.email]],
+      anexos: this.formBuilder.group({
+        logoFile: {base64: '',type: ''}
+      }),
     });
 
     this.route.params.subscribe(params => {
@@ -80,7 +84,7 @@ export class PrefeituraFormComponent {
       this.formControls.get('representante')?.get('nacionalidade')?.setValue(prefeitura.representante.nacionalidade);
       this.formControls.get('representante')?.get('cpf')?.setValue(prefeitura.representante.cpf);
       this.formControls.get('representante')?.get('rg')?.setValue(prefeitura.representante.rg);
-      
+
       this.formControls.get('responsavel')?.get('nome')?.setValue(prefeitura.responsavel.nome);
       this.formControls.get('responsavel')?.get('cargo')?.setValue(prefeitura.responsavel.cargo);
 
@@ -90,7 +94,19 @@ export class PrefeituraFormComponent {
       this.formControls.get('endereco')?.get('cidadeUf')?.setValue(prefeitura.endereco.cidadeUf);
       this.formControls.get('endereco')?.get('complemento')?.setValue(prefeitura.endereco.complemento);
       this.formControls.get('endereco')?.get('numero')?.setValue(prefeitura.endereco.numero);
+
+      console.log("prefeitura");
+      if(prefeitura?.anexos){
+        console.log(prefeitura.anexos.logoFile);
+        this.formControls?.get('anexos')?.get('logoFile')?.patchValue(prefeitura.anexos.logoFile);
+        console.log(this.formControls?.get('anexos')?.get('logoFile')?.value, "alooo")
+      }
+
+      this.showAnexos = true
+
      });
+    }else{
+      this.showAnexos = true;
     }
   }
 
@@ -100,7 +116,7 @@ export class PrefeituraFormComponent {
         if (!cpfExists) {
           this.prefeiturasService.save(this.formControls.getRawValue());
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-  
+
           this.router.navigate(['/prefeitura/lista']);
           return Promise.resolve();
         } else {
@@ -123,6 +139,18 @@ export class PrefeituraFormComponent {
     }else{
       this.isLoggedIn = false;
     }
+  }
+
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    if (file) {
+      console.log('Nome do arquivo:', file.name);
+      console.log('Tamanho do arquivo:', file.size);
+    }
+  }
+
+  saveFileBase64(event: { base64: string, type: string }) {
+    this.formControls?.get("anexos")?.get("logoFile")?.patchValue(event)
   }
 
   formatPhone() {

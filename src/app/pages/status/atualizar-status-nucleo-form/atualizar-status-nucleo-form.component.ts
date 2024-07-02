@@ -74,6 +74,7 @@ findNucleos(){
 }
 
 searchNucleo(nome: string) {
+  this.filteredNucleos = []
   this.nucleos.filter((item: any) => {
     if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
        this.filteredNucleos.push(item);

@@ -28,6 +28,7 @@ export class ContratanteFormComponent {
   filteredCartorios: any[] = [];
   cartorios: any[] = [];
   timeoutId: any;
+  arrayValidateCpfSocio = [];
 
   loadingCartorio: boolean = false;
   
@@ -72,6 +73,7 @@ export class ContratanteFormComponent {
       rne: [''],
       razao_social: [''],
       pessoa_juridica: [''],
+      cpf_socio: ['', [this.validateService.validateCPF]],
       cartorio: this.cartorioFormControls,
       anexos: this.anexosFormControl
     });
@@ -88,9 +90,12 @@ export class ContratanteFormComponent {
 
     if(this.contratanteId){
       this.contratantesService.findById(this.contratanteId).subscribe(contratante => {
+        console.log(contratante)
         this.formControls?.get('id')?.setValue(contratante.id);
         this.formControls?.get('nome')?.setValue(contratante.nome);
-        this.formControls?.get('cpf')?.setValue(contratante.cpf);
+
+        this.formControls?.get('cpf')?.setValue( this.validateService.formatCpfCnpj(contratante.cpf));
+
         this.formControls?.get('rg')?.setValue(contratante.rg);
         this.formControls?.get('email')?.setValue(contratante.email);
         this.formControls?.get('telefone')?.setValue(contratante.telefone);
@@ -106,6 +111,8 @@ export class ContratanteFormComponent {
           this.formControls?.get('rne')?.setValue(contratante.rne);
         }
 
+      
+
         if(contratante.cpf > 11){
           if(contratante.razao_social){
             this.formControls?.get('razao_social')?.setValue(contratante.razao_social);
@@ -114,6 +121,12 @@ export class ContratanteFormComponent {
           if(contratante.pessoa_juridica){
             this.formControls?.get('pessoa_juridica')?.setValue(contratante.pessoa_juridica);
           }
+
+          if(contratante.cpf_socio){
+            this.formControls?.get('cpf_socio')?.setValue(contratante.cpf_socio);
+
+            this.formControls?.get('cpf_socio')?.setValue(this.validateService.formatCpfCnpj(contratante.cpf_socio));
+          }
         }
 
         if(contratante.dataExpedicao){
@@ -121,7 +134,6 @@ export class ContratanteFormComponent {
             const data = new Date(dataEmMilliseconds);
           this.formControls?.get('dataExpedicao')?.setValue(data);
         }
-
 
         this.formControls.get('anexos')?.get('rgFile')?.setValue(contratante.anexos.rgFile);
         this.formControls.get('anexos')?.get('cpfFile')?.setValue(contratante.anexos.cpfFile);
@@ -134,7 +146,6 @@ export class ContratanteFormComponent {
         this.formControls.get('cartorio')?.get('nome')?.setValue(contratante.cartorio.nome);
         this.formControls.get('cartorio')?.get('cns')?.setValue(contratante.cartorio.cns);
         this.formControls.get('cartorio')?.get('cidadeUf')?.setValue(contratante.cartorio.cidadeUf);
-        
 
         if(contratante.estadoCivil == 'Casado' || contratante.estadoCivil == 'União Estável'){
           this.isMarried = true;
@@ -148,7 +159,6 @@ export class ContratanteFormComponent {
 
     this.estadoCivil = this.estadoCivilService.getEstadoCivil(); 
     this.findAllCartorios();
-
   }
 
   findAllCartorios(){
@@ -161,19 +171,23 @@ export class ContratanteFormComponent {
   }
 
   async create() {
-    const cpf = this.formControls?.get('cpf')?.getRawValue(); 
+    const body = this.formControls.getRawValue();
+    body.cpf = body.cpf.replace(/\D/g, '');
 
-    if(cpf.length == 11 ){
+    if(body.cpf.length == 11 ){
         this.formControls?.get('razao_social')?.setValue("");
         this.formControls?.get('pessoa_juridica')?.setValue("");
+        this.formControls?.get('cpf_socio')?.setValue("");
     }
 
-    if (cpf) {
+    body.cpf_socio ? body.cpf_socio = body.cpf_socio.replace(/\D/g, '') : body.cpf_socio = "";
+
+    if (body.cpf) {
       try {
-        const cpfExists = await this.contratantesService.checkIfCPFExists(cpf).toPromise(); 
+        const cpfExists = await this.contratantesService.checkIfCPFExists(body.cpf).toPromise(); 
   
         if (!cpfExists) {
-          await this.contratantesService.save(this.formControls.getRawValue()); 
+          await this.contratantesService.save(body); 
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
           this.router.navigate(['/contratante/lista']);
         } else {
@@ -185,15 +199,24 @@ export class ContratanteFormComponent {
     }
   }
 
-  async update(){4
-    const cpf = this.formControls?.get('cpf')?.getRawValue(); 
-    if(cpf.length == 11 ){
-        this.formControls?.get('razao_social')?.setValue("");
-        this.formControls?.get('pessoa_juridica')?.setValue("");
+  maskCpfCnpj(name: string){
+    this.formControls?.get(name)?.setValue(this.validateService.formatCpfCnpj(this.formControls?.get(name)?.value))
+  }
+
+  async update(){
+    const body = this.formControls.getRawValue();
+    body.cpf = body.cpf.replace(/\D/g, '');
+
+    if(body.cpf.length == 11 ){
+      this.formControls?.get('razao_social')?.setValue("");
+      this.formControls?.get('pessoa_juridica')?.setValue("");
+      this.formControls?.get('cpf_socio')?.setValue("");
     }
 
+    body.cpf_socio ? body.cpf_socio = body.cpf_socio.replace(/\D/g, '') : body.cpf_socio = "";
+
     if (this.formControls?.get('cpf')?.getRawValue()) {
-      await this.contratantesService.updateItem(this.contratanteId, this.formControls.getRawValue())
+      await this.contratantesService.updateItem(this.contratanteId, body)
     }
   }
 
@@ -242,6 +265,11 @@ export class ContratanteFormComponent {
     }
   }
 
+  cpfCnpjLength() {
+    const value = this.formControls?.get('cpf')?.value || '';
+    return value.replace(/\D/g, '').length;
+  }
+
   onFileSelected(event: any) {
     const file: File = event.target.files[0];
     if (file) {
@@ -268,7 +296,7 @@ export class ContratanteFormComponent {
     }
   }
   
- findCartorios(nome: string) {
+  findCartorios(nome: string) {
     this.filteredCartorios = this.cartorios.filter((item: any) => {
       return item.nome?.toLowerCase().includes(nome.toLowerCase());
     });

@@ -57,7 +57,7 @@ export class FuncionarioFormComponent {
     if(this.funcionarioId){
       this.funcionariosService.findById(this.funcionarioId).subscribe(funcionario => {
         this.nomeFormControl.setValue(funcionario.nome);
-        this.cpfFormControl.setValue(funcionario.cpf);
+        this.cpfFormControl.setValue(funcionario.cpf.replace(/\D/g, ''));
         this.emailFormControl.setValue(funcionario.email);
         this.telefoneFormControl.setValue(funcionario.telefone);
         this.usuarioFormControl.setValue(funcionario.usuario);
@@ -67,6 +67,8 @@ export class FuncionarioFormComponent {
         this.complementoFormControl.setValue(funcionario.complemento);
         this.cidadeUfFormControl.setValue(funcionario.cidadeUf);
         this.cepFormControl.setValue(funcionario.cep);
+
+        this.maskCpfCnpj();
       });
     }
     this.usuariosService.getItems().subscribe(usuarios => {
@@ -98,9 +100,11 @@ export class FuncionarioFormComponent {
   }
 
   create() {
+    const cpf = this.cpfFormControl?.value || '';
+    
     const item =  {
       "nome":this.nomeFormControl.value,
-      "cpf":this.cpfFormControl.value,
+      "cpf":cpf.replace(/\D/g, ''),
       "rua": this.ruaFormControl.value,
       "numero": this.numeroFormControl.value,
       "bairro": this.bairroFormControl.value,
@@ -129,9 +133,11 @@ export class FuncionarioFormComponent {
   }
 
   update(){
+    const cpf = this.cpfFormControl?.value || '';
+    
     const item =  {
       "nome":this.nomeFormControl.value,
-      "cpf":this.cpfFormControl.value,
+      "cpf":cpf.replace(/\D/g, ''),
       "rua": this.ruaFormControl.value,
       "numero": this.numeroFormControl.value,
       "bairro": this.bairroFormControl.value,
@@ -211,5 +217,15 @@ export class FuncionarioFormComponent {
     this.ruaFormControl.setValue('');
     this.bairroFormControl.setValue('');
     this.cidadeUfFormControl.setValue('');
+  }
+
+  cpfCnpjLength() {
+    const value = this.cpfFormControl?.value || '';
+    return value.replace(/\D/g, '').length;
+  }
+
+  maskCpfCnpj(){
+    const value = this.cpfFormControl?.value || '';
+    this.cpfFormControl?.setValue(this.validateService.formatCpfCnpj(value))
   }
 }

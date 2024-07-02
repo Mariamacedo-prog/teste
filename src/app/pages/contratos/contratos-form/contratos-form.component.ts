@@ -81,7 +81,10 @@ export class ContratosFormComponent {
     telefone: ['', [Validators.required]],
     nacionalidade: ['', [Validators.required]],
     profissao: ['', [Validators.required]],
-    estadoCivil: ['', [Validators.required]]
+    estadoCivil: ['', [Validators.required]],
+    razao_social: [''],
+    pessoa_juridica: [''],
+    cpf_socio: ['']
   });
 
   empresaFormControls = this.formBuilder.group({
@@ -121,13 +124,9 @@ export class ContratosFormComponent {
     this.isAuthenticated();
 
     this.findContratantes();
-
     this.findEmpresa();
-
     this.findVendedores();
-
     this.findStatus();
-
     this.findNucleos();
     
     if(this.contratoId){
@@ -178,6 +177,18 @@ export class ContratosFormComponent {
         this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato.contratante.nacionalidade);
         this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato.contratante.profissao);
         this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato.contratante.estadoCivil);
+
+        if(contrato.contratante?.razao_social){
+          this.formControls?.get('contratante')?.get('razao_social')?.setValue(contrato.contratante.razao_social);
+        }
+
+        if(contrato.contratante?.pessoa_juridica){
+          this.formControls?.get('contratante')?.get('pessoa_juridica')?.setValue(contrato.contratante.pessoa_juridica);
+        }
+     
+        if(contrato.contratante.cpf_socio){
+          this.formControls?.get('contratante')?.get('cpf_socio')?.setValue(contrato.contratante.cpf_socio);
+        }
    
         if(contrato.imovelId){
           this.formControls?.get('imovelId')?.setValue(contrato.imovelId);
@@ -259,6 +270,8 @@ export class ContratosFormComponent {
     if(nucleo){
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
+
+    console.log(this.formControls.getRawValue())
     this.formControls?.get('createdAt')?.setValue(new Date());
     this.contratosService.save(this.formControls.getRawValue());
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
@@ -296,11 +309,10 @@ export class ContratosFormComponent {
     }
   }
 
-
   handleKeyUpContratante(event: any) {
     this.loadingCpf = true;
     clearTimeout(this.timeoutId); 
-    const cpf = event.target.value.trim();
+    const cpf = event.target.value.replace(/\D/g, '').trim();
     if (cpf.length >= 3) {
       this.timeoutId = setTimeout(() => {
         this.searchContratantes(cpf);
@@ -309,7 +321,9 @@ export class ContratosFormComponent {
       this.filteredContratantes = [];
     }
   }
+
   searchContratantes(cpf: string) {
+    this.filteredContratantes = []
     this.contratantes.filter((item: any) => {
       if(item.cpf?.includes(cpf)){
          this.filteredContratantes.push(item);
@@ -317,6 +331,7 @@ export class ContratosFormComponent {
     });
     this.loadingCpf = false;
   }
+
   selectContratante(item: any){
     this.formControls?.get('cartorio')?.get('nome')?.setValue(item.cartorio.nome);
     this.formControls?.get('cartorio')?.get('cns')?.setValue(item.cartorio.cns);
@@ -331,12 +346,23 @@ export class ContratosFormComponent {
     this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(item.nacionalidade);
     this.formControls?.get('contratante')?.get('profissao')?.setValue(item.profissao);
     this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(item.estadoCivil);
+
+    if(item.razao_social){
+      this.formControls?.get('contratante')?.get('razao_social')?.setValue(item.razao_social);
+    }
+
+    if(item.pessoa_juridica){
+      this.formControls?.get('contratante')?.get('pessoa_juridica')?.setValue(item.pessoa_juridica);
+    }
+
+    if(item.cpf_socio){
+      console.log(item.cpf_socio)      
+      this.formControls?.get('contratante')?.get('cpf_socio')?.setValue(item.cpf_socio);
+    }
     this.filteredContratantes = [];
     this.loadingCpf = false;
     this.findImovel();
   }
-
-
 
   handleKeyUpVendedor(event: any) {
     this.loadingVendedor = true;
@@ -351,7 +377,9 @@ export class ContratosFormComponent {
       this.loadingVendedor = false;
     }
   }
+
   searchVendedor(nome: string) {
+    this.filteredVendedores = []
     this.vendedores.filter((item: any) => {
       if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
          this.filteredVendedores.push(item);
@@ -359,13 +387,13 @@ export class ContratosFormComponent {
     });
     this.loadingVendedor = false;
   }
+
   selectVendedor(item: any){
     this.formControls?.get('vendedor')?.setValue(item);
     this.formControls?.get('vendedor_nome')?.setValue(item.nome);
     this.loadingVendedor = false;
     console.log(this.formControls.getRawValue())
   }
-
 
   handleKeyUpNucleo(event: any) {
     this.loadingNucleo = true;
@@ -380,7 +408,9 @@ export class ContratosFormComponent {
       this.loadingNucleo = false;
     }
   }
+
   searchNucleo(nome: string) {
+    this.filteredNucleos = []
     this.nucleos.filter((item: any) => {
       if(item.nome?.toLowerCase().includes(nome.toLowerCase())){
          this.filteredNucleos.push(item);
@@ -388,6 +418,7 @@ export class ContratosFormComponent {
     });
     this.loadingNucleo = false;
   }
+
   selectNucleo(item: any){
     this.filteredNucleos = []
     this.formControls?.get('nucleo')?.setValue(item);

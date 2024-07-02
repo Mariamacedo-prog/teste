@@ -130,6 +130,10 @@ export class ValidateService {
 
   validateCPF(control: FormControl): { [key: string]: any } | null {
     const cpf = control.value?.replace(/[^\d]/g, '');
+
+      if( cpf.length == 0){
+        return null;
+      }
       if (!cpf || cpf.length !== 11) {
         return { 'cpfInvalido': true };
       }
@@ -178,7 +182,6 @@ export class ValidateService {
     return null;
   }
   
-
   validateCNS(control: FormControl): { [key: string]: any } | null {
     const cns = control.value?.replace(/[^\dX]/g, '');
 
@@ -187,5 +190,20 @@ export class ValidateService {
     }
 
     return null;
+  }
+
+  formatCpfCnpj(eventValue: string) {
+    let value = eventValue.replace(/\D/g, ''); // Remove tudo que não é número
+    if (value.length <= 11) {
+      value = value.replace(/(\d{3})(\d)/, '$1.$2');
+      value = value.replace(/(\d{3})(\d)/, '$1.$2');
+      value = value.replace(/(\d{3})(\d{1,2})$/, '$1-$2');
+    } else {
+      value = value.replace(/^(\d{2})(\d)/, '$1.$2');
+      value = value.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3');
+      value = value.replace(/\.(\d{3})(\d)/, '.$1/$2');
+      value = value.replace(/(\d{4})(\d{1,2})$/, '$1-$2');
+    }
+    return value;
   }
 }

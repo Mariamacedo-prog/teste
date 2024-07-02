@@ -31,6 +31,7 @@ export class VendedorFormComponent {
     { id: 4, nome: 'PIX' },
     { id: 5, nome: 'Transferência Bancária' }
   ]
+  showAnexos: boolean  = false;
 
   teste = {
     agencia:'',
@@ -76,27 +77,31 @@ export class VendedorFormComponent {
 
     if(this.vendedorId){
       this.vendedoresService.findById(this.vendedorId).subscribe(vendedor => {
-            this.nomeFormControl.setValue(vendedor.nome);
-            this.cpfFormControl.setValue(vendedor.cpf);
-            this.emailFormControl.setValue(vendedor.email);
-            this.telefoneFormControl.setValue(vendedor.telefone);
-            this.rgFormControl.setValue(vendedor.rg);
-            this.ruaFormControl.setValue(vendedor.rua);
-            this.numeroFormControl.setValue(vendedor.numero);
-            this.bairroFormControl.setValue(vendedor.bairro);
-            this.complementoFormControl.setValue(vendedor.complemento);
-            this.cidadeUfFormControl.setValue(vendedor.cidadeUf);
-            this.cepFormControl.setValue(vendedor.cep);
-            this.fotoFormControl.patchValue(vendedor.foto);
-            this.perfilFormControl.setValue(vendedor.perfil);
-            this.formaPagamentoFormControl.setValue(vendedor.formaPagamento);
-      
-            if(vendedor.dadosBancarios){
-              this.dadosBancariosFormControls.setValue(vendedor.dadosBancarios);
-              this.teste = vendedor.dadosBancarios;
-            }
+        this.nomeFormControl.setValue(vendedor.nome);
+        this.cpfFormControl.setValue(vendedor.cpf);
+        this.emailFormControl.setValue(vendedor.email);
+        this.telefoneFormControl.setValue(vendedor.telefone);
+        this.rgFormControl.setValue(vendedor.rg);
+        this.ruaFormControl.setValue(vendedor.rua);
+        this.numeroFormControl.setValue(vendedor.numero);
+        this.bairroFormControl.setValue(vendedor.bairro);
+        this.complementoFormControl.setValue(vendedor.complemento);
+        this.cidadeUfFormControl.setValue(vendedor.cidadeUf);
+        this.cepFormControl.setValue(vendedor.cep);
+        this.fotoFormControl.patchValue(vendedor.foto);
+        this.perfilFormControl.setValue(vendedor.perfil);
+        this.formaPagamentoFormControl.setValue(vendedor.formaPagamento);
+  
+        if(vendedor.dadosBancarios){
+          this.dadosBancariosFormControls.setValue(vendedor.dadosBancarios);
+          this.teste = vendedor.dadosBancarios;
+        }
+
+        this.showAnexos = true
       });
-    }
+      }else{
+        this.showAnexos = true;
+      }
   }
 
   create() {

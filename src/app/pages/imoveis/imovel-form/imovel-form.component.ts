@@ -291,7 +291,8 @@ export class ImovelFormComponent {
   handleKeyUp(event: any){
     this.loadingCpf = true;
     clearTimeout(this.timeoutId); 
-    const cpf = event.target.value.trim();
+    const cpf = event.target.value.replace(/\D/g, '').trim();
+
     if (cpf.length >= 3) {
       this.timeoutId = setTimeout(() => {
         this.searchCpf(cpf);
@@ -300,6 +301,8 @@ export class ImovelFormComponent {
 
       this.filteredCpf = [];
     }
+
+    this.formControls.get('contratante')?.get('cpf')?.setValue(cpf);
   }
 
   searchCpf(cpf: string) {
