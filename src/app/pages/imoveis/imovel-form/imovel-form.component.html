@@ -56,35 +56,35 @@
             </ng-template>
             <mat-form-field>
               <mat-label>CEP</mat-label>
-              <input [readonly]="visualizar" (keyup)="buscarEnderecoPorta()" maxlength="8" type="text" matInput formControlName="cep"/>
+              <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" (keyup)="buscarEnderecoPorta()" maxlength="8" type="text" matInput formControlName="cep"/>
             </mat-form-field>
     
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Rua</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="rua" />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  type="text" matInput formControlName="rua" />
                 <mat-error *ngIf="formControls.get('enderecoPorta.rua')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Número</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="numero" />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  type="text" matInput formControlName="numero" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Complemento</mat-label>
-                <input [readonly]="visualizar" type="text" matInput formControlName="complemento" />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" type="text" matInput formControlName="complemento" />
               </mat-form-field>
             </div>
             
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Bairro</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput  formControlName="bairro" />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  type="text" matInput  formControlName="bairro" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Cidade/UF</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="cidadeUf"  />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  type="text" matInput formControlName="cidadeUf"  />
                 <mat-error *ngIf="formControls.get('enderecoPorta.cidadeUf')?.hasError('required')" >
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
@@ -94,12 +94,12 @@
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>IPTU</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput  formControlName="iptu" />
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  type="text" matInput  formControlName="iptu" />
               </mat-form-field>
 
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
-                <input [readonly]="visualizar" (keyup)="buscarEnderecoPorta()" type="text" matInput formControlName="nucleoInformal" required>
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" (keyup)="buscarEnderecoPorta()" type="text" matInput formControlName="nucleoInformal" required>
                 <mat-error *ngIf="formControls.get('enderecoPorta.nucleoInformal')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>.
                 </mat-error>
@@ -108,7 +108,7 @@
 
 
 
-            <div class="inputs-row-form"  *ngIf="showAnexos">
+            <div class="inputs-row-form"  *ngIf="showAnexos || formControls.get('editedProjeto')?.value==false">
               <app-file-input [nome]="'Foto*'" 
               [fileInput]="this.formControls.get('enderecoPorta')?.get('fotos')?.value"
               (fileOutput)="saveFileBase64($event)" 
@@ -122,44 +122,44 @@
             </ng-template>
             <mat-form-field>
               <mat-label>CEP</mat-label>
-              <input [readonly]="visualizar" (keyup)="buscarEnderecoProjeto()" maxlength="8" type="text" matInput formControlName="cep"/>
+              <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" (keyup)="buscarEnderecoProjeto()" maxlength="8" type="text" matInput formControlName="cep"/>
             </mat-form-field>
     
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Rua</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="rua" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput formControlName="rua" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Quadra</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="quadra" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput formControlName="quadra" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Lote</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="lote" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput formControlName="lote" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Número</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="numero" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput formControlName="numero" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Complemento</mat-label>
-                <input [readonly]="visualizar" type="text" matInput formControlName="complemento" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" type="text" matInput formControlName="complemento" />
               </mat-form-field>
             </div>
             
             <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Bairro</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput  formControlName="bairro" />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput  formControlName="bairro" />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Cidade/UF</mat-label>
-                <input [readonly]="visualizar"  type="text" matInput formControlName="cidadeUf"  />
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true"  type="text" matInput formControlName="cidadeUf"  />
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
-                <input [readonly]="visualizar" (keyup)="buscarEnderecoProjeto()" type="text" matInput formControlName="nucleoInformalProjeto" >
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" (keyup)="buscarEnderecoProjeto()" type="text" matInput formControlName="nucleoInformalProjeto" >
               </mat-form-field>
             </div>
           </mat-tab>

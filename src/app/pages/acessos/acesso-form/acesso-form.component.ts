@@ -154,8 +154,6 @@ export class AcessoFormComponent {
     this.formControls.get('grupo')?.get('nome')?.setValue(selectedGroup.nome);
     this.formControls.get('grupo')?.get('descricao')?.setValue("teste");
     this.formControls.get('grupo')?.get('id')?.setValue(selectedGroup.id);
-
-    console.log('Selected Group:', this.formControls.getRawValue(),  this.formControls);
   }
 
   handleKeyUp(event: any){

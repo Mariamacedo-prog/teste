@@ -130,8 +130,7 @@ export class WordService {
   }
 
   async generateSectionInfo(cpf: string, formControls: FormGroup,  imovelDoContratante: any, parcelamentoInfo: any){
-    console.log(formControls?.getRawValue())
-    
+
     const image = new ImageRun({
       data: await fetch('../../../../assets/logoLM.psd.png').then(response => response.arrayBuffer()),
       transformation: {
@@ -702,7 +701,7 @@ export class WordService {
               font: "Arial"
             }]),
             space, space,
-
+            space, space,
           space, space,
           formControls?.get('assinaturaContratante')?.value == '' || 
           formControls?.get('assinaturaContratante')?.value == null ||
@@ -1345,7 +1344,7 @@ export class WordService {
             font: "Arial"
           }]),
           space, space,
-
+          space, space,
           space, space,
           formControls?.get('assinaturaContratante')?.value == '' || 
           formControls?.get('assinaturaContratante')?.value == null ||

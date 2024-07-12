@@ -33,7 +33,7 @@ export class NucleosFormComponent {
   nomeFormControl = new FormControl('', Validators.required);
   especieFormControl = new FormControl('');
   siglaFormControl = new FormControl('', [
-    this.validateSigla(this.nucleos)
+    this.validateSigla(this.nucleos, this.itemId)
   ]);
   
 
@@ -90,7 +90,7 @@ export class NucleosFormComponent {
     this.service.getItems().subscribe((nucleos)=>{
       this.nucleos = nucleos;
       this.siglaFormControl = new FormControl('', [
-        this.validateSigla(this.nucleos)
+        this.validateSigla(this.nucleos, this.itemId)
       ]);
     });
   }
@@ -174,12 +174,19 @@ export class NucleosFormComponent {
   }
   
   // Validador personalizado para verificar se o valor já existe em `nucleos`
-  validateSigla(nucleos: any[]): ValidatorFn {
+  validateSigla(nucleos: any[], id = ""): ValidatorFn {
     return (control: AbstractControl): { [key: string]: any } | null => {
       const value = control.value;
-      if (nucleos.some(item => item?.sigla?.toLowerCase() === value?.toLowerCase())) {
-    
-        return { 'siglaInvalid': true };
+      if (id) {
+        if(nucleos.some(item => item?.sigla?.toLowerCase() === value?.toLowerCase() && item?.id != id)){
+          return { 'siglaInvalid': true };
+        }
+        return null;
+      }else{
+        if(nucleos.some(item => item?.sigla?.toLowerCase() === value?.toLowerCase())){
+          return { 'siglaInvalid': true };
+        }
+        return null;
       }
       return null;
     };

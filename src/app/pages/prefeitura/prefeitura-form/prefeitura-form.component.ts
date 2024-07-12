@@ -95,11 +95,9 @@ export class PrefeituraFormComponent {
       this.formControls.get('endereco')?.get('complemento')?.setValue(prefeitura.endereco.complemento);
       this.formControls.get('endereco')?.get('numero')?.setValue(prefeitura.endereco.numero);
 
-      console.log("prefeitura");
+  
       if(prefeitura?.anexos){
-        console.log(prefeitura.anexos.logoFile);
         this.formControls?.get('anexos')?.get('logoFile')?.patchValue(prefeitura.anexos.logoFile);
-        console.log(this.formControls?.get('anexos')?.get('logoFile')?.value, "alooo")
       }
 
       this.showAnexos = true

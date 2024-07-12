@@ -48,7 +48,6 @@ export class ImovelGridComponent {
   }
 
   deleteItem(element: any){
-    console.log(element)
     const dialogRef = this.dialog.open(DialogComponent, {
       width: '300px',
       data: {

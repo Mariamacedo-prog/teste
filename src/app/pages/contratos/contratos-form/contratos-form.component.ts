@@ -271,7 +271,6 @@ export class ContratosFormComponent {
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
 
-    console.log(this.formControls.getRawValue())
     this.formControls?.get('createdAt')?.setValue(new Date());
     this.contratosService.save(this.formControls.getRawValue());
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
@@ -355,8 +354,7 @@ export class ContratosFormComponent {
       this.formControls?.get('contratante')?.get('pessoa_juridica')?.setValue(item.pessoa_juridica);
     }
 
-    if(item.cpf_socio){
-      console.log(item.cpf_socio)      
+    if(item.cpf_socio){  
       this.formControls?.get('contratante')?.get('cpf_socio')?.setValue(item.cpf_socio);
     }
     this.filteredContratantes = [];
@@ -392,7 +390,6 @@ export class ContratosFormComponent {
     this.formControls?.get('vendedor')?.setValue(item);
     this.formControls?.get('vendedor_nome')?.setValue(item.nome);
     this.loadingVendedor = false;
-    console.log(this.formControls.getRawValue())
   }
 
   handleKeyUpNucleo(event: any) {
@@ -424,7 +421,6 @@ export class ContratosFormComponent {
     this.formControls?.get('nucleo')?.setValue(item);
     this.formControls?.get('nucleo_nome')?.setValue(item.nome);
     this.loadingNucleo = false;
-    console.log(this.formControls.getRawValue())
   }
 
   receiveDataFromChild(data: any) {
@@ -442,7 +438,6 @@ export class ContratosFormComponent {
   }
 
   async generateWordFile(){
-    console.log(this.formControls, this.imovelDoContratante, this.parcelamentoInfo)
     await this.wordService.generateWordContratoFile(this.formControls, this.imovelDoContratante, this.parcelamentoInfo);
   }
 

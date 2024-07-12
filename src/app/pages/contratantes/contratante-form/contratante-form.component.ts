@@ -90,7 +90,6 @@ export class ContratanteFormComponent {
 
     if(this.contratanteId){
       this.contratantesService.findById(this.contratanteId).subscribe(contratante => {
-        console.log(contratante)
         this.formControls?.get('id')?.setValue(contratante.id);
         this.formControls?.get('nome')?.setValue(contratante.nome);
 

@@ -82,7 +82,10 @@ export class ImovelFormComponent {
       enderecoPorta: this.enderecoPorta,
       enderecoProjeto: this.enderecoProjeto,
       enderecoDefinitivo: this.enderecoDefinitivo,
-      contratante: this.contratante
+      contratante: this.contratante,
+      editedPorta: false,
+      editedProjeto: false,
+      editedDefinitivo: false
     });
 
     this.route.params.subscribe(params => {
@@ -101,9 +104,7 @@ export class ImovelFormComponent {
         this.formControls.get('contratante')?.get('cpf')?.setValue(imovel?.contratante?.cpf);
         this.formControls.get('contratante')?.get('id')?.setValue(imovel?.contratante?.id);
         
-
         this.formControls.get('enderecoPorta')?.get('rua')?.setValue(imovel.enderecoPorta.rua);
-        this.formControls.get('enderecoPorta')?.get('cep')?.setValue(imovel.enderecoPorta.cep);
         this.formControls.get('enderecoPorta')?.get('bairro')?.setValue(imovel.enderecoPorta.bairro);
         this.formControls.get('enderecoPorta')?.get('cidadeUf')?.setValue(imovel.enderecoPorta.cidadeUf);
         this.formControls.get('enderecoPorta')?.get('complemento')?.setValue(imovel.enderecoPorta.complemento);
@@ -112,19 +113,15 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoPorta')?.get('nucleoInformal')?.setValue(imovel.enderecoPorta.nucleoInformal);
         this.formControls.get('enderecoPorta')?.get('fotos')?.setValue(imovel.enderecoPorta.fotos);
 
-
         this.formControls.get('enderecoDefinitivo')?.get('rua')?.setValue(imovel.enderecoDefinitivo.rua);
-        this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(imovel.enderecoDefinitivo.cep);
         this.formControls.get('enderecoDefinitivo')?.get('bairro')?.setValue(imovel.enderecoDefinitivo.bairro);
         this.formControls.get('enderecoDefinitivo')?.get('cidadeUf')?.setValue(imovel.enderecoDefinitivo.cidadeUf);
         this.formControls.get('enderecoDefinitivo')?.get('complemento')?.setValue(imovel.enderecoDefinitivo.complemento);
         this.formControls.get('enderecoDefinitivo')?.get('numero')?.setValue(imovel.enderecoDefinitivo.numero);
         this.formControls.get('enderecoDefinitivo')?.get('nucleoInformalDefinitivo')?.setValue(imovel.enderecoDefinitivo.nucleoInformalDefinitivo);
         this.formControls.get('enderecoDefinitivo')?.get('matricula')?.setValue(imovel.enderecoDefinitivo.matricula);
-
-
+      
         this.formControls.get('enderecoProjeto')?.get('rua')?.setValue(imovel.enderecoProjeto.rua);
-        this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(imovel.enderecoProjeto.cep);
         this.formControls.get('enderecoProjeto')?.get('bairro')?.setValue(imovel.enderecoProjeto.bairro);
         this.formControls.get('enderecoProjeto')?.get('cidadeUf')?.setValue(imovel.enderecoProjeto.cidadeUf);
         this.formControls.get('enderecoProjeto')?.get('nucleoInformalProjeto')?.setValue(imovel.enderecoProjeto.nucleoInformalProjeto);
@@ -132,27 +129,68 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoProjeto')?.get('lote')?.setValue(imovel.enderecoProjeto.lote);
         this.formControls.get('enderecoProjeto')?.get('complemento')?.setValue(imovel.enderecoProjeto.complemento);
         this.formControls.get('enderecoProjeto')?.get('numero')?.setValue(imovel.enderecoProjeto.numero);
+        
+        this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(imovel.enderecoDefinitivo.cep);
+        this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(imovel.enderecoProjeto.cep);
+        this.formControls.get('enderecoPorta')?.get('cep')?.setValue(imovel.enderecoPorta.cep);
+
+        if(imovel.enderecoDefinitivo.numero){
+          this.formControls.get('editedDefinitivo')?.setValue(true)
+        }else{
+          this.buscarEnderecoDefinitivo();
+        }
+    
+        if(imovel.enderecoProjeto.numero){
+          this.formControls.get('editedProjeto')?.setValue(true)
+        }else{
+          this.buscarEnderecoProjeto();
+        }
+    
+        if(imovel.enderecoPorta.numero){
+          this.formControls.get('editedPorta')?.setValue(true)
+        }
+        
+
+
 
         this.showAnexos = true;
       });
     }else{
       this.showAnexos = true;
     }
-
-    
   }
 
   create() {
-    console.log(this.formControls.getRawValue())
+    if(this.formControls.get('enderecoDefinitivo')?.get('numero')?.value){
+      this.formControls.get('editedDefinitivo')?.setValue(true)
+    }
+
+    if(this.formControls.get('enderecoProjeto')?.get('numero')?.value){
+      this.formControls.get('editedProjeto')?.setValue(true)
+    }
+
+    if(this.formControls.get('enderecoPorta')?.get('numero')?.value){
+      this.formControls.get('editedPorta')?.setValue(true);
+    }
+
     this.imoveisService.save(this.formControls.getRawValue());
-      this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
-      this.router.navigate(['/imovel/lista']);
-
-
+    this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+    this.router.navigate(['/imovel/lista']);
   }
 
   update(){
-    console.log(this.formControls.getRawValue())
+    if(this.formControls.get('enderecoDefinitivo')?.get('numero')?.value){
+      this.formControls.get('editedDefinitivo')?.setValue(true)
+    }
+
+    if(this.formControls.get('enderecoProjeto')?.get('numero')?.value){
+      this.formControls.get('editedProjeto')?.setValue(true)
+    }
+
+    if(this.formControls.get('enderecoPorta')?.get('numero')?.value){
+      this.formControls.get('editedPorta')?.setValue(true);
+    }
+    
     if(this.formControls.get('contratante')?.get('cpf')?.getRawValue()){
       this.imoveisService.updateItem(this.imovelId, this.formControls.getRawValue())
     }
@@ -284,7 +322,6 @@ export class ImovelFormComponent {
   }
 
   saveFileBaseIptu64(event: { base64: string, type: string }){
-    console.log(event)
     this.formControls.get('enderecoPorta')?.get('iptu')?.patchValue(event);
   }
 

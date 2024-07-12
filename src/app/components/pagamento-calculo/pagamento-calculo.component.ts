@@ -140,7 +140,6 @@ export class PagamentoCalculoComponent {
 
               if(venda.plano == 600){
                 this.formControls?.get('plano')?.setValue("D8UoOnqR37T5XEBvivRP");
-                console.log(venda.plano)
               }
             }
 
@@ -187,7 +186,7 @@ export class PagamentoCalculoComponent {
               this.formControls?.get('entrada')?.get('dataUltimoPagamento')?.setValue(data);
             }
             this.formControls?.get('entrada')?.get('quantidade')?.setValue(venda?.entrada?.quantidade);
-            console.log(venda?.entrada?.valor)
+        
             this.formControls?.get('entrada')?.get('valor')?.setValue(venda?.entrada?.valor);
             this.formControls?.get('entrada')?.get('valorTotal')?.setValue(venda?.entrada?.valorTotal);
     
@@ -208,7 +207,6 @@ export class PagamentoCalculoComponent {
       this.optionsEntrada = [];
       this.formControls?.get('plano')?.setValue(this.planos[indexPlano].id);
       const plano = this.planos[indexPlano];
-      console.log(plano)
       this.formControls?.get('entrada')?.get('porcentagem')?.setValue(((100 - (100 - plano.entrada)) / 100));
       this.formControls?.get('parcelas')?.get('porcentagem')?.setValue((((100 - plano.entrada))  / 100));
       this.formControls?.get('valorAvista')?.setValue(plano.valor);

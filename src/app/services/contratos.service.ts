@@ -65,7 +65,6 @@ export class ContratosService {
   
         let batch = this.firestore.firestore.batch();
         resp.docs.forEach((userDocRef: any) => {
-          console.log("userDocRef", userDocRef.ref)
           batch.update(userDocRef.ref, {'status': newStatus});
           this.toolboxService.showTooltip('success', 'Atualizado com sucesso!', 'Sucesso!');
           this.router.navigate(['/status/lista']);
