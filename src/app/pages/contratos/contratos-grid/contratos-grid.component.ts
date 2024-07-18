@@ -5,7 +5,14 @@ import { ContratosService } from '../../../services/contratos.service';
 import { CartoriosService } from '../../../services/cartorios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
 
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-contratos-grid',
@@ -22,7 +29,7 @@ export class ContratosGridComponent {
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService,
      private contratosService: ContratosService, private cartoriosService: CartoriosService,
-     public dialog: MatDialog) {}
+     public dialog: MatDialog, private excelService: ExcelService) {}
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
   }
@@ -86,5 +93,42 @@ export class ContratosGridComponent {
   cartorioSelected(event: any){
     const value = event?.value;
     this.cartorioSearch = value;
+  }
+
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 100, object_name: "numeroContrato", title: "Numero do Contrato" },
+        { type: "text", width: 100, object_name: "cartorio.cidadeUf", title: "Cidade do Cartório" },
+        { type: "text", width: 200, object_name: "cartorio.nome", title: "Nome do Cartório" },
+        { type: "text", width: 100, object_name: "cartorio.cns", title: "CNS do Cartório" },
+        { type: "text", width: 300, object_name: "contratante.nome", title: "Nome do Contratante" },
+        { type: "text", width: 100, object_name: "contratante.cpf", title: "CPF/CNPJ do Contratante" },
+        { type: "text", width: 100, object_name: "contratante.razao_social", title: "Razão social do Contratante" },
+        { type: "text", width: 200, object_name: "contratante.email", title: "Email do Contratante" },
+        { type: "text", width: 100, object_name: "contratante.estadoCivil", title: "Estado Civil do Contratante" },
+        { type: "text", width: 150, object_name: "contratante.telefone", title: "Telefone do Contratante" },
+        { type: "text", width: 100, object_name: "contratante.profissao", title: "Profissão do Contratante" },
+        { type: "text", width: 100, object_name: "contratante.rg", title: "RG do Contratante" },
+
+        { type: "text", width: 300, object_name: "vendedor.nome", title: "Nome do Vendedor" },
+        { type: "text", width: 150, object_name: "vendedor.cidadeUf", title: "Cidade do Vendedor" },
+        { type: "text", width: 100, object_name: "vendedor.cpf", title: "CPF do Vendedor" },
+
+        { type: "text", width: 300, object_name: "nucleo.nome", title: "Nome do Núcleo" },
+        { type: "text", width: 150, object_name: "nucleo.cidade", title: "Cidade do Núcleo" },
+        { type: "text", width: 100, object_name: "nucleo.bairro", title: "Bairro do Núcleo" },
+        { type: "text", width: 300, object_name: "nucleo.uf", title: "UF do Núcleo" },
+        
+        { type: "text", width: 100, object_name: "assinaturaContratada", title: "Assinatura Contratada" },
+        { type: "text", width: 100, object_name: "assinaturaContratante", title: "Assinatura Contratante" },
+        { type: "text", width: 100, object_name: "assinaturaTesteminha1", title: "Assinatura Testeminha 1" },
+        { type: "text", width: 100, object_name: "assinaturaTesteminha2", title: "Assinatura Testeminha 2" },
+
+        
+        { type: "text", width: 40, object_name: "id", title: "Id" },
+        { type: "text", width: 40, object_name: "imovelId", title: "Id do imóvel" },
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }

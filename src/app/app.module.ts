@@ -22,6 +22,7 @@ import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { CommonModule } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatNativeDateModule,  DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { ExcelService } from './services/utils/excel.service';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -61,6 +62,7 @@ export const MY_DATE_FORMATS = {
   ],
   providers: [
     AuthService,
+    ExcelService,
     { provide: MY_DATE_FORMATS, useValue: MY_DATE_FORMATS },
     { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
     provideAnimationsAsync()

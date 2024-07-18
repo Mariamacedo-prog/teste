@@ -1,6 +1,5 @@
 <div class="page-container-grid">
   <h1>Listagem de Contratos</h1>
-  
   <div>
     <div class="inputs-row-form">
       <mat-form-field class="search-field-grid">
@@ -51,7 +50,7 @@
         <input matInput placeholder="Pesquisar por Nome, CPF, Vendedor e Contatante" [(ngModel)]="searchTerm" (keyup)="search()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
-      
+      <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon >download</mat-icon></button>
       <button style="margin-top:17px; margin-left: 20px; padding: 15px 40px;" (click)="search()" mat-stroked-button color="primary" >Filtrar</button>
       <button style="margin-top:17px; margin-left: 20px;"  mat-raised-button color="primary" (click)="adicionarNovo()" >Novo Contrato</button>
     </div>
