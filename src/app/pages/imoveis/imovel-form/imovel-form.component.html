@@ -99,7 +99,7 @@
 
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
-                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" (keyup)="buscarEnderecoPorta()" type="text" matInput formControlName="nucleoInformal" required>
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" type="text" matInput formControlName="nucleoInformal" required>
                 <mat-error *ngIf="formControls.get('enderecoPorta.nucleoInformal')?.hasError('required')">
                   Este campo é <strong>obrigatório</strong>.
                 </mat-error>
@@ -159,7 +159,7 @@
               </mat-form-field>
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
-                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" (keyup)="buscarEnderecoProjeto()" type="text" matInput formControlName="nucleoInformalProjeto" >
+                <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" type="text" matInput formControlName="nucleoInformalProjeto" >
               </mat-form-field>
             </div>
           </mat-tab>
@@ -203,7 +203,7 @@
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label>Núcleo Informal</mat-label>
-                  <input [readonly]="visualizar" (keyup)="buscarEnderecoDefinitivo()" type="text" matInput formControlName="nucleoInformalDefinitivo" >
+                  <input [readonly]="visualizar" type="text" matInput formControlName="nucleoInformalDefinitivo" >
                 </mat-form-field>
               </div>
 

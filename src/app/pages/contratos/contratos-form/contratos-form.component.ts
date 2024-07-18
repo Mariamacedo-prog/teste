@@ -105,6 +105,7 @@ export class ContratosFormComponent {
       nucleo: [""],
       nucleo_nome: [""],
       status: [""],
+      numeroContrato: [null],
       createdAt: [null],
       updatedAt: [null],
       imovelId: [''],
@@ -131,6 +132,7 @@ export class ContratosFormComponent {
     
     if(this.contratoId){
       this.contratosService.findById(this.contratoId).subscribe(contrato => {
+        console.log(contrato)
         this.formControls?.get('id')?.setValue(contrato.id);
      
         this.formControls?.get('assinaturaContratante')?.setValue(contrato.assinaturaContratante);
@@ -158,6 +160,10 @@ export class ContratosFormComponent {
         
         if(contrato.updatedAt){
           this.formControls?.get('updatedAt')?.setValue(contrato.updatedAt); 
+        }
+
+        if(contrato.numeroContrato){
+          this.formControls?.get('numeroContrato')?.setValue(contrato.numeroContrato);
         }
 
         this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
@@ -282,6 +288,7 @@ export class ContratosFormComponent {
     if(nucleo){
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
+
     this.formControls?.get('updatedAt')?.setValue(new Date());
     this.contratosService.updateItem(this.contratoId, this.formControls.getRawValue())
   }

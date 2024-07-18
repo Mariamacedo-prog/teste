@@ -165,6 +165,14 @@ export class WordService {
           space,
           space,  space,
           this.gerarParagrafo(
+            [ { text:`Contrato nº ${formControls?.get('numeroContrato')?.value ? formControls?.get('numeroContrato')?.value : formControls?.get('id')?.value}`, 
+                bold:true, 
+                size:25, 
+                font: "Arial"
+              }], "center"),
+          space,
+          space,  space,
+          this.gerarParagrafo(
             [{ text:"Pelo presente instrumento particular, as partes abaixo qualificadas", 
               bold:true, 
               size:25, 
@@ -803,6 +811,13 @@ export class WordService {
           [ { text:"CONTRATO DE PRESTAÇÃO DE SERVIÇOS PARA INDIVIDUALIZAÇÃO DE UNIDADES", 
               bold:true, 
               size:31, 
+              font: "Arial"
+            }], "center"),
+            space,  space,
+          this.gerarParagrafo(
+          [ { text:`Contrato nº ${formControls?.get('numeroContrato')?.value ? formControls?.get('numeroContrato')?.value : formControls?.get('id')?.value}`, 
+              bold:true, 
+              size:25, 
               font: "Arial"
             }], "center"),
           space,

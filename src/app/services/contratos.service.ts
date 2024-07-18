@@ -33,8 +33,10 @@ export class ContratosService {
   }
 
 
-  async save(user: any): Promise<void> { 
-    return await this.itemsCollection.add(user).then(() => undefined);
+  async save(item: any): Promise<void> { 
+    const newNumeroContrato = await this.getNextNumeroContrato();
+    item.numeroContrato = newNumeroContrato;
+    return await this.itemsCollection.add(item).then(() => undefined);
   }
 
   findById(id: string): Observable<any> {
@@ -42,6 +44,11 @@ export class ContratosService {
   }
 
   async updateItem(id: any, newData: any): Promise<void> {
+    if(newData.numeroContrato == null){
+      const newNumeroContrato = await this.getNextNumeroContrato();
+      newData.numeroContrato = newNumeroContrato;
+    }
+
     try {
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/contrato/lista']);
@@ -80,6 +87,31 @@ export class ContratosService {
     } catch (error) {
       this.toolboxService.showTooltip('error', 'Não foi possível atualizar, verifique os dados e tente novamente!', 'ERROR!');
       throw new Error('Não foi possível atualizar, verifique os dados e tente novamente!');
+    }
+  }
+
+  private async getNextNumeroContrato(): Promise<number> {
+    const counterDoc = this.firestore.firestore.collection('counters').doc('nextNumeroContrato');
+
+    try {
+      const newNumeroContrato = await this.firestore.firestore.runTransaction(async (transaction) => {
+        const counterSnapshot = await transaction.get(counterDoc);
+
+        if (!counterSnapshot.exists) {
+          throw new Error('Documento do contador não existe!');
+        }
+
+        const nextNumeroContrato = counterSnapshot.data()?.['value'] + 1;
+        transaction.update(counterDoc, { value: nextNumeroContrato });
+
+        return nextNumeroContrato;
+      });
+
+      console.log('Novo número de contrato gerado: ', newNumeroContrato);
+      return newNumeroContrato;
+    } catch (e) {
+      console.error('Erro ao obter o próximo número de contrato: ', e);
+      throw e;
     }
   }
 }

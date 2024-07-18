@@ -42,7 +42,7 @@ export class ContratantesService {
     try {
       const contratante = await firstValueFrom(this.firestore.collection('contratantes', ref => ref.where('cpf', '==', cpf)).valueChanges({ idField: 'id' }));
       if (contratante.length > 0 && contratante[0].id !== id) {
-        this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
+        this.toolboxService.showTooltip('error',`${cpf > 11 ? 'CNPJ':'CPF'} já cadastrado no banco de dados!`, 'ERROR!');
         throw new Error('CPF já cadastrado no banco de dados!');
       } else {
         this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
