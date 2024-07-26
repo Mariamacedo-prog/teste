@@ -5,6 +5,14 @@ import { ContratantesService } from '../../../services/contratantes.service';
 import { CartoriosService } from '../../../services/cartorios.service';
 import {  MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-contratante-grid',
@@ -20,7 +28,7 @@ export class ContratanteGridComponent {
 
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, public dialog: MatDialog,
-    private contratantesService: ContratantesService, private cartoriosService: CartoriosService) {}
+    private contratantesService: ContratantesService, private cartoriosService: CartoriosService, private excelService: ExcelService) {}
   adicionarNovo() {
     this.router.navigate(["/contratante/novo"]);
   }
@@ -88,5 +96,32 @@ export class ContratanteGridComponent {
   cartorioSelected(event: any){
     const value = event?.value;
     this.cartorioSearch = value;
+  }
+
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 200, object_name: "nome", title: "Nome do Contratante" },
+        { type: "text", width: 300, object_name: "cpf", title: "CPF do Contratante" },
+        { type: "text", width: 300, object_name: "rg", title: "RG do Contratante" },
+        { type: "text", width: 300, object_name: "email", title: "Email do Contratante" },
+        { type: "text", width: 300, object_name: "telefone", title: "Telefone do Contratante" },
+        { type: "text", width: 300, object_name: "nacionalidade", title: "Nacionalidade do Contratante" },
+        { type: "text", width: 300, object_name: "profissao", title: "Profissão do Contratante" },
+        { type: "text", width: 300, object_name: "estadoCivil", title: "Estado Civil do Contratante" },
+        { type: "text", width: 300, object_name: "nomeConjugue", title: "Nome do Conjugê do Contratante" },
+        { type: "text", width: 300, object_name: "nacionalidadeConjugue", title: "Nacionalidade do Conjugê do Contratante" },
+        
+        
+        { type: "text", width: 300, object_name: "cartorio.nome", title: "Cartorio" },
+
+        { type: "text", width: 300, object_name: "situacao.valoresRecebidos", title: "Valores Recebidos" },
+        { type: "text", width: 300, object_name: "situacao.valoresReceber", title: "Valores a Receber" },
+        { type: "text", width: 300, object_name: "situacao.situacaoPagamento", title: "Situação do Pagamento" },
+
+        
+        
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }

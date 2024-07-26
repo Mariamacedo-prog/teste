@@ -4,6 +4,14 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-usuario-grid',
@@ -16,7 +24,7 @@ export class UsuarioGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private usuariosService: UsuariosService, 
-    public dialog: MatDialog) {}
+    public dialog: MatDialog, private excelService: ExcelService) {}
   adicionarNovoUsuario() {
     this.router.navigate(["/usuario/novo"]);
   }
@@ -64,5 +72,17 @@ export class UsuarioGridComponent {
         this.findAllUsers();
       }
     });
+  }
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        
+        { type: "text", width: 200, object_name: "nome", title: "Nome do Usuario" },
+        { type: "text", width: 200, object_name: "cpf", title: "CPF do Usuario" },
+        { type: "text", width: 200, object_name: "email", title: "Email do Usuario"},
+        { type: "text", width: 200, object_name: "telefone", title: "Telefone do Usuario"},
+        
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }

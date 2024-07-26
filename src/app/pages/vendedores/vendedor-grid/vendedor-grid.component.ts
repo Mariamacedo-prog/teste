@@ -4,6 +4,14 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { VendedoresService } from '../../../services/vendedores.service';
 import {  MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-vendedor-grid',
@@ -16,7 +24,7 @@ export class VendedorGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private vendedoresService: VendedoresService,
-    public dialog: MatDialog
+    public dialog: MatDialog, private excelService: ExcelService
   ) {}
 
  
@@ -66,5 +74,22 @@ export class VendedorGridComponent {
         this.findAll();
       }
     });
+  }
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 200, object_name: "nome", title: "Nome do Vendedor" },
+        { type: "text", width: 100, object_name: "cpf", title: "CPF do Vendedor" },
+        { type: "text", width: 110, object_name: "telefone", title: "Telefone do Vendedor" },
+        { type: "text", width: 300, object_name: "email", title: "Email do Vendedor" },
+        { type: "text", width: 100, object_name: "rg", title: "RG do Vendedor" },
+        { type: "text", width: 210, object_name: "rua", title: "Rua do Vendedor" },
+        { type: "text", width: 200, object_name: "numero", title: "Numero do Vendedor" },
+        { type: "text", width: 100, object_name: "bairro", title: "Bairro do Vendedor" },
+        { type: "text", width: 150, object_name: "cidadeUf", title: "Cidade do Vendedor " },
+        { type: "text", width: 100, object_name: "cep", title: "CEP do Vendedor " },
+       
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }

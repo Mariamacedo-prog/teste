@@ -4,6 +4,14 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { FuncionariosService } from '../../../services/funcionarios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-funcionario-grid',
@@ -16,7 +24,7 @@ export class FuncionarioGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private funcionariosService: FuncionariosService,
-    public dialog: MatDialog
+    public dialog: MatDialog, private excelService: ExcelService
   ) {}
 
   ngOnInit(): void {
@@ -65,5 +73,22 @@ export class FuncionarioGridComponent {
         this.findAll();
       }
     });
+  }
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 200, object_name: "nome", title: "Nome do Vendedor" },
+        { type: "text", width: 200, object_name: "cpf", title: "CPF do Vendedor" },
+        { type: "text", width: 200, object_name: "email", title: "Email do Vendedor" },
+        { type: "text", width: 200, object_name: "telefone", title: "Telefone do Vendedor" },
+        { type: "text", width: 200, object_name: "rua", title: "Rua do Vendedor" },
+        { type: "text", width: 200, object_name: "numero", title: "Numero do Vendedor" },
+        { type: "text", width: 200, object_name: "bairro", title: "Bairro do Vendedor" },
+        { type: "text", width: 200, object_name: "cidadeUf", title: "Cidade/UF do Vendedor" },
+        { type: "text", width: 200, object_name: "cep", title: "CEP do Vendedor" },
+        { type: "text", width: 200, object_name: "usuario", title: "Usuario do Vendedor" },
+      
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }
