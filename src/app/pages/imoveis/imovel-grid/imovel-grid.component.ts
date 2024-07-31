@@ -81,7 +81,7 @@ export class ImovelGridComponent {
         { type: "text", width: 200, object_name: "enderecoPorta.bairro", title: "Bairro Endereço de Porta" },
         { type: "text", width: 200, object_name: "enderecoPorta.cidadeUf", title: "Cidade/UF Endereço de Porta" },
         { type: "text", width: 120, object_name: "enderecoPorta.cep", title: "CEP Endereço de Porta" },
-        { type: "text", width: 200, object_name: "enderecoPorta.nulecoInformal", title: "Nucleo Informal Endereço de Porta" },
+        { type: "text", width: 200, object_name: "enderecoPorta.nucleoInformal", title: "Nucleo Informal Endereço de Porta" },
         { type: "text", width: 150, object_name: "enderecoPorta.iptu", title: "IPTU Endereço de Porta" },
 
 

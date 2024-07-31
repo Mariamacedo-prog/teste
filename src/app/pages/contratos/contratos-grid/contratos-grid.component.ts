@@ -121,8 +121,8 @@ export class ContratosGridComponent {
         
         { type: "text", width: 100, object_name: "assinaturaContratada", title: "Assinatura Contratada" },
         { type: "text", width: 100, object_name: "assinaturaContratante", title: "Assinatura Contratante" },
-        { type: "text", width: 100, object_name: "assinaturaTesteminha1", title: "Assinatura Testeminha 1" },
-        { type: "text", width: 100, object_name: "assinaturaTesteminha2", title: "Assinatura Testeminha 2" },
+        { type: "text", width: 100, object_name: "assinaturaTesteminha1", title: "Assinatura Testemunha 1" },
+        { type: "text", width: 100, object_name: "assinaturaTesteminha2", title: "Assinatura Testemunha 2" },
 
         
         { type: "text", width: 40, object_name: "id", title: "Id" },
