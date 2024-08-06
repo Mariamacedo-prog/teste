@@ -24,7 +24,7 @@ export class StatusFormComponent {
  ngOnInit(): void {
    this.route.params.subscribe(params => {
       this.itemId = params['id'];
-      
+
       if(params['tela'] == 'visualizar'){
        this.view = true;
       }
@@ -71,7 +71,7 @@ export class StatusFormComponent {
  validForm(): boolean {
    return (
        this.descricaoFormControl.valid &&
-       this.nomeFormControl.valid 
+       this.nomeFormControl.valid
    );
  }
 }

@@ -4,6 +4,14 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { StatusService } from '../../../services/status.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-status-grid',
@@ -16,14 +24,14 @@ export class StatusGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private service: StatusService,
-    public dialog: MatDialog
+    public dialog: MatDialog, private excelService: ExcelService
   ) {}
 
- 
+
   ngOnInit(): void {
     this.findAll();
   }
-  
+
   findAll(){
     this.service.getItems().subscribe(item => {
       if (item.length >= 0) {
@@ -70,5 +78,14 @@ export class StatusGridComponent {
         this.findAll();
       }
     });
+  }
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 100, object_name: "nome", title: "Nome" },
+        { type: "text", width: 100, object_name: "descricao", title: "Descricao" },
+
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }

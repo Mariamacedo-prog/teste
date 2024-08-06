@@ -5,11 +5,11 @@
         <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="search()" />
         <mat-icon matPrefix>search</mat-icon>
       </mat-form-field>
-  
+      <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon >download</mat-icon></button>
       <button style="margin-top:17px;" mat-raised-button color="primary"  (click)="newCartorio()">Nova Cartorio</button>
     </div>
-  
-  
+
+
     <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">
       <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef > Nome</th>
@@ -31,8 +31,8 @@
           <th mat-header-cell *matHeaderCellDef >Cidade </th>
           <td mat-cell *matCellDef="let element" > {{element.endereco.cidadeUf}} </td>
         </ng-container>
-  
-  
+
+
         <ng-container matColumnDef="email" >
           <th mat-header-cell *matHeaderCellDef >E-mail </th>
           <td mat-cell *matCellDef="let element" > {{element.email}} </td>
@@ -55,11 +55,10 @@
           </button>
         </td>
       </ng-container>
-  
+
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
   </div>
-  
-  
-  
+
+

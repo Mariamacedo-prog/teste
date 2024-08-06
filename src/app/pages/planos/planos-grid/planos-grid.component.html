@@ -6,6 +6,7 @@
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
 
+    <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon >download</mat-icon></button>
     <button style="margin-top:17px;" mat-raised-button color="primary"  (click)="addNew()">Novo PLano</button>
   </div>
   <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">

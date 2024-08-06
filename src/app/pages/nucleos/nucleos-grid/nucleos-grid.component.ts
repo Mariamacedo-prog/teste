@@ -4,6 +4,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { NucleoService } from '../../../services/nucleo.service';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { ExcelService } from '../../../services/utils/excel.service';
+
+interface ColumnConfig {
+  type: string;
+  width: number;
+  object_name: string;
+  title: string;
+}
 
 @Component({
   selector: 'app-nucleos-grid',
@@ -16,14 +24,14 @@ export class NucleosGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private service: NucleoService,
-    public dialog: MatDialog
+    public dialog: MatDialog, private excelService: ExcelService
   ) {}
 
- 
+
   ngOnInit(): void {
     this.findAll();
   }
-  
+
   findAll(){
     this.service.getItems().subscribe(item => {
       if (item.length >= 0) {
@@ -66,5 +74,19 @@ export class NucleosGridComponent {
         this.findAll();
       }
     });
+  }
+  generateExcel(): void {
+    const columnsConfig: ColumnConfig[] = [
+        { type: "text", width: 200, object_name: "nome", title: "Nome" },
+
+        { type: "text", width: 150, object_name: "bairro", title: "Bairro" },
+        { type: "text", width: 150, object_name: "cidade", title: "Cidade" },
+        { type: "text", width: 80, object_name: "uf", title: "UF" },
+        { type: "text", width: 100, object_name: "especie", title: "Espécie" },
+        { type: "text", width: 100, object_name: "sigla", title: "Sigla" },
+
+    ];
+
+    this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
   }
 }
