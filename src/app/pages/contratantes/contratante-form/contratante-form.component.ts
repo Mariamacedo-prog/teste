@@ -108,9 +108,8 @@ export class ContratanteFormComponent {
         if(contratante.estrangeiro){
           this.formControls?.get('estrangeiro')?.setValue(contratante.estrangeiro);
           this.formControls?.get('rne')?.setValue(contratante.rne);
+          this.isEstrangeiro({checked: true})
         }
-
-      
 
         if(contratante.cpf > 11){
           if(contratante.razao_social){
@@ -149,7 +148,7 @@ export class ContratanteFormComponent {
         if(contratante.estadoCivil == 'Casado' || contratante.estadoCivil == 'União Estável'){
           this.isMarried = true;
         }
-
+        this.selectEstadoCivil();
         this.showAnexos = true;
       });        
     }else{

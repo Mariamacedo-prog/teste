@@ -60,7 +60,7 @@
           <mat-label>Escolha o imovel</mat-label>
           <mat-select (selectionChange)="changeImovel($event)">
             @for (imovel of imoveisList; track imovel) {
-              <mat-option [value]="imovel">{{imovel.enderecoPorta.rua}}</mat-option>
+              <mat-option [value]="imovel">{{imovel?.enderecoPorta?.rua}}, número:  {{imovel?.enderecoPorta?.numero}}, {{imovel?.enderecoPorta?.complemento}}</mat-option>
             }
           </mat-select>
         </mat-form-field>

@@ -126,21 +126,21 @@ export class PagamentoCalculoComponent {
             }else{
               this.formControls?.get('plano_valor')?.setValue(venda.plano);
 
-              if(venda.plano == 6000){
-                this.formControls?.get('plano')?.setValue('868i2kSmlbvARVwiG4tS');
-              }
+              // if(venda.plano == 6000){
+              //   this.formControls?.get('plano')?.setValue('868i2kSmlbvARVwiG4tS');
+              // }
 
-              if(venda.plano == 10000){
-                this.formControls?.get('plano')?.setValue('z6QGeMsy1zoDahkSChBd'); 
-              }
+              // if(venda.plano == 10000){
+              //   this.formControls?.get('plano')?.setValue('z6QGeMsy1zoDahkSChBd'); 
+              // }
 
-              if(venda.plano == 12000){
-                this.formControls?.get('plano')?.setValue('csdo5OqSx72He39517qN'); 
-              }
+              // if(venda.plano == 12000){
+              //   this.formControls?.get('plano')?.setValue('csdo5OqSx72He39517qN'); 
+              // }
 
-              if(venda.plano == 600){
-                this.formControls?.get('plano')?.setValue("D8UoOnqR37T5XEBvivRP");
-              }
+              // if(venda.plano == 600){
+              //   this.formControls?.get('plano')?.setValue("D8UoOnqR37T5XEBvivRP");
+              // }
             }
 
             if(venda.maxParcelas){
@@ -201,7 +201,9 @@ export class PagamentoCalculoComponent {
   changePlano(event: any) {
     this.listarValorEntrada();
     let value = event.value;
+    
     if(value){
+     
       let indexPlano = this.planos.findIndex((plano: any) => plano.id === value);
 
       this.optionsEntrada = [];
