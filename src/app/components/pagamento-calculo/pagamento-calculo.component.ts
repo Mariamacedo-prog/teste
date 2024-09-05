@@ -26,6 +26,7 @@ interface TypeSelectValue {
   numeroParcelas: number;
   status: boolean;
   valor: number;
+  desconto ?: number;
 }
 
 @Component({
@@ -85,6 +86,7 @@ export class PagamentoCalculoComponent {
       parcelas: this.parcelasFormControls,
       isAvista: false,
       valorAvista: [null, Validators.required],
+      porcentagemDesconto: [null], 
     });
 
     this.findPlanos();
@@ -141,6 +143,10 @@ export class PagamentoCalculoComponent {
               // if(venda.plano == 600){
               //   this.formControls?.get('plano')?.setValue("D8UoOnqR37T5XEBvivRP");
               // }
+            }
+
+            if(venda.porcentagemDesconto){
+              this.formControls?.get('porcentagemDesconto')?.setValue(venda.porcentagemDesconto);
             }
 
             if(venda.maxParcelas){
@@ -205,14 +211,19 @@ export class PagamentoCalculoComponent {
     if(value){
      
       let indexPlano = this.planos.findIndex((plano: any) => plano.id === value);
-
       this.optionsEntrada = [];
       this.formControls?.get('plano')?.setValue(this.planos[indexPlano].id);
       const plano = this.planos[indexPlano];
       this.formControls?.get('entrada')?.get('porcentagem')?.setValue(((100 - (100 - plano.entrada)) / 100));
       this.formControls?.get('parcelas')?.get('porcentagem')?.setValue((((100 - plano.entrada))  / 100));
-      this.formControls?.get('valorAvista')?.setValue(plano.valor);
       this.formControls?.get('plano_valor')?.setValue(plano.valor);
+
+      if(plano?.desconto && plano?.desconto > 0){
+        this.formControls?.get('valorAvista')?.setValue(plano.valor - ((plano.desconto / 100) * plano.valor));
+      }else {
+        this.formControls?.get('valorAvista')?.setValue(plano.valor);
+      }
+     
       this.formControls?.get('maxParcelas')?.setValue(plano.numeroParcelas);
 
       this.listarValorEntrada();
@@ -315,7 +326,7 @@ export class PagamentoCalculoComponent {
       this.optionsParcelas.push({
         valor: valor,
         quant: i,
-        viewValue: `Em ${i} vez${i > 1 ? 'es' : ' '} de R$${valor.toFixed(2)}`
+        viewValue: `Em ${i} vez${i > 1 ? 'es' : ' '} de ${valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
        });
     }
   }
@@ -406,7 +417,7 @@ export class PagamentoCalculoComponent {
     this.optionsEntrada.push({
       valor: novaEntrada,
       quant: 1,
-      viewValue: `Em 1 vez de R$${novaEntrada.toFixed(2)}`
+      viewValue: `Em 1 vez de ${novaEntrada.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
      });
 
      novaEntrada = novaEntrada / 2;
@@ -414,7 +425,7 @@ export class PagamentoCalculoComponent {
      this.optionsEntrada.push({
       valor: novaEntrada ,
       quant:2,
-      viewValue: `Em 2 vezes de R$${novaEntrada.toFixed(2)}`
+      viewValue: `Em 2 vezes de ${novaEntrada.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
      });
  
      const porcentagemParcelas = this.formControls?.get('parcelas')?.get('porcentagem')?.value ? this.formControls?.get('parcelas')?.get('porcentagem')?.value : 0.90;
@@ -427,7 +438,7 @@ export class PagamentoCalculoComponent {
        this.optionsParcelas.push({
          valor: valor,
          quant: i,
-         viewValue: `Em ${i} vez${i > 1 ? 'es' : ' '} de R$${valor.toFixed(2)}`
+         viewValue: `Em ${i} vez${i > 1 ? 'es' : ' '} de ${valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}`
         });
      }
   }

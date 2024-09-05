@@ -132,7 +132,6 @@ export class ContratosFormComponent {
     
     if(this.contratoId){
       this.contratosService.findById(this.contratoId).subscribe(contrato => {
-        console.log(contrato)
         this.formControls?.get('id')?.setValue(contrato.id);
      
         this.formControls?.get('assinaturaContratante')?.setValue(contrato.assinaturaContratante);
