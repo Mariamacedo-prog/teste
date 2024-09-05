@@ -127,22 +127,6 @@ export class PagamentoCalculoComponent {
               this.formControls?.get('plano_valor')?.setValue(venda.plano_valor);
             }else{
               this.formControls?.get('plano_valor')?.setValue(venda.plano);
-
-              // if(venda.plano == 6000){
-              //   this.formControls?.get('plano')?.setValue('868i2kSmlbvARVwiG4tS');
-              // }
-
-              // if(venda.plano == 10000){
-              //   this.formControls?.get('plano')?.setValue('z6QGeMsy1zoDahkSChBd'); 
-              // }
-
-              // if(venda.plano == 12000){
-              //   this.formControls?.get('plano')?.setValue('csdo5OqSx72He39517qN'); 
-              // }
-
-              // if(venda.plano == 600){
-              //   this.formControls?.get('plano')?.setValue("D8UoOnqR37T5XEBvivRP");
-              // }
             }
 
             if(venda.porcentagemDesconto){
@@ -209,7 +193,6 @@ export class PagamentoCalculoComponent {
     let value = event.value;
     
     if(value){
-     
       let indexPlano = this.planos.findIndex((plano: any) => plano.id === value);
       this.optionsEntrada = [];
       this.formControls?.get('plano')?.setValue(this.planos[indexPlano].id);
@@ -217,8 +200,9 @@ export class PagamentoCalculoComponent {
       this.formControls?.get('entrada')?.get('porcentagem')?.setValue(((100 - (100 - plano.entrada)) / 100));
       this.formControls?.get('parcelas')?.get('porcentagem')?.setValue((((100 - plano.entrada))  / 100));
       this.formControls?.get('plano_valor')?.setValue(plano.valor);
-
-      if(plano?.desconto && plano?.desconto > 0){
+      
+      if(plano?.desconto){
+        this.formControls?.get('porcentagemDesconto')?.setValue((plano.desconto / 100));
         this.formControls?.get('valorAvista')?.setValue(plano.valor - ((plano.desconto / 100) * plano.valor));
       }else {
         this.formControls?.get('valorAvista')?.setValue(plano.valor);
@@ -446,7 +430,11 @@ export class PagamentoCalculoComponent {
   pagamentoAvista(event: MatSlideToggleChange) {
     if (event.checked) {
       this.formControls?.get('isAvista')?.setValue(true);
-      this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano_valor')?.value);
+      if(this.formControls?.get('porcentagemDesconto')?.value){
+        this.formControls?.get('valorAvista')?.setValue( this.formControls?.get('plano_valor')?.value - ((this.formControls?.get('porcentagemDesconto')?.value * 100) * this.formControls?.get('plano_valor')?.value) / 100)
+      }else{
+        this.formControls?.get('valorAvista')?.setValue(this.formControls?.get('plano_valor')?.value);
+      }
 
       this.clearValues()
       this.formControls?.get('entrada')?.get('valorTotal')?.setValue(this.formControls?.get('plano_valor')?.value);
