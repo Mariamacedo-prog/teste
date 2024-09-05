@@ -46,7 +46,7 @@
                 <div class="inputs-row-form" *ngIf="this.formControls?.get('isAvista')?.value ==true && this.formControls.get('plano_valor')?.value > 0" style="flex-direction: column;"  formGroupName="entrada">
                     <mat-form-field  >
                       <mat-label>Valor à vista</mat-label>
-                      <input matInput [value]="(this.formControls.get('plano_valor')?.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
+                      <input matInput [value]="(this.formControls.get('valorAvista')?.value).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })" />
                     </mat-form-field>
                     <mat-form-field *ngIf="this.formControls?.get('entrada')?.get('valor')?.value > 0">
                       <mat-label>Data do Pagamento</mat-label>

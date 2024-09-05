@@ -11,6 +11,10 @@
 npm-debug.log
 yarn-error.log
 
+# yarn
+yarn.lock
+package-lock.json
+
 # IDEs and editors
 .idea/
 .project

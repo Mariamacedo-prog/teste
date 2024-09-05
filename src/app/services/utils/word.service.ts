@@ -462,7 +462,7 @@ export class WordService {
                 size:25, 
                 font: "Arial"
               },
-              { text: `${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`, 
+              { text: `${parcelamentoInfo?.plano_valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)${parcelamentoInfo?.porcentagemDesconto ? `, com desconto de ${parcelamentoInfo?.porcentagemDesconto * 100}%`: ""}.`, 
                 bold:true, 
                 size:25, 
                 font: "Arial"
@@ -545,7 +545,7 @@ export class WordService {
             this.gerarParagrafo(
               [{ text: parcelamentoInfo?.parcelas?.quantidade > 0 
                 ? `` 
-                : `        • Pago em uma única vez, em moeda corrente, na assinatura do presente contrato no valor de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`,
+                : `        • Pago em uma única vez, em moeda corrente, na assinatura do presente contrato no valor de ${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais) `,
                 bold:true,
                 size:25, 
                 font: "Arial"
@@ -1112,7 +1112,7 @@ export class WordService {
               size:25, 
               font: "Arial"
             },
-            { text: `${parcelamentoInfo?.valorAvista?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)`, 
+            { text: `${parcelamentoInfo?.plano_valor?.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })} (reais)${parcelamentoInfo?.porcentagemDesconto ? `, com desconto de ${parcelamentoInfo?.porcentagemDesconto * 100}%`: ""}.`, 
               bold:true, 
               size:25, 
               font: "Arial"

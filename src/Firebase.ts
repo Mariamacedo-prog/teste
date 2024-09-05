@@ -16,9 +16,6 @@ import 'firebase/storage';
 //   appId: "1:792752854006:web:de6ef7cff9aa60ef606dd7"
 // }
 
-
-
-
 //// ANTIGO PROD
 
 // const info ={
@@ -29,8 +26,6 @@ import 'firebase/storage';
 //   messagingSenderId: "60391473788",
 //   appId: "1:60391473788:web:2ac1e1871aeef6ab1abff9",
 // }
-
-
 
 
 //// NOVO PROD
