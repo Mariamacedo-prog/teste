@@ -19,7 +19,7 @@ interface ColumnConfig {
 })
 
 export class PlanosGridComponent {
-  displayedColumns: string[] = ['nome', 'valor', 'entrada' , 'numeroParcelas', 'status', 'actions'];
+  displayedColumns: string[] = ['nome', 'valor', 'entrada', 'desconto', 'numeroParcelas', 'status', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
@@ -36,6 +36,7 @@ export class PlanosGridComponent {
     this.planosService.getItems().subscribe(planos => {
       if (planos.length >= 0) {
         this.dataSource = planos;
+        console.log(planos)
         this.dataSourceFilter = planos;
       }
     });
