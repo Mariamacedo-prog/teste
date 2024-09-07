@@ -5,17 +5,28 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { tap, delay } from 'rxjs/operators';
 import { UsuariosService } from '../services/usuarios.service';
-
+import { AuthState, loginSuccess, setPermissions, logOutSuccess }  from "../store/store"
+import { Store } from '@ngrx/store';
+import { AcessoService } from '../services/acesso.service';
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   isLoggedIn = false;
   redirectUrl: string | null = null;
-  private db: any = {usuarios: [], acessos: [],funcionarios: [], contratante: [], menu:[]};
-  public usuarioLogado: any;
 
-  constructor(private router: Router, private usuariosService: UsuariosService) {
+  permissions$: Observable<any>;
+  user$: Observable<any>;
+  isLoggedIn$: Observable<boolean>;
+
+  constructor(private router: Router, 
+    private usuariosService: UsuariosService,
+    private acessoService: AcessoService,
+    private store: Store<{ auth: AuthState }>
+  ) {
+    this.permissions$ = this.store.select(state => state.auth.permissions);
+    this.user$ = this.store.select(state => state.auth.user);
+    this.isLoggedIn$ = this.store.select(state => state.auth.isLoggedIn);
   }
 
   ngOnDestroy(): void {
@@ -30,9 +41,26 @@ export class AuthService {
     if (cpf && senha) {
       this.usuariosService.findByCpfSenha(cpf, senha).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
-          this.isLoggedIn = true;
-          localStorage.setItem('isLoggedIn', JSON.stringify(true));
-          localStorage.setItem('usuario', JSON.stringify(usuarioEncontrado[0]));
+          this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
+          console.log(usuarioEncontrado[0])
+          if(usuarioEncontrado[0].perfil.id){
+            this.getAllPermissions(usuarioEncontrado[0].perfil.id);
+          }else{
+            this.store.dispatch(setPermissions({ permissions: {
+              acesso: 'restrito',
+              cartorio: 'restrito',
+              contratante: 'restrito',
+              contrato: 'restrito',
+              funcionario: 'restrito',
+              imovel: 'restrito',
+              nucleo: 'restrito',
+              plano: 'restrito',
+              prefeitura: 'restrito',
+              status: 'restrito',
+              usuario: 'restrito',
+              vendedor: 'restrito',
+            } }));
+          }
         }
       });
     }
@@ -41,12 +69,15 @@ export class AuthService {
 
   logout(): void {
     this.isLoggedIn = false;
-    this.usuarioLogado = null;
-    localStorage.setItem('isLoggedIn', JSON.stringify(false));
-    localStorage.setItem('usuario', JSON.stringify(null));
-
-    localStorage.removeItem('isLoggedIn');
-    localStorage.removeItem('usuario');
+    this.store.dispatch(logOutSuccess());
     this.router.navigate(['/login']);
+  }
+
+  getAllPermissions(id: any): void {
+    this.acessoService.findById(id).subscribe(item => {
+      if(item.permissoes){
+        this.store.dispatch(setPermissions({ permissions: item.permissoes }));
+      }
+    })
   }
 }

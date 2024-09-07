@@ -5,6 +5,7 @@ import { NucleoService } from '../../../services/nucleo.service';
 import { AbstractControl, FormControl, ValidatorFn, Validators } from '@angular/forms';
 import { CepService } from '../../../services/utils/cep.service';
 import { PlanosService } from '../../../services/planos.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-nucleos-form',
@@ -13,13 +14,18 @@ import { PlanosService } from '../../../services/planos.service';
 })
 export class NucleosFormComponent {
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
-    private service: NucleoService, private planoService: PlanosService, private cepService: CepService,) {}
-    
+    private service: NucleoService, private planoService: PlanosService, private cepService: CepService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.acesso;
+      });
+    }
   nucleos: any[] = [];
 
   itemId = '';
   view: boolean = false;
-  isLoggedIn: boolean = false;
+  access: any = '';
   databaseInfo: any = {};
 
   cepFormControl = new FormControl('');
@@ -38,8 +44,11 @@ export class NucleosFormComponent {
   
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findNucleos();
- 
          
     this.route.params.subscribe(params => {
         this.itemId = params['id'];
@@ -48,8 +57,6 @@ export class NucleosFormComponent {
         this.view = true;
         }
     });
-
-    this.isAuthenticated();
 
     if(this.itemId){
       this.service.findById(this.itemId).subscribe(nucleo => {
@@ -76,14 +83,6 @@ export class NucleosFormComponent {
         this.planosList = planos;
       }
     });
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-    }
   }
 
   findNucleos(){

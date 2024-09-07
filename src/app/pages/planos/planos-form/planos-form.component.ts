@@ -3,6 +3,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { PlanosService } from '../../../services/planos.service';
+import { AuthService } from '../../../auth/auth.service';
 @Component({
   selector: 'app-planos-form',
   templateUrl: './planos-form.component.html',
@@ -11,11 +12,17 @@ import { PlanosService } from '../../../services/planos.service';
 export class PlanosFormComponent {
 
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
-     private planosService: PlanosService) {}
-
+     private planosService: PlanosService,
+     private  authService: AuthService
+     ) {
+       this.authService.permissions$.subscribe(perms => {
+         this.access = perms.acesso;
+       });
+     }
+ 
+     access: any = '';
   planoId = '';
   view: boolean = false;
-  isLoggedIn: boolean = false;
   databaseInfo: any = {};
 
   valorFormControl = new FormControl(0, [Validators.required]);
@@ -49,6 +56,10 @@ export class PlanosFormComponent {
 
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.route.params.subscribe(params => {
        this.planoId = params['id'];
        
@@ -56,8 +67,6 @@ export class PlanosFormComponent {
         this.view = true;
        }
     });
-
-    this.isAuthenticated();
 
     if(this.planoId){
       this.planosService.findById(this.planoId).subscribe(user => {
@@ -71,14 +80,6 @@ export class PlanosFormComponent {
           this.descontoFormControl.setValue(user.desconto);
         }
       });
-    }
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
     }
   }
 

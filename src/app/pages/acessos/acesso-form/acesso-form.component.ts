@@ -1,191 +1,154 @@
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Component } from '@angular/core';
+import { AbstractControl, FormBuilder, FormGroup, ValidatorFn, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
 import { Observable, of } from 'rxjs';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ValidateService } from '../../../services/utils/validate.service';
-import { MatChipListbox, MatChipListboxChange, MatChipOption } from '@angular/material/chips';
-import { UsuariosService } from '../../../services/usuarios.service';
+import { AcessoService } from '../../../services/acesso.service';
+import { MenuService } from '../../../services/menu.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-acesso-form',
   templateUrl: './acesso-form.component.html',
   styleUrl: './acesso-form.component.css'
 })
-export class AcessoFormComponent {
-  isLoggedIn: boolean = false;
+export class AcessoFormComponent implements OnInit{
+  id = "";
+  view: boolean = false;
+  access: any = '';
+
   databaseInfo: any = {};
   filteredOptions: Observable<string[]> = of([]);
   formControls!: FormGroup;
   telasPermitidas: { tela: string; nivel: any; }[] = [];
   arrayTelas: any = [];
 
-
   timeoutId: any;
-  filteredCpf: any[] = [];
-  loadingCpf: boolean = false;
-  constructor(private toolboxService: ToolboxService, private router: Router, 
-    private route: ActivatedRoute, private formBuilder: FormBuilder,
-    private validateService: ValidateService
-    ) {}
+  filteredNome: any[] = [];
+  loadingAcesso: boolean = false;
+  acessos: any;
+  constructor(private toolboxService: ToolboxService, 
+    private router: Router, 
+    private route: ActivatedRoute, 
+    private formBuilder: FormBuilder,
+    private service: AcessoService,
+    private menuService: MenuService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.acesso;
+      });
+    }
 
-  usuarioFormControls = this.formBuilder.group({
-    id: [0, Validators.required],
-    email:  ['', [Validators.required, Validators.email]],
-    nome: ['', Validators.required],
-    cpf: ['', [Validators.required, this.validateService.validateCPF]],
-    telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
-    telas: [[[]], [Validators.required]]
-  });
-
-  grupoFormControls = this.formBuilder.group({
-    id: [0, Validators.required],
-    nome: ['', Validators.required],
-    descricao: ['', Validators.required],
-    telas: [[[]], Validators.required]
+  permissoesFormControls = this.formBuilder.group({
+    acesso: ['restrito', Validators.required],
+    cartorio: ['restrito', Validators.required],
+    contratante: ['restrito', Validators.required],
+    contrato: ['restrito', Validators.required],
+    funcionario: ['restrito', Validators.required],
+    imovel: ['restrito', Validators.required],
+    nucleo: ['restrito', Validators.required],
+    plano: ['restrito', Validators.required],
+    prefeitura: ['restrito', Validators.required],
+    status: ['restrito', Validators.required],
+    usuario: ['restrito', Validators.required],
+    vendedor: ['restrito', Validators.required],
   });
 
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.formControls = this.formBuilder.group({
-      id: [0, Validators.required],
-      usuario: this.usuarioFormControls,
-      grupo: this.grupoFormControls
+      id: [""],
+      createdAt: [null],
+      deletedAt: [null],
+      nomeGrupo: ["", [Validators.required]],
+      status: [true],
+      updatedAt: [null],
+      permissoes: this.permissoesFormControls
     });
-    this.isAuthenticated();
 
-    const storedDb = localStorage.getItem('appDb');
-      if (storedDb) {
-        this.databaseInfo = JSON.parse(storedDb);
-        this.arrayTelas = this.databaseInfo.telas;
+    this.route.params.subscribe(params => {
+      this.id = params['id'];
+
+      if(params['tela'] == 'visualizar'){
+       this.view = true;
       }
+   });
+
+    this.arrayTelas = this.menuService.getMenuItems();
+    this.findAcessos();
+
+    if(this.id){
+      this.service.findById(this.id).subscribe(item => {
+        this.formControls.patchValue({
+          id: item.id,
+          createdAt: item.createdAt,
+          deletedAt: item.deletedAt,
+          nomeGrupo: item.nomeGrupo,
+          status: item.status,
+          updatedAt: item.updatedAt,
+          permissoes: item.permissoes
+        });
+        this.permissoesFormControls.patchValue(item.permissoes);
+      });
+    }
+  } 
+  
+  findAcessos(){
+    this.service.getItems().subscribe((acessos)=>{
+      this.acessos = acessos;
+      this.formControls?.get('nomeGrupo')?.setValidators([
+        this.validateNomeGrupo(this.acessos, this.id), Validators.required
+      ]);
+    });
   }
 
-  localizaUsuario(){
-    const usuario = this.databaseInfo.usuarios.find((item: any) => item.cpf == this.formControls.get('usuario')?.get('cpf')?.value);
-    if(usuario){
-      this.formControls.get('usuario')?.get('nome')?.setValue(usuario.nome);
-      this.formControls.get('usuario')?.get('telefone')?.setValue(usuario.telefone);
-      this.formControls.get('usuario')?.get('email')?.setValue(usuario.email);
-      this.formControls.get('usuario')?.get('id')?.setValue(usuario.id);
 
-      this.formControls.get('id')?.setValue(Math.floor(Math.random() * 100000));
-    }else{
-      this.toolboxService.showTooltip('error', 'Usuário não encontrado na base de dados!', 'ERRO CPF!');
+
+
+  create() {
+    if(this.formControls.getRawValue()){
+      this.service.save(this.formControls.getRawValue());
+      this.toolboxService.showTooltip('success', 'Perfil cadastrado com sucesso!', 'Sucesso!');
+      this.router.navigate(['/acesso/lista']);
     }
   }
 
-  cadastrar() {
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      this.databaseInfo = JSON.parse(storedDb);
-    }
-    if(this.databaseInfo.acessos){
-      const acessosPeloCnpj = this.databaseInfo.acessos.find((item: any) => item.usuario.cpf == this.formControls.get('usuario')?.get('cpf')?.value);
-      if(acessosPeloCnpj){
-        this.toolboxService.showTooltip('error', 'Usuário com CPF com permissao já cadastrada na base de dados!', 'ERRO CPF!');
-        return;
-      }
-    }
-    
-    this.databaseInfo.acessos.push(
-      this.formControls.getRawValue()
-    )
-
-    localStorage.setItem('appDb', JSON.stringify(this.databaseInfo));
-    this.toolboxService.showTooltip('success', 'Cadastro de Permissão realizada com sucesso!', 'Sucesso!');
-    this.router.navigate(['/acesso/lista']);
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-      this.router.navigate(['/login']);
+  async update(){
+    if(this.formControls.getRawValue()){
+      this.service.updateItem(this.id, this.formControls.getRawValue())
+      this.router.navigate(['/acesso/lista']);
     }
   }
 
-  formatarTelefone() {
-    if(this.formControls.get('prefeitura')?.get('telefone')?.value){
-      let telefone = this.formControls.get('prefeitura')?.get('telefone')?.value.replace(/\D/g, '');
 
-      if (telefone.length === 11) {
-        this.formControls.get('prefeitura')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 7)}-${telefone.substring(7)}`);
-      } else if (telefone.length === 10) {
-        this.formControls.get('prefeitura')?.get('telefone')?.setValue(`(${telefone.substring(0, 2)}) ${telefone.substring(2, 6)}-${telefone.substring(6)}`);
-      }
-    }
-  }
 
-  formularioValido(): boolean {
+  formValid(): boolean {
     return this.formControls.valid;
   }
 
-  permissaoTela(tela: string, event: MatChipListboxChange) {
-    if (event.value !== 'Restrito' && event.value != undefined) {
-      const index = this.telasPermitidas.findIndex((item: any) => item.tela === tela);
-  
-      if (index !== -1) {
-        this.telasPermitidas[index] = {
-          tela: tela,
-          nivel: event.value
-        };
-      } else {
-        this.telasPermitidas.push({
-          tela: tela,
-          nivel: event.value
-        });
-      }
-    } else {
-      const index = this.telasPermitidas.findIndex((item: any) => item.tela === tela);
-      if (index !== -1) {
-        this.telasPermitidas.splice(index, 1);
-      }
-    }
-
-    this.formControls.get('usuario')?.get('telas')?.setValue(this.telasPermitidas);
-    this.formControls.get('grupo')?.get('telas')?.setValue(this.telasPermitidas);
+  handleKeyUp(event: any) {
+    this.formControls?.get('nomeGrupo')?.updateValueAndValidity();
   }
 
-  onSelectGrupo(event: any){
-    const selectedGroup = event.value;
- 
-    this.formControls.get('grupo')?.get('nome')?.setValue(selectedGroup.nome);
-    this.formControls.get('grupo')?.get('descricao')?.setValue("teste");
-    this.formControls.get('grupo')?.get('id')?.setValue(selectedGroup.id);
-  }
-
-  handleKeyUp(event: any){
-    this.loadingCpf = true;
-    clearTimeout(this.timeoutId); 
-    const nome = event.target.value.trim();
-    if (nome.length >= 3) {
-      this.timeoutId = setTimeout(() => {
-        this.buscarCpf(nome);
-      }, 2000); 
-    } else {
-
-      this.filteredCpf = [];
-    }
-  }
-
-  buscarCpf(cpf: string) {
-    this.filteredCpf = this.databaseInfo.usuarios.filter((item: any) => {
-      return item.cpf?.includes(cpf);
-    });
-    this.loadingCpf = false;
-  }
-
-  selectedCpf(option: any){
-    this.loadingCpf = false;
-    if(option){
-      if(option.nome){
-        this.formControls.get('usuario')?.get('nome')?.setValue(option.nome);
+  validateNomeGrupo(acessos: any[], id = ""): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (id) {
+        if(acessos.some(item => item?.nomeGrupo?.toLowerCase() === value?.toLowerCase() && item?.id != id)){
+          return { 'nomeGrupoInvalid': true };
+        }
+        return null;
+      }else{
+        if(acessos.some(item => item?.nomeGrupo?.toLowerCase() === value?.toLowerCase())){
+          return { 'nomeGrupoInvalid': true };
+        }
+        return null;
       }
-      if(option.cpf){
-        this.formControls.get('usuario')?.get('cpf')?.setValue(option.cpf);
-      }
-    }
+    };
   }
 }

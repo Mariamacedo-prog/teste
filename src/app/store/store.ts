@@ -1,4 +1,4 @@
-import { createReducer, on, createAction, props } from '@ngrx/store';
+import { createReducer, on, createAction, props, Store } from '@ngrx/store';
 
 export interface AuthState {
   isLoggedIn: boolean;
@@ -9,8 +9,10 @@ export interface AuthState {
 const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
-  permissions: {}
+  permissions: null
 };
+
+let store = Store<{ auth: AuthState }>;
 
 export const loginSuccess = createAction(
   '[Auth] Login Success',
@@ -37,11 +39,10 @@ export const authReducer = createReducer(
     ...state,
     isLoggedIn: false,
     user: null, 
-    permissions: {}
+    permissions: {} 
   })),
   on(setPermissions, (state, { permissions }) => ({
     ...state,
     permissions: permissions
   }))
 );
-

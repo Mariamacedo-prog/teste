@@ -4,6 +4,7 @@ import { ImoveisService } from '../../../services/imoveis.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -18,16 +19,29 @@ interface ColumnConfig {
   styleUrl: './imovel-grid.component.css'
 })
 export class ImovelGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'cpf', 'cidade',  'nucleo', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private imoveisService: ImoveisService, public dialog: MatDialog, private excelService: ExcelService) {}
+  constructor(private router: Router, private imoveisService: ImoveisService, public dialog: MatDialog, 
+    private excelService: ExcelService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.acesso;
+    });
+  }
+
   addNew() {
     this.router.navigate(["/imovel/novo"]);
   }
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findAll();
   }
 

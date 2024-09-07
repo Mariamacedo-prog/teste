@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { VendedoresService } from '../../../services/vendedores.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-vendedor-form',
@@ -16,10 +17,16 @@ export class VendedorFormComponent {
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
-    private vendedoresService: VendedoresService,  private formBuilder: FormBuilder) {}
+    private vendedoresService: VendedoresService,  private formBuilder: FormBuilder,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.acesso;
+      });
+    }
 
+  access: any = '';
   vendedorId = "";
-  isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
@@ -65,6 +72,10 @@ export class VendedorFormComponent {
   });
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.route.params.subscribe(params => {
        this.vendedorId = params['id'];
 
@@ -72,8 +83,6 @@ export class VendedorFormComponent {
         this.visualizar = true;
        }
     });
-
-    this.isAuthenticated();
 
     if(this.vendedorId){
       this.vendedoresService.findById(this.vendedorId).subscribe(vendedor => {
@@ -176,15 +185,6 @@ export class VendedorFormComponent {
         this.perfilFormControl.valid &&
         this.formaPagamentoFormControl.valid
     );
-  }
-
-  isAuthenticated() {
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-    }
-
   }
 
   formatPhone() {

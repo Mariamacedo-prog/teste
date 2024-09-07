@@ -6,6 +6,7 @@ import { CartoriosService } from '../../../services/cartorios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -20,6 +21,7 @@ interface ColumnConfig {
   styleUrl: './contratos-grid.component.css'
 })
 export class ContratosGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'statusEntrega', 'cartorio', 'vendedor', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
@@ -29,12 +31,22 @@ export class ContratosGridComponent {
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService,
      private contratosService: ContratosService, private cartoriosService: CartoriosService,
-     public dialog: MatDialog, private excelService: ExcelService) {}
+     public dialog: MatDialog, private excelService: ExcelService,
+     private authService: AuthService
+   ) {
+     this.authService.permissions$.subscribe(perms => {
+       this.access = perms.acesso;
+     });
+   }
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
   }
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findAll();
 
     this.cartoriosService.getItems().subscribe(cartorios => {

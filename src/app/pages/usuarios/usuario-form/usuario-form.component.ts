@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { UsuariosService } from '../../../services/usuarios.service';
+import { AcessoService } from '../../../services/acesso.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -11,15 +13,32 @@ import { UsuariosService } from '../../../services/usuarios.service';
   styleUrls: ['./usuario-form.component.css']
 })
 export class UsuarioFormComponent {
-
-  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
-    private validateService: ValidateService, private usuariosService: UsuariosService) {}
-
+  constructor(private toolboxService: ToolboxService, 
+    private router: Router,
+    private route: ActivatedRoute,
+    private validateService: ValidateService,
+    private usuariosService: UsuariosService,
+    private formBuilder: FormBuilder, 
+    private acessoService: AcessoService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.acesso;
+      });
+      this.authService.isLoggedIn$.subscribe(logged => {
+        this.isLoggedIn = logged;
+      });
+    }
   userId = '';
+  access: any = '';
   view: boolean = false;
   isLoggedIn: boolean = false;
   confirmSenha: string = '';
   databaseInfo: any = {};
+  timeoutId: any;
+  acessos: any[] = [];
+  filteredAcessos: any[] = [];
+  loadingAcessos: boolean = false;
 
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   nomeFormControl = new FormControl('', Validators.required);
@@ -27,8 +46,13 @@ export class UsuarioFormComponent {
   loginCpfFormControl = new FormControl('', [Validators.required, this.validateService.validateCPForCNPJ]);
   senhaFormControl = new FormControl('', [Validators.required, Validators.minLength(8), Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/)]);
   confirmSenhaFormControl = new FormControl('', [Validators.required, this.comparePasswords.bind(this)]);
-
-
+  createdAtFormControl = new FormControl(null);
+  deletedAtFormControl = new FormControl(null);
+  updatedAtFormControl = new FormControl(null);
+  perfil = this.formBuilder.group({
+    id: [''],
+    nomeGrupo: ['']
+  });
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
@@ -40,7 +64,7 @@ export class UsuarioFormComponent {
     });
 
     this.isAuthenticated();
-
+    this.findAcessos();
     if(this.userId){
       this.usuariosService.findById(this.userId).subscribe(user => {
         this.emailFormControl.setValue(user.email);
@@ -49,11 +73,32 @@ export class UsuarioFormComponent {
         this.loginCpfFormControl.setValue(user.cpf.replace(/\D/g, ''));
         this.senhaFormControl.setValue(user.senha);
         this.confirmSenhaFormControl.setValue(user.senha);
+        if(user.perfil){
+          this.perfil?.get('id')?.setValue(user.perfil.id);
+          this.perfil?.get('nomeGrupo')?.setValue(user.perfil.nomeGrupo);
+        }
+
+        if(user.createdAt){
+          this.createdAtFormControl?.setValue(user.createdAt);
+        }
+
+        if(user.deletedAt){
+          this.deletedAtFormControl?.setValue(user.deletedAt);
+        }
+
+        if(user.updatedAt){
+          this.updatedAtFormControl?.setValue(user.updatedAt);
+        }
+        
         this.maskCpfCnpj();
       });
-
-
     }
+  }
+
+  findAcessos(){
+    this.acessoService.getItems().subscribe((acessos)=>{
+      this.acessos = acessos;
+    });
   }
 
   formatPhone() {
@@ -87,8 +132,6 @@ export class UsuarioFormComponent {
     }
   }
 
-
-
   create() {
     const cpf = this.loginCpfFormControl?.value || '';
     const item = {
@@ -96,7 +139,11 @@ export class UsuarioFormComponent {
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
-      "cpf": cpf.replace(/\D/g, '')
+      "cpf": cpf.replace(/\D/g, ''),
+      "perfil": this.perfil.getRawValue(),
+      "createdAt": new Date(),
+      "deletedAt": null,
+      "updatedAt": new Date(),
     }
 
     if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
@@ -132,12 +179,15 @@ export class UsuarioFormComponent {
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
-      "cpf": cpf.replace(/\D/g, '')
+      "cpf": cpf.replace(/\D/g, ''),
+      "perfil": this.perfil.getRawValue(),
+      "createdAt": this.createdAtFormControl.value,
+      "deletedAt": this.deletedAtFormControl.value,
+      "updatedAt": new Date(),
     }
 
     if(item.cpf){
       this.usuariosService.updateItem(this.userId, item)
-
     }
   }
 
@@ -160,5 +210,35 @@ export class UsuarioFormComponent {
   maskCpfCnpj(){
     const value = this.loginCpfFormControl?.value || '';
     this.loginCpfFormControl?.setValue(this.validateService.formatCpfCnpj(value))
+  }
+
+  handleKeyUpAcesso(event: any) {
+    this.loadingAcessos = true;
+    clearTimeout(this.timeoutId); 
+    const nome = event.target.value.trim();
+    if (nome.length >= 3) {
+      this.timeoutId = setTimeout(() => {
+        this.searchAcesso(nome);
+      }, 2000); 
+    } else {
+      this.filteredAcessos = [];
+      this.loadingAcessos = false;
+    }
+  }
+
+  searchAcesso(nome: string) {
+    this.filteredAcessos = []
+    this.acessos.filter((item: any) => {
+      if(item.nomeGrupo?.toLowerCase().includes(nome.toLowerCase())){
+         this.filteredAcessos.push(item);
+      }  
+    });
+    this.loadingAcessos = false;
+  }
+
+  selectAcesso(item: any){
+    this.perfil?.get('id')?.setValue(item.id);
+    this.perfil?.get('nomeGrupo')?.setValue(item.nomeGrupo);
+    this.loadingAcessos = false;
   }
 }

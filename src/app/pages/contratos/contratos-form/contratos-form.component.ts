@@ -10,6 +10,7 @@ import { ImoveisService } from '../../../services/imoveis.service';
 import { VendedoresService } from '../../../services/vendedores.service';
 import { StatusService } from '../../../services/status.service';
 import { NucleoService } from '../../../services/nucleo.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-contratos-form',
@@ -18,7 +19,8 @@ import { NucleoService } from '../../../services/nucleo.service';
 })
 export class ContratosFormComponent {
   contratoId = "";
-  isLoggedIn: boolean = false;
+  access: any = '';
+
   databaseInfo: any = {};
   visualizar: boolean = false;
   formControls!: FormGroup;
@@ -49,7 +51,12 @@ export class ContratosFormComponent {
     private formBuilder: FormBuilder, private wordService: WordService, private contratosService: ContratosService, 
     private contratantesService: ContratantesService, private empresaService: EmpresasService, 
     private vendedoresService: VendedoresService,  private statusService: StatusService, private nucleoService: NucleoService, 
-    private imoveisService: ImoveisService) {
+    private imoveisService: ImoveisService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.acesso;
+      });
     }
 
   cartorioFormControls = this.formBuilder.group({
@@ -94,6 +101,10 @@ export class ContratosFormComponent {
   });
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.formControls = this.formBuilder.group({
       id: ['', Validators.required],
       assinaturaContratante: [''],
@@ -121,8 +132,6 @@ export class ContratosFormComponent {
         this.visualizar = true;
        }
     });
-
-    this.isAuthenticated();
 
     this.findContratantes();
     this.findEmpresa();
@@ -303,14 +312,6 @@ export class ContratosFormComponent {
       return false;
     }else{
       return true;
-    }
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
     }
   }
 

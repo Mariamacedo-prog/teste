@@ -6,7 +6,6 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 //// TESTE
-
 const info ={
   apiKey: "AIzaSyASZtusB2gmvpd_ApTIuSxVUbjCr02Fwns",
   authDomain: "reurb2-6dd5d.firebaseapp.com",

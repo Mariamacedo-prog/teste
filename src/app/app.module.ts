@@ -23,6 +23,8 @@ import { CommonModule } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { MatNativeDateModule,  DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
 import { ExcelService } from './services/utils/excel.service';
+import { StoreModule } from '@ngrx/store';
+import { authReducer } from './store/store';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -59,6 +61,7 @@ export const MY_DATE_FORMATS = {
     AngularFireModule.initializeApp(firebaseapp),
     AngularFirestoreModule.enablePersistence(),
     AngularFireStorageModule,
+    StoreModule.forRoot({ auth: authReducer }), 
   ],
   providers: [
     AuthService,

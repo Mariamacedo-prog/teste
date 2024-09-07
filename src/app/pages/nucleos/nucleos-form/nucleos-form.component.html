@@ -79,12 +79,12 @@
       
 
       <div class="area-botao-form " *ngIf="this.itemId === '' || this.itemId === undefined">
-        <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
-        <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/nucleos/lista">Voltar</button>
+        <button mat-raised-button color="primary" *ngIf="this.access === 'total'" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
+        <button mat-raised-button color="link" routerLink="/nucleos/lista">Voltar</button>
       </div>
 
-      <div class="area-botao-form " *ngIf="isLoggedIn && this.itemId !== '' && this.itemId !== undefined">
-        <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+      <div class="area-botao-form " *ngIf="this.itemId !== '' && this.itemId !== undefined">
+        <button *ngIf="!view && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
         <button mat-raised-button color="link" routerLink="/nucleos/lista">Voltar</button>
       </div>
     </mat-card-content>

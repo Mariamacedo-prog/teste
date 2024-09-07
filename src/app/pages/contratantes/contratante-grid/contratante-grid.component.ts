@@ -6,6 +6,7 @@ import { CartoriosService } from '../../../services/cartorios.service';
 import {  MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -20,6 +21,7 @@ interface ColumnConfig {
   styleUrl: './contratante-grid.component.css'
 })
 export class ContratanteGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'estado' ,'situacaoPagamento', 'cartorio','data','valoresReceber','valoresRecebidos', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
@@ -28,12 +30,23 @@ export class ContratanteGridComponent {
 
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, public dialog: MatDialog,
-    private contratantesService: ContratantesService, private cartoriosService: CartoriosService, private excelService: ExcelService) {}
+    private contratantesService: ContratantesService, private cartoriosService: CartoriosService, 
+    private excelService: ExcelService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.acesso;
+    });
+  }
   adicionarNovo() {
     this.router.navigate(["/contratante/novo"]);
   }
 
   findAll(){
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.contratantesService.getItems().subscribe(contratante => { 
       if (contratante.length >= 0) {
         this.dataSource = contratante;

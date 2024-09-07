@@ -5,6 +5,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -19,6 +20,7 @@ interface ColumnConfig {
 })
 
 export class PlanosGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'valor', 'entrada', 'desconto', 'numeroParcelas', 'status', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
@@ -26,8 +28,18 @@ export class PlanosGridComponent {
 
   constructor(private router: Router, private toolboxService: ToolboxService,
     private planosService: PlanosService,
-    public dialog: MatDialog, private excelService: ExcelService) {}
+    public dialog: MatDialog, private excelService: ExcelService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.acesso;
+    });
+  }
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findAll();
   }
 

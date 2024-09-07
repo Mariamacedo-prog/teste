@@ -5,6 +5,7 @@ import { VendedoresService } from '../../../services/vendedores.service';
 import {  MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -19,16 +20,25 @@ interface ColumnConfig {
   styleUrl: './vendedor-grid.component.css'
 })
 export class VendedorGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['foto','nome', 'cpf', 'telefone', 'email', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, private vendedoresService: VendedoresService,
-    public dialog: MatDialog, private excelService: ExcelService
-  ) {}
-
+    public dialog: MatDialog, private excelService: ExcelService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.acesso;
+    });
+  }
  
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findAll();
   }
   

@@ -6,37 +6,17 @@
 
     <form [formGroup]="formControls">
       <mat-card-content >
-        <div formGroupName="usuario">
+        <div class="inputs-row-form">
           <mat-form-field>
-            <mat-label>Nome do Usuário</mat-label>
-            <input matInput disabled [value]="formControls.get('usuario.nome')?.value"/>
-          </mat-form-field>
-
-          <mat-form-field class="example-full-width">
-            <mat-label>CPF</mat-label>
-            <input type="text"
-                   matInput
-                   formControlName="cpf"
-                   [matAutocomplete]="auto"
-                   (keyup)="handleKeyUp($event)">
-            <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                <mat-option *ngIf="filteredCpf.length === 0 && !loadingCpf" [value]="''">
-                  Não localizado
-                </mat-option>
-                <mat-option *ngFor="let option of filteredCpf" [value]="option.cpf" (onSelectionChange)="selectedCpf(option)">
-                  {{option.nome + " - " + option.cpf}}
-                </mat-option>
-            </mat-autocomplete>
-            <mat-progress-bar *ngIf="loadingCpf" mode="indeterminate"></mat-progress-bar>
-            <mat-error *ngIf="formControls.get('usuario.cpf')?.hasError('required')">
-              Este campo é <strong>obrigatório</strong>
+            <mat-label>Nome do Perfil</mat-label>
+            <input [readonly]="view"  type="text" matInput formControlName="nomeGrupo" />
+            <mat-error *ngIf="formControls.get('nomeGrupo')?.hasError('nomeGrupoInvalid')" >
+              Nome do perfil já localizada no banco de dados.
             </mat-error>
-            <mat-error *ngIf="formControls.get('usuario.cpf')?.hasError('cpfInvalido')">cpf inválido</mat-error>
           </mat-form-field>
         </div>
-        
-        <div *ngIf="formControls.get('usuario.nome')?.value">
-          <mat-card >
+        <div >
+          <mat-card [formGroup]="permissoesFormControls">
             <mat-card-header >
               <mat-card-title>Permissões</mat-card-title>
             </mat-card-header>
@@ -46,11 +26,10 @@
                   <mat-card class="card-tela" >
                     <li class="li-tela">
                       <div class="nome-tela"> <mat-icon >{{tela.icon}}</mat-icon> <p>{{tela.label}}</p></div>
-                      <mat-chip-listbox  (change)="permissaoTela(tela.label, $event)">
-                        <mat-chip-option [selected]="true" value="Restrito" color="warn"> Restrito</mat-chip-option>
-                        <mat-chip-option value="Consulta">Consulta</mat-chip-option>
-                        <mat-chip-option value="Alteração">Alteração</mat-chip-option>
-                        <mat-chip-option value="Total">Total</mat-chip-option>
+                      <mat-chip-listbox [formControlName]="tela.value" >
+                        <mat-chip-option value="restrito" color="warn"> Restrito</mat-chip-option>
+                        <mat-chip-option value="consulta">Consulta</mat-chip-option>
+                        <mat-chip-option value="total">Total</mat-chip-option>
                       </mat-chip-listbox>
                     </li>
                   </mat-card>
@@ -60,26 +39,16 @@
   
           </mat-card>
 
-          <mat-card >
-            <mat-card-header >
-              <mat-card-title>Adicionar a um grupo</mat-card-title>
-            </mat-card-header>
-            <mat-form-field class="search-field-grid">
-              <mat-label>Grupo</mat-label>
-              <mat-select (selectionChange)="onSelectGrupo($event)" >
-               @for (grupo of databaseInfo.gruposAcessos; track grupo) {
-                  <mat-option  [value]="grupo">{{grupo.nome}}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
-  
-          </mat-card>
-
         </div>
   
-        <div class="area-botao-form " *ngIf="isLoggedIn">
-          <button mat-raised-button color="primary" (click)="cadastrar()" [disabled]="!formularioValido()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="this.id === '' || this.id === undefined">
+          <button mat-raised-button *ngIf="this.access === 'total'" color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/acesso/lista">Voltar</button>
+        </div>
+
+        <div class="area-botao-form " *ngIf="this.id !==  '' && this.id !== undefined">
+          <button *ngIf="!view && this.access === 'total'"  mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+          <button mat-raised-button color="link" routerLink="/acesso/lista">Voltar</button>
         </div>
       </mat-card-content>
     </form>
