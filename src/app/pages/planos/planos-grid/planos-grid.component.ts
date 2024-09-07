@@ -32,7 +32,7 @@ export class PlanosGridComponent {
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
-      this.access = perms.acesso;
+      this.access = perms.plano;
     });
   }
   ngOnInit(): void {
@@ -48,7 +48,6 @@ export class PlanosGridComponent {
     this.planosService.getItems().subscribe(planos => {
       if (planos.length >= 0) {
         this.dataSource = planos;
-        console.log(planos)
         this.dataSourceFilter = planos;
       }
     });

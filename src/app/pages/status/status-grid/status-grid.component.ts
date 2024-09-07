@@ -30,7 +30,7 @@ export class StatusGridComponent {
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
-      this.access = perms.acesso;
+      this.access = perms.status;
     });
   }
 

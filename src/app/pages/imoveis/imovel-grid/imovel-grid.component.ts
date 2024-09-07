@@ -29,7 +29,7 @@ export class ImovelGridComponent {
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
-      this.access = perms.acesso;
+      this.access = perms.imovel;
     });
   }
 

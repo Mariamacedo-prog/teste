@@ -30,7 +30,7 @@ export class PrefeituraGridComponent {
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
-      this.access = perms.acesso;
+      this.access = perms.prefeitura;
     });
   }
 

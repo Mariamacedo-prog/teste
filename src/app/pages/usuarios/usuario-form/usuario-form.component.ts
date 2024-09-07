@@ -23,7 +23,13 @@ export class UsuarioFormComponent {
     private  authService: AuthService
     ) {
       this.authService.permissions$.subscribe(perms => {
-        this.access = perms.acesso;
+        if(perms?.usuario){
+          this.access = perms.usuario;
+        }
+
+        if(perms?.acesso){
+          this.perfilAcesso = perms.acesso;
+        }
       });
       this.authService.isLoggedIn$.subscribe(logged => {
         this.isLoggedIn = logged;
@@ -31,6 +37,8 @@ export class UsuarioFormComponent {
     }
   userId = '';
   access: any = '';
+  perfilAcesso: any = '';
+
   view: boolean = false;
   isLoggedIn: boolean = false;
   confirmSenha: string = '';

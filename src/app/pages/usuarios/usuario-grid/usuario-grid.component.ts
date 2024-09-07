@@ -30,7 +30,7 @@ export class UsuarioGridComponent {
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
-      this.access = perms.acesso;
+      this.access = perms.usuario;
     });
   }
   adicionarNovoUsuario() {
@@ -39,10 +39,6 @@ export class UsuarioGridComponent {
 
 
   ngOnInit(): void {
-    if(this.access == 'restrito'){
-      this.router.navigate(["/usuario/lista"]);
-    }
-
     this.findAllUsers();
   }
   

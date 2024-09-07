@@ -42,7 +42,6 @@ export class AuthService {
       this.usuariosService.findByCpfSenha(cpf, senha).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
           this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
-          console.log(usuarioEncontrado[0])
           if(usuarioEncontrado[0].perfil.id){
             this.getAllPermissions(usuarioEncontrado[0].perfil.id);
           }else{

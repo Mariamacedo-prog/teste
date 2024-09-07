@@ -22,7 +22,7 @@ export class MenuService {
   ]
   constructor(private firestore: AngularFirestore) {}
 
-  getMenuItems(): {"icon": string, "label": string, "route": string, id: number}[]{
+  getMenuItems(): any[]{
    // return this.firestore.collection('menu').valueChanges({ idField: 'id' });
    return this.menu;
   }

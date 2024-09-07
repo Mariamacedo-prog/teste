@@ -51,7 +51,7 @@ export class AcessoGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((acesso: any) => acesso.usuario.nome.includes(this.searchTerm) || acesso.usuario.cpf.includes(this.searchTerm) || acesso.grupo?.nome.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((acesso: any) => acesso.nomeGrupo.toLowerCase().includes(this.searchTerm.toLowerCase()) );
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
