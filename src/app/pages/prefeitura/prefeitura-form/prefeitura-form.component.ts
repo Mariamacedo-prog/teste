@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { PrefeiturasService } from '../../../services/prefeituras.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-prefeitura-form',
@@ -13,8 +14,8 @@ import { PrefeiturasService } from '../../../services/prefeituras.service';
   styleUrl: './prefeitura-form.component.css'
 })
 export class PrefeituraFormComponent {
+  access: any = '';
   prefeituraId = "";
-  isLoggedIn: boolean = false ;
   databaseInfo: any = {};
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
@@ -24,8 +25,14 @@ export class PrefeituraFormComponent {
 
   constructor(private toolboxService: ToolboxService, private router: Router,
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
-    private validateService: ValidateService, private prefeiturasService: PrefeiturasService
-    ) {}
+    private validateService: ValidateService, private prefeiturasService: PrefeiturasService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.prefeitura;
+      });
+    }
+
 
   responsavelFormControls = this.formBuilder.group({
     nome: [''],
@@ -49,6 +56,10 @@ export class PrefeituraFormComponent {
   });
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+    
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       responsavel: this.responsavelFormControls,
@@ -70,8 +81,6 @@ export class PrefeituraFormComponent {
        this.visualizar = true;
       }
    });
-
-   this.isAuthenticated();
 
    if(this.prefeituraId){
      this.prefeiturasService.findById(this.prefeituraId).subscribe(prefeitura => {
@@ -128,14 +137,6 @@ export class PrefeituraFormComponent {
   update(){
     if(this.formControls.get('cnpj')?.getRawValue()){
       this.prefeiturasService.updateItem(this.prefeituraId, this.formControls.getRawValue())
-    }
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
     }
   }
 

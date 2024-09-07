@@ -1,6 +1,10 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToolboxService } from '../../../components/toolbox/toolbox.service';
+import { AcessoService } from '../../../services/acesso.service';
+import { AuthService } from '../../../auth/auth.service';
+import { DialogComponent } from '../../../components/dialog/dialog.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-acesso-grid',
@@ -8,30 +12,38 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
   styleUrl: './acesso-grid.component.css'
 })
 export class AcessoGridComponent {
-  displayedColumns: string[] = ['nome', 'cpf', 'grupo','actions'];
+  access: any = '';
+  displayedColumns: string[] = ['nome', 'status','actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  dataGrupoSource:any = [];
-  dataGrupoSourceFilter:any = [];
-  displayedGrupoColumns: string[] = ['nome','actions'];
-  searchTermGrupo: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService) {}
+  constructor(private router: Router, 
+    private toolboxService: ToolboxService, 
+    public dialog: MatDialog,
+    private service: AcessoService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.acesso;
+    });
+  }
 
  
   ngOnInit(): void {
-    setTimeout(() => {
-      const storedDb = localStorage.getItem('appDb');
+    this.findAll();
+  };
 
-      if (storedDb) {
-        if(JSON.parse(storedDb).acessos){
-          this.dataSource = JSON.parse(storedDb).acessos;
-          this.dataSourceFilter = JSON.parse(storedDb).acessos;
-          this.dataGrupoSource = JSON.parse(storedDb).gruposAcessos;
-          this.dataGrupoSourceFilter = JSON.parse(storedDb).gruposAcessos;
-        }
+  findAll(){
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
+    this.service.getItems().subscribe(items => {
+      if (items.length >= 0) {
+        this.dataSource = items;
+        this.dataSourceFilter = items;
       }
-    }, 1000)
+    });
   }
 
   adicionarNovo() {
@@ -39,7 +51,7 @@ export class AcessoGridComponent {
   }
   
   procurar() {
-    this.dataSourceFilter = this.dataSource.filter((acesso: any) => acesso.usuario.nome.includes(this.searchTerm) || acesso.usuario.cpf.includes(this.searchTerm) || acesso.grupo?.nome.includes(this.searchTerm));
+    this.dataSourceFilter = this.dataSource.filter((acesso: any) => acesso.nomeGrupo.toLowerCase().includes(this.searchTerm.toLowerCase()) );
     if(this.searchTerm.length == 0){
       this.dataSourceFilter = this.dataSource;
     }
@@ -49,52 +61,28 @@ export class AcessoGridComponent {
     this.router.navigate(["/acesso/novo"]);
   }
   
-  procurarGrupo() {
-    this.dataGrupoSourceFilter = this.dataGrupoSource.filter((acesso: any) => acesso.nome.includes(this.searchTermGrupo));
-    if(this.searchTermGrupo.length == 0){
-      this.dataGrupoSourceFilter = this.dataGrupoSource;
-    }
-  }
 
   visualizarItem(element: any){
-    this.router.navigate(["/usuario/form/" + element.usuario.id + "/visualizar"]);
+    this.router.navigate(["/acesso/form/" + element.id + "/visualizar"]);
   }
 
   editarItem(element: any){
-    this.router.navigate(["/usuario/form/" + element.usuario.id]);
+    this.router.navigate(["/acesso/form/" + element.id]);
   }
 
   deletarItem(element: any){
-    let databaseInfo: any = {};
-    const storedDb = localStorage.getItem('appDb');
-    if (storedDb) {
-      databaseInfo = JSON.parse(storedDb);
-    }
-    const index = databaseInfo.acessos.findIndex((item: any) => item.id == element.id);
+    const dialogRef = this.dialog.open(DialogComponent, {
+      width: '300px',
+      data: {
+        text: `Tem certeza que deseja excluir Cartorio "${element.nome}"?`,
+      }
+    });
 
-    if (index !== -1) {
-      databaseInfo.acessos.splice(index, 1)
-      this.toolboxService.showTooltip('success', 'Acesso foi deletado com sucesso!', 'SUCESSO!');
-    }
-
-    // const indexUsuario = databaseInfo.usuarios.findIndex((item: any) => item.id == element.usuario.id);
-
-    // if (indexUsuario !== -1) {
-    //   databaseInfo.usuarios.splice(indexUsuario, 1)
-    //   this.toolboxService.showTooltip('success', 'Acesso foi deletado com sucesso!', 'SUCESSO!');
-    // }
-
-    localStorage.setItem('appDb', JSON.stringify(databaseInfo));
-    this.dataSourceFilter = databaseInfo.acessos;
-    this.dataSource = databaseInfo.acessos;
-  }
-
-  gerenciarPermissoes(element: any){
-    this.router.navigate(["/acesso/permissao/usuario/" + element.id]);
-    
-  }
-  
-  adicionarGrupo(element: any){
-    this.router.navigate(["/acesso/adicionar/grupo/" + element.id]);
+    dialogRef.afterClosed().subscribe(result => {
+      if(result){
+        this.service.deleteItem(element.id);
+        this.findAll();
+      }
+    });
   }
 }

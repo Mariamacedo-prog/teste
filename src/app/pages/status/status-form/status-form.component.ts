@@ -3,6 +3,7 @@ import { ToolboxService } from '../../../components/toolbox/toolbox.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { StatusService } from '../../../services/status.service';
 import { FormControl, Validators } from '@angular/forms';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-status-form',
@@ -11,17 +12,27 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class StatusFormComponent {
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
-    private service: StatusService) {}
+    private service: StatusService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.status;
+      });
+    }
 
  itemId = '';
  view: boolean = false;
- isLoggedIn: boolean = false;
+ access: any = '';
  databaseInfo: any = {};
 
  descricaoFormControl = new FormControl("", [Validators.required]);
  nomeFormControl = new FormControl('', Validators.required);
 
  ngOnInit(): void {
+  if(this.access == 'restrito'){
+    this.router.navigate(["/usuario/lista"]);
+  }
+  
    this.route.params.subscribe(params => {
       this.itemId = params['id'];
 
@@ -30,21 +41,11 @@ export class StatusFormComponent {
       }
    });
 
-   this.isAuthenticated();
-
    if(this.itemId){
      this.service.findById(this.itemId).subscribe(user => {
        this.nomeFormControl.setValue(user.nome);
        this.descricaoFormControl.setValue(user.descricao);
      });
-   }
- }
-
- isAuthenticated(){
-   if(localStorage.getItem('isLoggedIn') == 'true'){
-     this.isLoggedIn = true;
-   }else{
-     this.isLoggedIn = false;
    }
  }
 

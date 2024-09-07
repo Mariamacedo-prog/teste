@@ -5,6 +5,21 @@
     </mat-card-header>
 
     <mat-card-content>
+      <mat-form-field *ngIf="this.perfilAcesso === 'total'"> 
+        <mat-label>Perfil</mat-label>
+        <input type="text"
+                [readonly]="view"
+                matInput
+                [value]="this.perfil.get('nomeGrupo')?.value"
+                [matAutocomplete]="autoAcesso"
+                (keyup)="handleKeyUpAcesso($event)">
+        <mat-autocomplete autoActiveFirstOption #autoAcesso="matAutocomplete">
+            <mat-option *ngFor="let option of filteredAcessos" [value]="option.nomeGrupo" (onSelectionChange)="selectAcesso(option)">
+              {{option.nomeGrupo}}
+            </mat-option>
+        </mat-autocomplete>
+        <mat-progress-bar *ngIf="loadingAcessos" mode="indeterminate"></mat-progress-bar>
+      </mat-form-field>    
       <mat-form-field>
         <mat-label>Nome</mat-label>
         <input [readonly]="view" matInput [formControl]="nomeFormControl" />
@@ -80,7 +95,7 @@
         </div>
 
         <div class="area-botao-form " *ngIf="isLoggedIn && this.userId !== '' && this.userId !== undefined">
-          <button *ngIf="!view" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+          <button *ngIf="!view && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
         </div>
     </mat-card-content>

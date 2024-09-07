@@ -6,6 +6,7 @@ interface MenuItem {
   icon: string;
   label: string;
   route: string;
+  value?: string;
 }
 
 @Component({
@@ -17,11 +18,15 @@ export class MenuComponent {
   @Output() menuToggled = new EventEmitter<boolean>();
   menuItens: MenuItem[] = [];
   isMenuOpen = false;
+  permissions: any;
   mobileQuery: MediaQueryList;
-
+  isLoggedIn: boolean = false;
   private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef,private menuService: MenuService, private media: MediaMatcher, private authService: AuthService) {
+  constructor(private changeDetectorRef: ChangeDetectorRef,
+    private menuService: MenuService, 
+    private media: MediaMatcher, 
+    private authService: AuthService) {
     this.mobileQuery = media.matchMedia('(max-width: 1200px)');
     this._mobileQueryListener = () => {
       this.isMenuOpen = !this.mobileQuery.matches;
@@ -29,10 +34,33 @@ export class MenuComponent {
       
     };
     this.mobileQuery.addEventListener('change', this._mobileQueryListener);
+    
+    this.authService.permissions$.subscribe(perms => {
+      this.permissions = perms;
+      this.generateListMenu();
+    });
+    this.authService.isLoggedIn$.subscribe(logged => {
+      this.isLoggedIn = logged;
+    });
   }
 
   ngOnInit(): void {
-    this.menuItens=this.menuService.getMenuItems();
+ 
+  }
+
+  generateListMenu(){
+    let teste = this.menuService.getMenuItems();
+    let novoMenuList: MenuItem[] = [];
+    for(let item of teste){
+      if(this.permissions && this.permissions[item.value] != null){
+        if(this.permissions[item.value] != 'restrito'){
+            novoMenuList.push(item);
+        }
+      } 
+      
+    }
+    
+    this.menuItens = novoMenuList
   }
 
   isAuthenticated(): boolean | null{

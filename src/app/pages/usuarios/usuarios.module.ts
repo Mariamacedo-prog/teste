@@ -12,6 +12,8 @@ import { MatCardModule } from '@angular/material/card';
 import { authGuard } from '../../auth/auth.guard';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import { DialogModule } from '@angular/cdk/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const routes: Routes = [
   { path: 'novo/cadastro', component: UsuarioFormComponent},
@@ -34,6 +36,8 @@ const routes: Routes = [
     MatCardModule,
     MatPaginatorModule,
     DialogModule,
+    MatAutocompleteModule,
+    MatProgressBarModule,
     RouterModule.forChild(routes)
   ]
 })

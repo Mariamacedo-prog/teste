@@ -7,6 +7,7 @@ import { ValidateService } from '../../../services/utils/validate.service';
 import { ContratantesService } from '../../../services/contratantes.service';
 import { EstadoCivilService } from '../../../services/estadoCivil.service';
 import { CartoriosService } from '../../../services/cartorios.service';
+import { AuthService } from '../../../auth/auth.service';
 
 
 @Component({
@@ -16,8 +17,9 @@ import { CartoriosService } from '../../../services/cartorios.service';
 })
 export class ContratanteFormComponent {
   contratanteId = "";
+  access: any = '';
+
   isMarried = false;
-  isLoggedIn: boolean = false;
   databaseInfo: any = {};
   estadoCivil: any = {};
   options: string[] = [];
@@ -35,9 +37,13 @@ export class ContratanteFormComponent {
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private validateService: ValidateService,
     private formBuilder: FormBuilder, private contratantesService: ContratantesService,
-    private estadoCivilService: EstadoCivilService, private cartoriosService: CartoriosService
-  ) {}
-
+    private estadoCivilService: EstadoCivilService, private cartoriosService: CartoriosService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.contratante;
+      });
+    }
   anexosFormControl = this.formBuilder.group({
     rgFile: [{base64: '',type: ''}, Validators.required],
     cpfFile: [{base64: '',type: ''}, Validators.required],
@@ -55,6 +61,10 @@ export class ContratanteFormComponent {
   });
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
@@ -85,8 +95,6 @@ export class ContratanteFormComponent {
         this.visualizar = true;
        }
     });
-
-    this.isAuthenticated();
 
     if(this.contratanteId){
       this.contratantesService.findById(this.contratanteId).subscribe(contratante => {
@@ -243,13 +251,6 @@ export class ContratanteFormComponent {
     );
   }
 
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-    }
-  }
   
   formatPhone() {
     if(this.formControls?.get('telefone')?.value){

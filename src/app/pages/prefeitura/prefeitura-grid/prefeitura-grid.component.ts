@@ -4,6 +4,7 @@ import { PrefeiturasService } from '../../../services/prefeituras.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -18,16 +19,30 @@ interface ColumnConfig {
   styleUrl: './prefeitura-grid.component.css'
 })
 export class PrefeituraGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'cnpj', 'cargo', 'cidade', 'email', 'telefone', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private prefeiturasService: PrefeiturasService, public dialog: MatDialog, private excelService: ExcelService ) {}
+  constructor(private router: Router, private prefeiturasService: PrefeiturasService, 
+    public dialog: MatDialog, 
+    private excelService: ExcelService,
+    private authService: AuthService
+  ) {
+    this.authService.permissions$.subscribe(perms => {
+      this.access = perms.prefeitura;
+    });
+  }
+
   adicionarNovaPrefeitura() {
     this.router.navigate(["/prefeitura/nova"]);
   }
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.findAll();
   }
 

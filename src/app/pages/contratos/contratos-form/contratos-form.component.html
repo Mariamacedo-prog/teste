@@ -134,8 +134,8 @@
           </mat-select>
         </mat-form-field>
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId !== '' && this.contratoId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="this.contratoId !== '' && this.contratoId !== undefined">
+          <button *ngIf="!visualizar && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
         </div>
       </mat-card-content>
@@ -153,8 +153,8 @@
     </div>
 
     
-    <div class="area-botao-form " *ngIf="isLoggedIn && this.contratoId === '' || this.contratoId === undefined">
-      <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+    <div class="area-botao-form " *ngIf="this.contratoId === '' || this.contratoId === undefined">
+      <button mat-raised-button *ngIf="this.access === 'total'" color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
       <button  mat-raised-button color="link" routerLink="/contrato/lista">Voltar</button>
     </div>
 

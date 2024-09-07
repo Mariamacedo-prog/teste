@@ -5,6 +5,7 @@ import { CartoriosService } from '../../../services/cartorios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogComponent } from '../../../components/dialog/dialog.component';
 import { ExcelService } from '../../../services/utils/excel.service';
+import { AuthService } from '../../../auth/auth.service';
 
 interface ColumnConfig {
   type: string;
@@ -19,17 +20,28 @@ interface ColumnConfig {
   styleUrl: './cartorio-grid.component.css'
 })
 export class CartorioGridComponent {
+  access: any = '';
   displayedColumns: string[] = ['nome', 'cnpj', 'cns', 'cargo', 'cidade', 'email', 'telefone', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService,
-    public dialog: MatDialog,private cartoriosService: CartoriosService, private excelService: ExcelService) {}
+    public dialog: MatDialog,private cartoriosService: CartoriosService, 
+    private excelService: ExcelService, private authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.cartorio;
+      });
+    }
   newCartorio() {
     this.router.navigate(["/cartorio/novo"]);
   }
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
    this.findAll();
   }
 

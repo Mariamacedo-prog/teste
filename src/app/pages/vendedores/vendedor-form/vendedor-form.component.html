@@ -174,13 +174,13 @@
 
 
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId === '' || this.vendedorId === undefined">
-          <button mat-raised-button color="primary" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
+        <div class="area-botao-form " *ngIf="this.vendedorId === '' || this.vendedorId === undefined">
+          <button mat-raised-button color="primary" *ngIf="this.access === 'total'" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/vendedor/lista">Voltar</button>
         </div>
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.vendedorId !== '' && this.vendedorId !== undefined">
-          <button *ngIf="!visualizar" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
+        <div class="area-botao-form " *ngIf="this.vendedorId !== '' && this.vendedorId !== undefined">
+          <button *ngIf="!visualizar && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!formValid()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/vendedor/lista">Voltar</button>
         </div>
     </mat-card-content>

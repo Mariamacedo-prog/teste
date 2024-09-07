@@ -23,7 +23,7 @@ export class LoginComponent {
 
   login(): void {
     this.authService.login(this.usuario.cpf, this.usuario.senha).subscribe(() => {
-      if (this.authService.isLoggedIn) {
+      if (this.authService.isLoggedIn$) {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
           : '/usuario/lista';

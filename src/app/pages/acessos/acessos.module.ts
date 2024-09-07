@@ -16,10 +16,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterModule, Routes } from '@angular/router';
 import { authGuard } from '../../auth/auth.guard';
 import {MatProgressBarModule} from '@angular/material/progress-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
 
 const routes: Routes = [
-  { path: 'permissao/usuario/:id', component: AcessoFormComponent, canActivate: [authGuard] },
-  { path: 'adicionar/grupo/:id', component: AcessoFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id', component: AcessoFormComponent, canActivate: [authGuard] },
+  { path: 'form/:id/:tela', component: AcessoFormComponent, canActivate: [authGuard] },
   { path: 'novo', component: AcessoFormComponent, canActivate: [authGuard] },
   { path: 'lista', component: AcessoGridComponent, canActivate: [authGuard] }
 ];
@@ -43,6 +44,7 @@ const routes: Routes = [
     MatAutocompleteModule,
     MatChipsModule,
     MatProgressBarModule,
+    MatFormFieldModule,
     MatListModule,
     RouterModule.forChild(routes)
   ]

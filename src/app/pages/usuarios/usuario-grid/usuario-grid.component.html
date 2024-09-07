@@ -5,8 +5,8 @@
       <input matInput placeholder="Pesquisar por Nome ou CPF" [(ngModel)]="searchTerm" (keyup)="findUser()" />
       <mat-icon matPrefix>search</mat-icon>
     </mat-form-field>
-    <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon >download</mat-icon></button>
-    <button style="margin-top:17px;" mat-raised-button color="primary"  (click)="adicionarNovoUsuario()">Novo Usuário</button>
+    <button *ngIf="this.access !== 'restrito'"  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon >download</mat-icon></button>
+    <button *ngIf="this.access !== 'restrito'"  style="margin-top:17px;" mat-raised-button color="primary"  (click)="adicionarNovoUsuario()">Novo Usuário</button>
   </div>
 
   <table mat-table [dataSource]="dataSourceFilter" class="mat-elevation-z8">
@@ -29,13 +29,13 @@
     <ng-container matColumnDef="actions" class="">
       <th mat-header-cell *matHeaderCellDef > Ações </th>
       <td mat-cell *matCellDef="let element" >
-        <button class="icon-blue" mat-icon-button (click)="viewItem(element)">
+        <button *ngIf="this.access !== 'restrito'" class="icon-blue" mat-icon-button (click)="viewItem(element)">
           <mat-icon >visibility</mat-icon>
         </button>
-        <button class="icon-green" mat-icon-button (click)="editItem(element)">
+        <button *ngIf="this.access === 'total'" class="icon-green" mat-icon-button (click)="editItem(element)">
           <mat-icon >edit</mat-icon>
         </button>
-        <button class="icon-red" mat-icon-button  (click)="deleteItem(element)">
+        <button *ngIf="this.access === 'total'" class="icon-red" mat-icon-button  (click)="deleteItem(element)">
           <mat-icon >delete</mat-icon>
         </button>
       </td>

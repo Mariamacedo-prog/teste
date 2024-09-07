@@ -7,6 +7,7 @@ import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { FuncionariosService } from '../../../services/funcionarios.service';
 import { UsuariosService } from '../../../services/usuarios.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-funcionario-form',
@@ -14,14 +15,20 @@ import { UsuariosService } from '../../../services/usuarios.service';
   styleUrl: './funcionario-form.component.css'
 })
 export class FuncionarioFormComponent {
-
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
-    private funcionariosService: FuncionariosService, private usuariosService: UsuariosService) {}
+    private funcionariosService: FuncionariosService, private usuariosService: UsuariosService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.funcionario;
+      });
+    }
+
   funcionarioId = '';
-  isLoggedIn: boolean = false;
   databaseInfo: any = {};
   options: string[] = [];
+  access: any = '';
 
   visualizar: boolean = false;
 
@@ -44,6 +51,10 @@ export class FuncionarioFormComponent {
 
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.route.params.subscribe(params => {
        this.funcionarioId = params['id'];
 
@@ -51,8 +62,6 @@ export class FuncionarioFormComponent {
         this.visualizar = true;
        }
     });
-
-    this.isAuthenticated();
 
     if(this.funcionarioId){
       this.funcionariosService.findById(this.funcionarioId).subscribe(funcionario => {
@@ -166,14 +175,6 @@ export class FuncionarioFormComponent {
         this.emailFormControl.valid &&
         this.telefoneFormControl.valid
     );
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
-    }
   }
 
   formatPhone() {

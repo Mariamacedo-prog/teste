@@ -8,6 +8,7 @@ import { CepService } from '../../../services/utils/cep.service';
 import { ImoveisService } from '../../../services/imoveis.service';
 import { ContratantesService } from '../../../services/contratantes.service';
 import { DomSanitizer } from '@angular/platform-browser';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-imovel-form',
@@ -16,6 +17,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 })
 export class ImovelFormComponent {
   imovelId = '';
+  access: any = '';
+  
   showAnexos: boolean  = false;
   isLoggedIn: boolean = false;
   databaseInfo: any = {};
@@ -32,8 +35,13 @@ export class ImovelFormComponent {
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder, 
     private imoveisService: ImoveisService, private contratantesService: ContratantesService,
-    public sanitizer:DomSanitizer
-    ) {}
+    public sanitizer:DomSanitizer,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.imovel;
+      });
+    }
 
   contratante = this.formBuilder.group({
     nome: ['', Validators.required],
@@ -77,6 +85,10 @@ export class ImovelFormComponent {
   });
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       enderecoPorta: this.enderecoPorta,

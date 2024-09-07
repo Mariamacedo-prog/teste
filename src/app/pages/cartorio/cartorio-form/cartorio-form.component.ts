@@ -6,6 +6,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CepService } from '../../../services/utils/cep.service';
 import { ValidateService } from '../../../services/utils/validate.service';
 import { CartoriosService } from '../../../services/cartorios.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-cartorio-form',
@@ -14,17 +15,23 @@ import { CartoriosService } from '../../../services/cartorios.service';
 })
 export class CartorioFormComponent {
   cartorioId = "";
-  isLoggedIn: boolean = false;
+  visualizar: boolean = false;
+  access: any = '';
+
   databaseInfo: any = {};
   options: string[] = [];
   filteredOptions: Observable<string[]> = of([]);
-  visualizar: boolean = false;
+
   formControls!: FormGroup; 
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
-    private validateService: ValidateService, private cartoriosService: CartoriosService
-    ) {}
+    private validateService: ValidateService, private cartoriosService: CartoriosService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.cartorio;
+      });}
 
   enderecoFormControls = this.formBuilder.group({
     rua: ['', Validators.required],
@@ -46,6 +53,10 @@ export class CartorioFormComponent {
 
 
   ngOnInit(): void {
+    if(this.access == 'restrito'){
+      this.router.navigate(["/usuario/lista"]);
+    }
+    
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
@@ -64,9 +75,6 @@ export class CartorioFormComponent {
         this.visualizar = true;
        }
     });
-
-    this.isAuthenticated();
-
 
     if(this.cartorioId){
       this.cartoriosService.findById(this.cartorioId).subscribe(cartorio => {
@@ -117,14 +125,6 @@ export class CartorioFormComponent {
   async update(){
     if (this.formControls?.get('cnpj')?.getRawValue()) {
       await this.cartoriosService.updateItem(this.cartorioId, this.formControls.getRawValue())
-    }
-  }
-
-  isAuthenticated(){
-    if(localStorage.getItem('isLoggedIn') == 'true'){
-      this.isLoggedIn = true;
-    }else{
-      this.isLoggedIn = false;
     }
   }
 

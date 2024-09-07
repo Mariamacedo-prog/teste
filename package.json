@@ -23,6 +23,7 @@
     "@angular/platform-browser-dynamic": "^17.2.0",
     "@angular/router": "^17.2.0",
     "@netlify/angular-runtime": "^2.0.6",
+    "@ngrx/store": "^18.0.2",
     "axios": "^1.6.7",
     "docx": "^8.5.0",
     "firebase": "^10.10.0",

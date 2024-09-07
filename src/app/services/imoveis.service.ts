@@ -49,7 +49,6 @@ export class ImoveisService {
       this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/imovel/lista']);
     } catch (error) {
-      console.log(error)
       this.toolboxService.showTooltip('error', 'Ocorreu um erro ao atualizar', 'ERROR!');
       this.toolboxService.showTooltip('error', `${error}`, 'ERROR!');
     }
