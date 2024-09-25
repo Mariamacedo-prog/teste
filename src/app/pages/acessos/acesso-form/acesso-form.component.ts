@@ -53,6 +53,7 @@ export class AcessoFormComponent implements OnInit{
     status: ['restrito', Validators.required],
     usuario: ['restrito', Validators.required],
     vendedor: ['restrito', Validators.required],
+    gerenciar_documento: ['restrito', Validators.required],
   });
 
 

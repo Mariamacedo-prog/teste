@@ -54,6 +54,7 @@ export class ImovelFormComponent {
     numero: ['', Validators.required],
     bairro: ['', Validators.required],
     complemento: [''],
+    numeroPavimento: [''],
     nucleoInformal: ['', Validators.required],
     cidadeUf: ['', Validators.required],
     cep: [''],
@@ -70,6 +71,7 @@ export class ImovelFormComponent {
     bairro: [''],
     complemento: [''],
     cidadeUf: [''],
+    areaConstruida: [''],
     cep: ['']
   });
 
@@ -120,6 +122,7 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoPorta')?.get('bairro')?.setValue(imovel.enderecoPorta.bairro);
         this.formControls.get('enderecoPorta')?.get('cidadeUf')?.setValue(imovel.enderecoPorta.cidadeUf);
         this.formControls.get('enderecoPorta')?.get('complemento')?.setValue(imovel.enderecoPorta.complemento);
+        this.formControls.get('enderecoPorta')?.get('numeroPavimento')?.setValue(imovel.enderecoPorta.numeroPavimento);
         this.formControls.get('enderecoPorta')?.get('numero')?.setValue(imovel.enderecoPorta.numero);
         this.formControls.get('enderecoPorta')?.get('iptu')?.setValue(imovel.enderecoPorta.iptu);
         this.formControls.get('enderecoPorta')?.get('nucleoInformal')?.setValue(imovel.enderecoPorta.nucleoInformal);
@@ -141,6 +144,7 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoProjeto')?.get('lote')?.setValue(imovel.enderecoProjeto.lote);
         this.formControls.get('enderecoProjeto')?.get('complemento')?.setValue(imovel.enderecoProjeto.complemento);
         this.formControls.get('enderecoProjeto')?.get('numero')?.setValue(imovel.enderecoProjeto.numero);
+        this.formControls.get('enderecoProjeto')?.get('areaConstruida')?.setValue(imovel.enderecoProjeto.areaConstruida);
         
         this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(imovel.enderecoDefinitivo.cep);
         this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(imovel.enderecoProjeto.cep);

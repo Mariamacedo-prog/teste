@@ -18,7 +18,8 @@ export class MenuService {
     {"icon": "local_atm", "label": "Planos", "value": "plano",   "route": "/planos/lista", id: 11},
     {"icon": "linear_scale", "label": "Status", "value": "status",   "route": "/status/lista", id: 10},
     {"icon": "radio_button_unchecked", "label": "Núcleos", "value": "nucleo",   "route": "/nucleos/lista", id: 13},
-    {"icon": "border_color", "label": "Contratos", "value": "contrato",   "route": "/contrato/lista", id: 9}
+    {"icon": "border_color", "label": "Contratos", "value": "contrato",   "route": "/contrato/lista", id: 9},
+   // {"icon": "folder_open", "label": "Gerenciar Documentos", "value": "gerenciar_documento",   "route": "/gerenciarDocumento/lista", id: 9}
   ]
   constructor(private firestore: AngularFirestore) {}
 

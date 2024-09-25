@@ -19,7 +19,7 @@
     </ng-container>
     <ng-container matColumnDef="cpf">
       <th mat-header-cell *matHeaderCellDef > CPF </th>
-      <td mat-cell *matCellDef="let element"> {{element.contratante.cpf}} </td>
+      <td mat-cell *matCellDef="let element"> {{ formatarCpfCnpj(element.contratante.cpf) }} </td>
     </ng-container>
     <ng-container matColumnDef="cidade" >
       <th mat-header-cell *matHeaderCellDef > Cidade/Estado</th>
@@ -28,7 +28,19 @@
     <ng-container matColumnDef="nucleo" >
       <th mat-header-cell *matHeaderCellDef >Núcleo Informal</th>
       <td mat-cell *matCellDef="let element" > {{element.enderecoPorta.nucleoInformal}} </td>
-    </ng-container>
+      </ng-container>
+      <ng-container matColumnDef="rua" >
+        <th mat-header-cell *matHeaderCellDef >Rua</th>
+        <td mat-cell *matCellDef="let element" > {{element.enderecoPorta.rua}} </td>
+        </ng-container>
+        <ng-container matColumnDef="numero" >
+          <th mat-header-cell *matHeaderCellDef >Número</th>
+          <td mat-cell *matCellDef="let element" > {{element.enderecoPorta.numero}} </td>
+          </ng-container>
+          <ng-container matColumnDef="complemento" >
+            <th mat-header-cell *matHeaderCellDef >Complemento</th>
+            <td mat-cell *matCellDef="let element" > {{element.enderecoPorta.complemento}} </td>
+            </ng-container>
 
     <ng-container matColumnDef="actions">
       <th mat-header-cell *matHeaderCellDef > Ações </th>

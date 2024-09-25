@@ -20,7 +20,7 @@ interface ColumnConfig {
 })
 export class ImovelGridComponent {
   access: any = '';
-  displayedColumns: string[] = ['nome', 'cpf', 'cidade',  'nucleo', 'actions'];
+  displayedColumns: string[] = ['nome', 'cpf', 'cidade',  'nucleo', 'rua', 'numero', 'complemento', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
@@ -120,5 +120,24 @@ export class ImovelGridComponent {
     ];
 
     this.excelService.exportAsExcelFile(this.dataSourceFilter, columnsConfig, 'dados');
+  }
+  formatarCpfCnpj(valor: string): string {
+    if (!valor) {
+      return '';
+    }
+
+    valor = valor.replace(/\D/g, '');
+
+    
+    if (valor.length === 11) {
+      return valor.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+    }
+
+    
+    if (valor.length === 14) {
+      return valor.replace(/(\d{2})(\d{3})(\d{3})(\d{4})(\d{2})/, '$1.$2.$3/$4-$5');
+    }
+
+    return valor; 
   }
 }
