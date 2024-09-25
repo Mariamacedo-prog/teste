@@ -21,7 +21,7 @@ import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { CommonModule } from '@angular/common';
 import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
-import { MatNativeDateModule,  DateAdapter, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ExcelService } from './services/utils/excel.service';
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './store/store';

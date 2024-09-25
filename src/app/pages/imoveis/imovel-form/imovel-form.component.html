@@ -75,6 +75,10 @@
                 <mat-label>Complemento</mat-label>
                 <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true" type="text" matInput formControlName="complemento" />
               </mat-form-field>
+              <mat-form-field>
+                <mat-label>Número de Pavimento</mat-label>
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="numeroPavimento"/>
+              </mat-form-field>
             </div>
             
             <div class="inputs-row-form">
@@ -160,6 +164,10 @@
               <mat-form-field>
                 <mat-label>Núcleo Informal</mat-label>
                 <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" type="text" matInput formControlName="nucleoInformalProjeto" >
+              </mat-form-field>
+              <mat-form-field>
+                <mat-label>Área Construida</mat-label>
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="areaConstruida"/>
               </mat-form-field>
             </div>
           </mat-tab>

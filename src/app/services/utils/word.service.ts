@@ -577,7 +577,7 @@ export class WordService {
             }]),
             space,  space,
             this.gerarParagrafo(
-            [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, pela variação do ",  
+            [{ text:"Os valores das parcelas mensais serão reajustados anualmente, pela variação do ",  
               size:25, 
               font: "Arial"
             },{
@@ -837,7 +837,7 @@ export class WordService {
               font: "Arial",
             },
             { 
-              text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante),
+              text:`${formControls?.get('contratante')?.get('nome')?.value}, ${formControls?.get('contratante')?.get('nacionalidade')?.value}, ${formControls?.get('contratante')?.get('estadoCivil')?.value}, ${formControls?.get('contratante')?.get('profissao')?.value}, inscrito no CPF sob o n° ${formControls?.get('contratante')?.get('cpf')?.value} e no RG sob o n° ${formControls?.get('contratante')?.get('rg')?.value}, residente e domiciliado na rua ` + this.gerarEnderecoPorta(imovelDoContratante) + ` doravante denominado`,
               size:25, 
               font: "Arial",
               outlineLevel: 2,
