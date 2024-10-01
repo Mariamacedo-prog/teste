@@ -13,6 +13,7 @@ export class GerenciarDocumentoFormComponent {
   access: any = '';
   id = '';
   data:any = [];
+  datainfo:any = {};
   visualizar: boolean = false;
   constructor(private router: Router, private route: ActivatedRoute, private gerenciarDocumentoService: GerenciarDocumentoService, private authService: AuthService, private pdfService: PdfService
   ) {
@@ -40,7 +41,8 @@ export class GerenciarDocumentoFormComponent {
   findItem(){
     this.gerenciarDocumentoService.getById(this.id).subscribe(contrato => {
       if(contrato[0]){
-
+          this.datainfo = contrato[0]
+          console.log(contrato[0])
           let base64List = [];
           let anexoContratante = contrato[0]?.contratante?.anexos;
           if(anexoContratante.cetidaoCasamentoFile.base64){

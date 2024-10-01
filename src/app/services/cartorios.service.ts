@@ -28,8 +28,13 @@ export class CartoriosService {
   }
 
 
-  async save(user: any): Promise<void> { 
-    await this.itemsCollection.add(user);
+  async save(user: any): Promise<void> {
+    try {
+      await this.itemsCollection.add(user);
+    } catch (error) {
+      console.error("Erro ao criar o item: ", error);
+      throw error;
+    }  
   }
 
   findById(id: string): Observable<any> {

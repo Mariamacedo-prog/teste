@@ -20,7 +20,12 @@ export class AcessoService {
 
 
   async save(item: any): Promise<void> { 
-    await this.itemsCollection.add(item);
+    try {
+      await this.itemsCollection.add(item);
+    } catch (error) {
+      console.error("Erro ao criar o item: ", error);
+      throw error;
+    }
   }
 
   findById(id: string): Observable<any> {

@@ -31,7 +31,12 @@ export class ImoveisService {
 
  
   async save(user: any): Promise<void> { 
-    return await this.itemsCollection.add(user).then(() => undefined);
+    try {
+      return await this.itemsCollection.add(user).then(() => undefined);
+    } catch (error) {
+      console.error("Erro ao criar o item: ", error);
+      throw error;
+    } 
   }
 
   findById(id: string): Observable<any> {

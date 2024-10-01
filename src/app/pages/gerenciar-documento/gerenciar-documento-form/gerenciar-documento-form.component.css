@@ -9,6 +9,32 @@
   }
 }
 
+.info-title{
+  text-align: center;
+  color: #ccc;
+  font-size: 13px;
+  font-weight: bold;
+}
+
+.info-content{
+  display: flex;
+  flex-wrap: wrap;
+  padding: 10px;
+  font-size: 12px;
+  div {
+    margin:10px;
+    border-radius: 5px;
+    padding: 10px;
+  }
+  b {
+    font-size: 10px;
+    font-style: italic;
+  }
+  span{
+    margin-bottom: -20px;
+  }
+}
+
 @media screen and (max-width: 810px) {
   .list-downloads{
     flex-direction: column;
@@ -16,5 +42,9 @@
     div {
       width: 100%;
     }
+  }
+
+  .info-content{
+    flex-direction: column;
   }
 }
