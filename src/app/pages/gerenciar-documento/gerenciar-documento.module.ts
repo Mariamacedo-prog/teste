@@ -11,6 +11,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import {MatCheckboxModule} from '@angular/material/checkbox';
+import { VisualizerComponent } from '../../components/visualizer/visualizer.component';
+import { MatCardModule } from '@angular/material/card';
 
 
 
@@ -29,6 +31,8 @@ const routes: Routes = [
     CommonModule,
     FormsModule,
     MatInputModule,
+    MatCardModule,
+    VisualizerComponent,
     MatButtonModule,
     MatCheckboxModule,
     MatIconModule,

@@ -1,1 +1,15 @@
-<p>gerenciar-documento-form works!</p>
+<div class="container-form" >
+  <mat-card class="card-form" >
+    <mat-card-header >
+      <mat-card-title>Gerenciar Documentos</mat-card-title>
+    </mat-card-header>
+
+
+    <div class="list-downloads">
+      <div *ngFor="let item of data">
+        <app-visualizer *ngIf="item.base64 && item.type && item.name" [base64]="item.base64" [type]="item.type" [nome]="item.name"></app-visualizer>
+      </div>
+    </div>
+  </mat-card>
+</div>
+

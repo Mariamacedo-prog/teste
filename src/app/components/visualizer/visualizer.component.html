@@ -1,0 +1,17 @@
+
+<div class="content">
+  <div  *ngIf="pdfSrc">
+    <iframe class="image" [src]="pdfSrc" type="application/pdf"  > </iframe>
+  </div>
+  
+  <div *ngIf="imagemSrc">
+    <img class="image" [src]="imagemSrc"  alt="Imagem Selecionada" />
+  </div>
+  <div class="title-content" [matTooltip]="filename">
+    <p>{{nome}}.{{type}}</p>
+  </div>
+  
+  <span class="icon" (click)="downloadPdf()">
+    <mat-icon>download</mat-icon>
+  </span>
+</div>

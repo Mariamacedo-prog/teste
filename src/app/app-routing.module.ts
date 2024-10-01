@@ -47,7 +47,7 @@ const routes: Routes = [
   { path: 'nucleos', loadChildren: () => import('./pages/nucleos/nucleos.module').then(m => m.NucleosModule) },
 
  // Rotas de Nucleos
- // { path: 'gerenciarDocumento', loadChildren: () => import('./pages/gerenciar-documento/gerenciar-documento.module').then(m => m.GerenciarDocumentoModule) },
+ { path: 'gerenciarDocumento', loadChildren: () => import('./pages/gerenciar-documento/gerenciar-documento.module').then(m => m.GerenciarDocumentoModule) },
 ];
 
 
