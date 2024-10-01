@@ -29,7 +29,12 @@ export class ContratantesService {
 
 
   async save(user: any): Promise<void> { 
-    await this.itemsCollection.add(user);
+    try {
+      await this.itemsCollection.add(user);
+    } catch (error) {
+      console.error("Erro ao criar o item: ", error);
+      throw error;
+    }
   }
 
   findById(id: string): Observable<any> {

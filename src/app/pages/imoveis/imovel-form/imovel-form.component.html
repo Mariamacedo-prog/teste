@@ -112,7 +112,7 @@
 
 
 
-            <div class="inputs-row-form"  *ngIf="showAnexos || formControls.get('editedProjeto')?.value==false">
+            <div class="inputs-row-form"  *ngIf="showAnexos">
               <app-file-input [nome]="'Foto*'" 
               [fileInput]="this.formControls.get('enderecoPorta')?.get('fotos')?.value"
               (fileOutput)="saveFileBase64($event)" 

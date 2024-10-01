@@ -1,1 +1,35 @@
-<p>gerenciar-documento-form works!</p>
+<div class="container-form" >
+  <mat-card class="card-form" >
+   
+    <mat-card-header >
+      <mat-card-title>Gerenciar Documentos</mat-card-title>
+    </mat-card-header>
+  
+    <mat-card-content>
+      <div class="info-title" *ngIf="datainfo?.contrato?.numeroContrato">CONTRATO n° {{datainfo.contrato.numeroContrato}}</div>
+      <div class="info-content">
+        <div *ngIf="datainfo?.contrato?.vendedor_nome"><b>VENDEDOR: </b><span>{{datainfo.contrato.vendedor_nome || ''}}</span></div>
+        <div><b>Nome: </b> <span>{{datainfo?.contratante?.nome || ''}}</span> </div>
+        <div><b>CPF/CNPJ: </b> <span>{{datainfo?.contratante?.cpf || ''}}</span></div>
+      
+        <div><b>E-mail: </b><span>{{datainfo?.contratante?.email || ''}}</span></div>
+        <div><b>Telefone: </b><span>{{datainfo?.contratante?.telefone || ''}}</span></div>
+      
+      </div>
+      <div class="info-title">ENDEREÇO PORTA</div>
+      <div class="info-content">
+        <div *ngIf="datainfo?.imovel?.enderecoPorta?.rua"><b>Rua: </b>{{datainfo?.imovel?.enderecoPorta?.rua || ''}}</div>
+        <div *ngIf="datainfo?.imovel?.enderecoPorta?.numero"><b>Número: </b>{{datainfo?.imovel?.enderecoPorta?.numero || ''}}</div>
+        <div *ngIf="datainfo?.imovel?.enderecoPorta?.complemento"><b>Complemento: </b>{{datainfo?.imovel?.enderecoPorta?.complemento || ''}}</div>
+        <div *ngIf="datainfo?.imovel?.enderecoPorta?.bairro"><b>Bairro: </b>{{datainfo?.imovel?.enderecoPorta?.bairro || ''}}</div>
+      </div>
+    </mat-card-content>
+
+    <div class="list-downloads">
+      <div *ngFor="let item of data">
+        <app-visualizer *ngIf="item.base64 && item.type && item.name" [base64]="item.base64" [type]="item.type" [nome]="item.name"></app-visualizer>
+      </div>
+    </div>
+  </mat-card>
+</div>
+

@@ -34,9 +34,14 @@ export class ContratosService {
 
 
   async save(item: any): Promise<void> { 
-    const newNumeroContrato = await this.getNextNumeroContrato();
-    item.numeroContrato = newNumeroContrato;
-    return await this.itemsCollection.add(item).then(() => undefined);
+    try {
+      const newNumeroContrato = await this.getNextNumeroContrato();
+      item.numeroContrato = newNumeroContrato;
+      return await this.itemsCollection.add(item).then(() => undefined);
+    } catch (error) {
+      console.error("Erro ao criar o item: ", error);
+      throw error;
+    }  
   }
 
   findById(id: string): Observable<any> {

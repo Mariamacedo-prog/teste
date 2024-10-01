@@ -52,7 +52,7 @@ export class InputfileComponent {
         if (file.type.startsWith('image/')) {
           this.imagemSrc = 'data:image/jpeg;base64,' + base64String;
           this.fileOutput.emit({base64: this.imagemSrc, type: 'jpg'});
-          this.pdfSrc = undefined; // Limpa o pdfSrc, se existir
+          this.pdfSrc = undefined;
         } else if (file.type === 'application/pdf') {
           this.convertBase64ToPDF(base64String)
           this.fileOutput.emit({base64: base64String, type: 'pdf'});
