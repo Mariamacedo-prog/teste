@@ -165,11 +165,19 @@
                 <mat-label>Núcleo Informal</mat-label>
                 <input [readonly]="visualizar || formControls.get('editedDefinitivo')?.value==true" type="text" matInput formControlName="nucleoInformalProjeto" >
               </mat-form-field>
+              
+            </div>
+            <div class="inputs-row-form">
               <mat-form-field>
                 <mat-label>Área Construida</mat-label>
                 <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="areaConstruida"/>
               </mat-form-field>
+              <mat-form-field>
+                <mat-label>Área Edificada</mat-label>
+                <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="areaEdificadaProjeto"/>
+              </mat-form-field>
             </div>
+
           </mat-tab>
          
           <mat-tab formGroupName="enderecoDefinitivo" > 
@@ -220,7 +228,12 @@
                   <mat-label>Matricula</mat-label>
                   <input [readonly]="visualizar"  type="text" matInput formControlName="matricula"  />
                 </mat-form-field>
+                <mat-form-field>
+                  <mat-label>Área Edificada</mat-label>
+                  <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="areaEdificadaDefinitivo"/>
+                </mat-form-field>
               </div>
+              
           </mat-tab>
 
         

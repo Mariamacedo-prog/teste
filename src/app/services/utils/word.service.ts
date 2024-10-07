@@ -1227,7 +1227,7 @@ export class WordService {
           }]),
           space,  space,
           this.gerarParagrafo(
-          [{ text:"Os valores das parcelas mensais serão reajustados anualmente, pela variação do ",  
+          [{ text:"Os valores das parcelas mensais serão reajustados mensalmente, pela variação do ",  
             size:25, 
             font: "Arial"
           },{

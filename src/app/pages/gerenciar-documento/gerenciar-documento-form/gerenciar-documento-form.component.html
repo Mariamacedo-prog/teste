@@ -8,20 +8,35 @@
     <mat-card-content>
       <div class="info-title" *ngIf="datainfo?.contrato?.numeroContrato">CONTRATO n° {{datainfo.contrato.numeroContrato}}</div>
       <div class="info-content">
-        <div *ngIf="datainfo?.contrato?.vendedor_nome"><b>VENDEDOR: </b><span>{{datainfo.contrato.vendedor_nome || ''}}</span></div>
-        <div><b>Nome: </b> <span>{{datainfo?.contratante?.nome || ''}}</span> </div>
+        <div *ngIf="datainfo?.contrato?.vendedor_nome"><b>Vendedor: </b><span>{{datainfo.contrato.vendedor_nome || ''}}</span></div>
+        <div class="info-flex"><b>Nome: </b> <span>{{datainfo?.contratante?.nome || ''}}</span> </div>
         <div><b>CPF/CNPJ: </b> <span>{{datainfo?.contratante?.cpf || ''}}</span></div>
-      
-        <div><b>E-mail: </b><span>{{datainfo?.contratante?.email || ''}}</span></div>
+        <div class="info-flex"><b>E-mail: </b><span>{{datainfo?.contratante?.email || ''}}</span></div>
         <div><b>Telefone: </b><span>{{datainfo?.contratante?.telefone || ''}}</span></div>
-      
+      </div>
+      <div class="info-content">
+        <div *ngIf="datainfo?.contrato?.nucleo_nome" class="info-flex"><b>Nome Núcleo: </b> <span>{{datainfo?.contrato?.nucleo_nome || ''}}</span> </div>
+        <div *ngIf="datainfo?.contrato?.cartorio?.nome"><b>Nome Cartorio: </b><span>{{datainfo?.contrato?.cartorio?.nome || ''}}</span></div>
+        <div *ngIf="datainfo?.contrato?.empresa?.nome" class="info-flex"><b>Nome Empresa: </b><span>{{datainfo?.contrato?.empresa?.nome || ''}}</span></div>
+      </div>
+      <div class="info-content">
+        <div *ngIf="datainfo?.contratante?.estadoCivil" class="info-flex"><b>Estado Civil: </b><span>{{datainfo?.contratante?.estadoCivil || ''}}</span></div>
+        <div class="info-flex"><b>Estrangeiro: </b><span>{{datainfo?.contratante?.estrangeiro ? 'SIM' : 'NÃO'}}</span></div>
+        <div *ngIf="datainfo?.contratante?.nacionalidade" class="info-flex"><b>Nacionalidade: </b><span>{{datainfo?.contratante?.nacionalidade || ''}}</span></div>
+        <div *ngIf="datainfo?.contratante?.cpf_socio" class="info-flex"><b>CPF Sócio: </b> <span>{{datainfo?.contratante?.cpf_socio || ''}}</span> </div>
+      </div>
+      <div class="info-content">
+        <div *ngIf="datainfo?.contratante?.nomeConjugue" class="info-flex"><b>Nome Cônjuge: </b><span>{{datainfo?.contratante?.nomeConjugue || ''}}</span></div>
+        <div *ngIf="datainfo?.contratante?.nacionalidadeConjugue"  class="info-flex"><b>Nacionalidade Cônjuge: </b><span>{{datainfo?.contratante?.nacionalidadeConjugue || ''}}</span></div>
+        <div *ngIf="datainfo?.contratante?.pessoa_juridica" class="info-flex"><b>Pessoa Jurídica: </b><span>{{datainfo?.contratante?.pessoa_juridica || ''}}</span></div>
+        <div *ngIf="datainfo?.contratante?.profissao" class="info-flex"><b>Profissão: </b> <span>{{datainfo?.contratante?.profissao || ''}}</span> </div>
       </div>
       <div class="info-title">ENDEREÇO PORTA</div>
       <div class="info-content">
-        <div *ngIf="datainfo?.imovel?.enderecoPorta?.rua"><b>Rua: </b>{{datainfo?.imovel?.enderecoPorta?.rua || ''}}</div>
+        <div  class="info-flex" *ngIf="datainfo?.imovel?.enderecoPorta?.rua"><b>Rua: </b>{{datainfo?.imovel?.enderecoPorta?.rua || ''}}</div>
         <div *ngIf="datainfo?.imovel?.enderecoPorta?.numero"><b>Número: </b>{{datainfo?.imovel?.enderecoPorta?.numero || ''}}</div>
         <div *ngIf="datainfo?.imovel?.enderecoPorta?.complemento"><b>Complemento: </b>{{datainfo?.imovel?.enderecoPorta?.complemento || ''}}</div>
-        <div *ngIf="datainfo?.imovel?.enderecoPorta?.bairro"><b>Bairro: </b>{{datainfo?.imovel?.enderecoPorta?.bairro || ''}}</div>
+        <div class="info-flex" *ngIf="datainfo?.imovel?.enderecoPorta?.bairro"><b>Bairro: </b>{{datainfo?.imovel?.enderecoPorta?.bairro || ''}}</div>
       </div>
     </mat-card-content>
 
