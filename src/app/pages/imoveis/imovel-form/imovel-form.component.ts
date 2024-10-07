@@ -72,6 +72,7 @@ export class ImovelFormComponent {
     complemento: [''],
     cidadeUf: [''],
     areaConstruida: [''],
+    areaEdificadaProjeto: [''],
     cep: ['']
   });
 
@@ -83,7 +84,8 @@ export class ImovelFormComponent {
     complemento: [''],
     cidadeUf: [''],
     cep: [''],
-    matricula: ['']
+    matricula: [''],
+    areaEdificadaDefinitivo: [''],
   });
 
   ngOnInit(): void {
@@ -139,6 +141,9 @@ export class ImovelFormComponent {
         this.formControls.get('enderecoDefinitivo')?.get('numero')?.setValue(imovel.enderecoDefinitivo.numero);
         this.formControls.get('enderecoDefinitivo')?.get('nucleoInformalDefinitivo')?.setValue(imovel.enderecoDefinitivo.nucleoInformalDefinitivo);
         this.formControls.get('enderecoDefinitivo')?.get('matricula')?.setValue(imovel.enderecoDefinitivo.matricula);
+        if (imovel.enderecoDefinitivo.areaEdificadaDefinitivo) {
+          this.formControls.get('enderecoDefinitivo')?.get('areaEdificadaDefinitivo')?.setValue(imovel.enderecoDefinitivo.areaEdificadaDefinitivo);
+      }
       
         this.formControls.get('enderecoProjeto')?.get('rua')?.setValue(imovel.enderecoProjeto.rua);
         this.formControls.get('enderecoProjeto')?.get('bairro')?.setValue(imovel.enderecoProjeto.bairro);
@@ -151,6 +156,9 @@ export class ImovelFormComponent {
         if(imovel.enderecoProjeto.areaConstruida){
           this.formControls.get('enderecoProjeto')?.get('areaConstruida')?.setValue(imovel.enderecoProjeto.areaConstruida);
         }
+        if (imovel.enderecoProjeto.areaEdificadaProjeto) {
+          this.formControls.get('enderecoProjeto')?.get('areaEdificadaProjeto')?.setValue(imovel.enderecoProjeto.areaEdificadaProjeto);
+      }
         
         this.formControls.get('enderecoDefinitivo')?.get('cep')?.setValue(imovel.enderecoDefinitivo.cep);
         this.formControls.get('enderecoProjeto')?.get('cep')?.setValue(imovel.enderecoProjeto.cep);
