@@ -45,10 +45,10 @@ export class ContratanteFormComponent {
       });
     }
   anexosFormControl = this.formBuilder.group({
-    rgFile: [{base64: '',type: ''}, Validators.required],
-    cpfFile: [{base64: '',type: ''}, Validators.required],
-    comprovanteAquisicaoImovelFile: [{base64: '',type: ''}, Validators.required],
-    comprovanteEnderecofile: [{base64: '',type: ''}, Validators.required],
+    rgFile: [{base64: '',type: ''}],
+    cpfFile: [{base64: '',type: ''}],
+    comprovanteAquisicaoImovelFile: [{base64: '',type: ''}],
+    comprovanteEnderecofile: [{base64: '',type: ''}],
     cetidaoCasamentoFile:[{base64: '',type: ''}],
     rgConjugueFile:[{base64: '',type: ''}],
     cpfConjugueFile:[{base64: '',type: ''}]
