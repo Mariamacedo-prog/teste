@@ -203,7 +203,7 @@
            </div>
         
   
-           <div class="input-file-row">
+           <div class="input-file-row" *ngIf="showAnexos">
             <app-file-input [nome]="'Comprovante de Aquisição do  imóvel*'" 
             [fileInput]="this.formControls.get('anexos')?.get('comprovanteAquisicaoImovelFile')?.value"  
             (fileOutput)="saveFileBase64($event, 'comprovanteAquisicaoImovelFile')"  (fileSelected)="onFileSelected($event)"></app-file-input>
@@ -212,17 +212,17 @@
              (fileOutput)="saveFileBase64($event, 'comprovanteEnderecofile')" (fileSelected)="onFileSelected($event)"></app-file-input>
             </div>
   
-           <div class="input-file-row" *ngIf="isMarried">
-            <app-file-input [nome]="'Certidão de Casamento*'"
-             [fileInput]="this.formControls.get('cetidaoCasamentoFile')?.get('cpfFile')?.value"  
+           <div class="input-file-row" *ngIf="isMarried && showAnexos">
+            <app-file-input *ngIf="showAnexos" [nome]="'Certidão de Casamento*'"
+             [fileInput]="this.formControls.get('anexos')?.get('cetidaoCasamentoFile')?.value"  
              (fileOutput)="saveFileBase64($event, 'cetidaoCasamentoFile')" 
               (fileSelected)="onFileSelected($event)"></app-file-input>
-            <app-file-input [nome]="'Documento de Identificação do Cônjuge*'" 
-            [fileInput]="this.formControls.get('rgConjugueFile')?.get('cpfFile')?.value" 
+            <app-file-input  *ngIf="showAnexos" [nome]="'Documento de Identificação do Cônjuge*'" 
+            [fileInput]="this.formControls.get('anexos')?.get('rgConjugueFile')?.value" 
              (fileOutput)="saveFileBase64($event, 'rgConjugueFile')"  
              (fileSelected)="onFileSelected($event)"></app-file-input>
-            <app-file-input [nome]="'CPF do Cônjuge*'" 
-            [fileInput]="this.formControls.get('cpfConjugueFile')?.get('cpfFile')?.value" 
+            <app-file-input  *ngIf="showAnexos" [nome]="'CPF do Cônjuge*'" 
+            [fileInput]="this.formControls.get('anexos')?.get('cpfConjugueFile')?.value" 
              (fileOutput)="saveFileBase64($event, 'cpfConjugueFile')"  
              (fileSelected)="onFileSelected($event)"></app-file-input>
            </div>
