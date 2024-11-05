@@ -8,6 +8,7 @@ import { UsuariosService } from '../services/usuarios.service';
 import { AuthState, loginSuccess, setPermissions, logOutSuccess }  from "../store/store"
 import { Store } from '@ngrx/store';
 import { AcessoService } from '../services/acesso.service';
+import { ContratantesService } from '../services/contratantes.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +22,7 @@ export class AuthService {
 
   constructor(private router: Router, 
     private usuariosService: UsuariosService,
+    private contratantesService: ContratantesService,
     private acessoService: AcessoService,
     private store: Store<{ auth: AuthState }>
   ) {
@@ -41,6 +43,7 @@ export class AuthService {
     if (cpf && senha) {
       this.usuariosService.findByCpfSenha(cpf, senha).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
+          console.log(usuarioEncontrado)
           this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
           if(usuarioEncontrado[0].perfil.id){
             this.getAllPermissions(usuarioEncontrado[0].perfil.id);
@@ -58,8 +61,37 @@ export class AuthService {
               status: 'restrito',
               usuario: 'restrito',
               vendedor: 'restrito',
+              gerenciar_documento: 'restrito'
             } }));
           }
+        }
+      });
+    }
+    return of(this.isLoggedIn).pipe(delay(1000));
+  }
+
+  loginContratante(cpf: string, email: string): Observable<boolean> {
+    if (cpf && email) {
+      this.contratantesService.findByCpfEmail(cpf, email).subscribe(usuarioEncontrado => {
+        if (usuarioEncontrado.length > 0) {
+          this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
+      
+            this.store.dispatch(setPermissions({ permissions: {
+              acesso: 'restrito',
+              cartorio: 'restrito',
+              contratante: 'restrito',
+              contrato: 'restrito',
+              funcionario: 'restrito',
+              imovel: 'restrito',
+              nucleo: 'restrito',
+              plano: 'restrito',
+              prefeitura: 'restrito',
+              status: 'restrito',
+              usuario: 'restrito',
+              vendedor: 'restrito',
+              gerenciar_documento: 'consulta'
+            } }));
+        
         }
       });
     }

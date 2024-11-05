@@ -44,6 +44,11 @@ export class ContratosService {
     }  
   }
 
+  findByCpf(cpf: string): Observable<any[]> {
+    return this.firestore.collection('contratos', 
+      ref => ref.where('contratante.cpf', '==', cpf)).valueChanges({ idField: 'id' });
+  }
+
   findById(id: string): Observable<any> {
     return this.itemsCollection.doc(id).valueChanges({ idField: 'id' });
   }

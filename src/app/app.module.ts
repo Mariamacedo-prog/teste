@@ -17,6 +17,7 @@ import { AuthService } from './auth/auth.service';
 import { ToolboxComponent } from './components/toolbox/toolbox.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'; 
 import { AngularFireModule } from '@angular/fire/compat';
+import { MatTabsModule } from '@angular/material/tabs';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
 import { AngularFireStorageModule } from '@angular/fire/compat/storage';
 import { CommonModule } from '@angular/common';
@@ -55,6 +56,7 @@ export const MY_DATE_FORMATS = {
     MatCardModule,
     MatIconModule,
     ReactiveFormsModule,
+    MatTabsModule,
     FormsModule,
     HttpClientModule,
     MatButtonModule,  
