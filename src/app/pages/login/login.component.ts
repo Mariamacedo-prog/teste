@@ -14,6 +14,12 @@ export class LoginComponent {
     senha: ''
   }
 
+  contratante = {
+    cpf: '',
+    email: ''
+  }
+
+
   constructor(private authService: AuthService, private router: Router, private toolboxService: ToolboxService) {}
   ngOnInit(): void {
     if(localStorage.getItem('isLoggedIn') == 'true'){
@@ -27,6 +33,19 @@ export class LoginComponent {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
           : '/usuario/lista';
+        this.router.navigate([redirectUrl]);
+      }else{
+        this.toolboxService.showTooltip('error', 'Usuário ou senha incorreta!', 'ERRO!');
+      }
+    });
+  }
+
+  loginContratante(): void {
+    this.authService.loginContratante(this.contratante.cpf, this.contratante.email).subscribe(() => {
+      if (this.authService.isLoggedIn$) {
+        const redirectUrl = this.authService.redirectUrl
+          ? this.authService.redirectUrl
+          : '/gerenciarDocumento/lista';
         this.router.navigate([redirectUrl]);
       }else{
         this.toolboxService.showTooltip('error', 'Usuário ou senha incorreta!', 'ERRO!');

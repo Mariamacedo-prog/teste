@@ -16,6 +16,7 @@ import { saveAs } from 'file-saver';
 })
 export class GerenciarDocumentoGridComponent {
   access: any = '';
+  user: any = {};
   displayedColumns: string[] = ['nome', 'cpf', 'cidade', 'cartorio', 'actions'];
   dataSource:any = [];
   dataSourceFilter:any = [];
@@ -30,19 +31,43 @@ export class GerenciarDocumentoGridComponent {
      this.authService.permissions$.subscribe(perms => {
        this.access = perms.gerenciar_documento;
      });
+
+     this.authService.user$.subscribe(perms => {
+      this.user = perms;
+    });
    }
 
   ngOnInit(): void {
+    console.log(this.user)
     if(this.access == 'restrito'){
       this.router.navigate(["/usuario/lista"]);
     }
 
-    this.findAll();
+    if(this.user?.perfil?.id){
+      this.findAll();
+    } else {
+      this.findByCpf(this.user.cpf);
+    }
 
     this.cartoriosService.getItems().subscribe(cartorios => {
       if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
       }
+    });
+  }
+
+  findByCpf(cpf: string){
+    this.contratosService.findByCpf(cpf).subscribe(contratos => {
+      console.log(contratos, "contratos")
+      if (contratos.length >= 0) {
+        this.dataSource = contratos;
+        this.dataSourceFilter = contratos;
+      }
+    });
+
+    this.gerenciarDocumentoService.getByCpf(cpf).subscribe(info => {
+      console.log(info, "info")
+      this.contratoInfo = info
     });
   }
   
@@ -95,7 +120,6 @@ export class GerenciarDocumentoGridComponent {
  async download(){
     const zip = new JSZip();
     for(let i of this.contratoInfo){
-      console.log(this.contratoInfo)
       if(i.contrato.id && this.selectedItems.includes(i.contrato.id)){
         let base64List = [];
 

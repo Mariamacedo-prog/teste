@@ -11,6 +11,7 @@ import { PdfService } from '../../../services/utils/pdf.service';
 })
 export class GerenciarDocumentoFormComponent {
   access: any = '';
+  user: any = {};
   id = '';
   data:any = [];
   datainfo:any = {};
@@ -19,6 +20,10 @@ export class GerenciarDocumentoFormComponent {
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.gerenciar_documento;
+      console.log(perms)
+    });
+    this.authService.user$.subscribe(perms => {
+      this.user = perms;
     });
   }
 
@@ -28,6 +33,7 @@ export class GerenciarDocumentoFormComponent {
     }
 
     this.route.params.subscribe(params => {
+      
        this.id = params['id'];
 
        if(params['tela'] == 'visualizar'){
@@ -40,6 +46,7 @@ export class GerenciarDocumentoFormComponent {
 
   findItem(){
     this.gerenciarDocumentoService.getById(this.id).subscribe(contrato => {
+      console.log(contrato, this.id)
       if(contrato[0]){
           this.datainfo = contrato[0]
           console.log(contrato[0])

@@ -38,6 +38,29 @@ export class GerenciarDocumentoService {
     );
   }
 
+  getByCpf(cpf: any): Observable<any[]> {
+    const contratante$ = this.firestore.collection('contratantes').valueChanges({ idField: 'id' });
+    const imoveis$ = this.firestore.collection('imoveis').valueChanges({ idField: 'id' });
+    const contrato$ = this.firestore.collection('contratos').valueChanges({ idField: 'id' });
+  
+    return combineLatest([contratante$, imoveis$, contrato$]).pipe(
+      map(([contratantes, imoveis, contratos]) => {
+        const contrato: any = contratos.find((contrato: any) => contrato.contratante.cpf === cpf);
+  
+        if (contrato) {
+          const newContrato = {
+            contrato,
+            contratante: contratantes.find(c => c.id === contrato.contratante.id) || null,
+            imovel: imoveis.find(i => i.id === contrato.imovelId) || null,
+          };
+          return [newContrato];
+        } else {
+          return [];
+        }
+      })
+    );
+  }
+
   getById(id: any): Observable<any[]> {
     const contratante$ = this.firestore.collection('contratantes').valueChanges({ idField: 'id' });
     const imoveis$ = this.firestore.collection('imoveis').valueChanges({ idField: 'id' });
