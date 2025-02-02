@@ -14,7 +14,7 @@ export class LoginComponent {
     cpf: '',
     senha: ''
   };
-  empresaId = '';
+  empresaSelected: any = {};
   paramItem: any = ''
   title = "REURB"
 
@@ -35,7 +35,6 @@ export class LoginComponent {
       const franqueado = params.get('franqueado');
       if(franqueado){
         this.paramItem = franqueado;
-        console.log('Valor de teste (dinâmico):', franqueado);
       }else{
         this.paramItem =  "REURB";
       }
@@ -48,7 +47,7 @@ export class LoginComponent {
         let indexEmpresa = empresas.findIndex((item: any) => item.companyIdentifier === this.paramItem);
 
         if(indexEmpresa >= 0){
-          this.empresaId = empresas[indexEmpresa].id
+          this.empresaSelected = empresas[indexEmpresa]
         }
       }
     });
@@ -81,6 +80,22 @@ export class LoginComponent {
   }
 
   changeEmpresa(event: any): void {
-    console.log(event)
+    if(event.value){
+      this.empresaSelected = event.value;
+      this.atualizarFranqueado(event.value.companyIdentifier)
+    }
+   
+  }
+
+  atualizarFranqueado(novoValor: string): void {
+    const queryParams = { ...this.route.snapshot.queryParams };
+
+    queryParams['franqueado'] = novoValor;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
   }
 }

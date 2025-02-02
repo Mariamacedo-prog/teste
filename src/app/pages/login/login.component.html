@@ -5,8 +5,8 @@
     </mat-card-header>
     <mat-form-field >
       <mat-label>Franqueado:</mat-label>
-      <mat-select  (selectionChange)="changeEmpresa($event)" [(ngModel)]="empresaId" >
-        <mat-option *ngFor="let empresa of empresasList;" [value]="empresa.id" >
+      <mat-select  (selectionChange)="changeEmpresa($event)" [(ngModel)]="empresaSelected" >
+        <mat-option *ngFor="let empresa of empresasList;" [value]="empresa" >
           {{ empresa?.companyIdentifier + " - " + empresa?.nome}}
         </mat-option>
       </mat-select>
