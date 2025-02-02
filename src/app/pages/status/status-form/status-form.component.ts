@@ -26,6 +26,7 @@ export class StatusFormComponent {
  databaseInfo: any = {};
 
  descricaoFormControl = new FormControl("", [Validators.required]);
+ empresaIdFormControl = new FormControl("");
  nomeFormControl = new FormControl('', Validators.required);
 
  ngOnInit(): void {
@@ -42,9 +43,12 @@ export class StatusFormComponent {
    });
 
    if(this.itemId){
-     this.service.findById(this.itemId).subscribe(user => {
-       this.nomeFormControl.setValue(user.nome);
-       this.descricaoFormControl.setValue(user.descricao);
+     this.service.findById(this.itemId).subscribe(status => {
+      if(status.empresaId){
+        this.empresaIdFormControl.setValue(status.empresaId)
+      }
+       this.nomeFormControl.setValue(status.nome);
+       this.descricaoFormControl.setValue(status.descricao);
      });
    }
  }
@@ -52,6 +56,7 @@ export class StatusFormComponent {
  create() {
    const item = {
      "nome":this.nomeFormControl.value,
+     "empresaId":this.empresaIdFormControl.value,
      "descricao": this.descricaoFormControl.value,
    }
    if(item){
@@ -64,6 +69,7 @@ export class StatusFormComponent {
  async update(){
    const item = {
     "nome":this.nomeFormControl.value,
+    "empresaId":this.empresaIdFormControl.value,
     "descricao": this.descricaoFormControl.value,
    }
    this.service.updateItem(this.itemId, item)

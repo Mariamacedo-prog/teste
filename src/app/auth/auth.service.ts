@@ -61,7 +61,8 @@ export class AuthService {
               status: 'restrito',
               usuario: 'restrito',
               vendedor: 'restrito',
-              gerenciar_documento: 'restrito'
+              gerenciar_documento: 'restrito',
+              empresas: 'restrito'
             } }));
           }
         }
@@ -89,7 +90,8 @@ export class AuthService {
               status: 'restrito',
               usuario: 'restrito',
               vendedor: 'restrito',
-              gerenciar_documento: 'consulta'
+              gerenciar_documento: 'consulta',
+              empresas: 'restrito'
             } }));
         
         }

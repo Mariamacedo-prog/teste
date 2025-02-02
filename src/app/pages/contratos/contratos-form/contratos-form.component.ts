@@ -118,6 +118,7 @@ export class ContratosFormComponent {
       status: [""],
       numeroContrato: [null],
       createdAt: [null],
+      empresaId: [""],
       updatedAt: [null],
       imovelId: [''],
       contratante: this.contratanteFormControls,
@@ -172,6 +173,10 @@ export class ContratosFormComponent {
 
         if(contrato.numeroContrato){
           this.formControls?.get('numeroContrato')?.setValue(contrato.numeroContrato);
+        }
+
+        if(contrato.empresaId){
+          this.formControls?.get('empresaId')?.setValue(contrato.empresaId);
         }
 
         this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);

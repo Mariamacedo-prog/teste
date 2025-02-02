@@ -48,6 +48,9 @@ const routes: Routes = [
 
   // Rotas de Gerenciar Documento
   { path: 'gerenciarDocumento', loadChildren: () => import('./pages/gerenciar-documento/gerenciar-documento.module').then(m => m.GerenciarDocumentoModule) },
+
+  // Rotas de Empresas
+  { path: 'empresas', loadChildren: () => import('./pages/empresas/empresas.module').then(m => m.EmpresasModule) },
 ];
 
 

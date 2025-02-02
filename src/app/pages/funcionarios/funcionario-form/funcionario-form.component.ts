@@ -48,7 +48,7 @@ export class FuncionarioFormComponent {
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-
+  empresaIdFormControl = new FormControl('Myx6tIheTMM2mFLpb5ZU');
 
   ngOnInit(): void {
     if(this.access == 'restrito'){
@@ -76,6 +76,10 @@ export class FuncionarioFormComponent {
         this.complementoFormControl.setValue(funcionario.complemento);
         this.cidadeUfFormControl.setValue(funcionario.cidadeUf);
         this.cepFormControl.setValue(funcionario.cep);
+
+        if(funcionario.empresaId){
+          this.empresaIdFormControl.setValue(funcionario.empresaId);
+        }
 
         this.maskCpfCnpj();
       });
@@ -122,7 +126,8 @@ export class FuncionarioFormComponent {
       "usuario":this.usuarioFormControl.value,
       "email": this.emailFormControl.value,
       "telefone":this.telefoneFormControl.value,
-      "cep": this.cepFormControl.value
+      "cep": this.cepFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
 
     if(item.cpf){
@@ -155,8 +160,10 @@ export class FuncionarioFormComponent {
       "usuario":this.usuarioFormControl.value,
       "email": this.emailFormControl.value,
       "telefone":this.telefoneFormControl.value,
-      "cep": this.cepFormControl.value
+      "cep": this.cepFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
+
 
     if(item.cpf){
       this.funcionariosService.updateItem(this.funcionarioId, item)

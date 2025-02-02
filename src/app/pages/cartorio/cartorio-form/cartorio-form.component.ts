@@ -60,6 +60,7 @@ export class CartorioFormComponent {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
+      empresaId: [""],
       cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -83,6 +84,10 @@ export class CartorioFormComponent {
         this.formControls.get('telefone')?.setValue(cartorio.telefone);
         this.formControls.get('email')?.setValue(cartorio.email);
         this.formControls.get('cns')?.setValue(cartorio.cns);
+
+        if(cartorio.empresaId){
+          this.formControls.get('empresaId')?.setValue(cartorio.empresaId);
+        }
 
         this.formControls.get('representante')?.get('nome')?.setValue(cartorio.representante.nome);
         this.formControls.get('representante')?.get('nacionalidade')?.setValue(cartorio.representante.nacionalidade);

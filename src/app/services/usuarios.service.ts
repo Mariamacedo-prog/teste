@@ -33,9 +33,11 @@ export class UsuariosService {
       );
   }
 
+  async saveUser(user: any): Promise<any> { 
+    const docRef = await this.firestore.collection('usuarios').add(user);
 
-  saveUser(user: any): Promise<void> { 
-    return this.firestore.collection('usuarios').add(user).then(() => undefined);
+    const docSnapshot: any = await docRef.get();
+    return { id: docRef.id, ...docSnapshot.data() };
   }
 
   findByCpfSenha(cpf: string, senha: string): Observable<any[]> {
@@ -47,7 +49,7 @@ export class UsuariosService {
     return this.firestore.collection('usuarios').doc(id).valueChanges({ idField: 'id' });
   }
 
-  async updateItem(id: any, newData: any): Promise<void> {
+  async updateItem(id: any, newData: any): Promise<any> {
     const cpf = newData.cpf;
   
     try {
@@ -56,9 +58,10 @@ export class UsuariosService {
         this.toolboxService.showTooltip('error', 'CPF já cadastrado no banco de dados!', 'ERROR!');
         throw new Error('CPF já cadastrado no banco de dados!');
       } else {
-        this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
+        this.toolboxService.showTooltip('success', 'Cadastro atualizado com sucesso!', 'Sucesso!');
         this.router.navigate(['/usuario/lista']);
         await this.itemsCollection.doc(id).update(newData);
+        return { id: id, ...newData };
       }
     } catch (error) {
       console.error("Erro ao atualizar o item: ", error);

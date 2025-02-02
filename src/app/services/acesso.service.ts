@@ -19,9 +19,10 @@ export class AcessoService {
   }
 
 
-  async save(item: any): Promise<void> { 
+  async save(item: any): Promise<any> { 
     try {
-      await this.itemsCollection.add(item);
+      const docRef = await this.itemsCollection.add(item);
+      return { id: docRef.id, ...item };
     } catch (error) {
       console.error("Erro ao criar o item: ", error);
       throw error;

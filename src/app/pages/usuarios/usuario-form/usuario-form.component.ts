@@ -57,6 +57,9 @@ export class UsuarioFormComponent {
   createdAtFormControl = new FormControl(null);
   deletedAtFormControl = new FormControl(null);
   updatedAtFormControl = new FormControl(null);
+  empresaIdFormControl = new FormControl(null);
+  principalFormControl = new FormControl(false);
+  
   perfil = this.formBuilder.group({
     id: [''],
     nomeGrupo: ['']
@@ -81,6 +84,8 @@ export class UsuarioFormComponent {
         this.loginCpfFormControl.setValue(user.cpf.replace(/\D/g, ''));
         this.senhaFormControl.setValue(user.senha);
         this.confirmSenhaFormControl.setValue(user.senha);
+        this.empresaIdFormControl.setValue(user.empresaId || '');
+        
         if(user.perfil){
           this.perfil?.get('id')?.setValue(user.perfil.id);
           this.perfil?.get('nomeGrupo')?.setValue(user.perfil.nomeGrupo);
@@ -147,6 +152,7 @@ export class UsuarioFormComponent {
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
+      "empresaId": this.empresaIdFormControl.value,
       "cpf": cpf.replace(/\D/g, ''),
       "perfil": this.perfil.getRawValue(),
       "createdAt": new Date(),
@@ -187,6 +193,7 @@ export class UsuarioFormComponent {
       "senha": this.senhaFormControl.value,
       "nome": this.nomeFormControl.value,
       "telefone": this.telefoneFormControl.value,
+      "empresaId": this.empresaIdFormControl.value,
       "cpf": cpf.replace(/\D/g, ''),
       "perfil": this.perfil.getRawValue(),
       "createdAt": this.createdAtFormControl.value,

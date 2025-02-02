@@ -66,6 +66,7 @@ export class PrefeituraFormComponent {
       representante: this.representanteFormControls,
       endereco: this.enderecoFormControls,
       nome: ['', Validators.required],
+      empresaId: [''],
       cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -88,6 +89,9 @@ export class PrefeituraFormComponent {
       this.formControls.get('cnpj')?.setValue(prefeitura.cnpj);
       this.formControls.get('telefone')?.setValue(prefeitura.telefone);
       this.formControls.get('email')?.setValue(prefeitura.email);
+      if(prefeitura.empresaId){
+        this.formControls.get('empresaId')?.setValue(prefeitura.empresaId);
+      }
 
       this.formControls.get('representante')?.get('nome')?.setValue(prefeitura.representante.nome);
       this.formControls.get('representante')?.get('nacionalidade')?.setValue(prefeitura.representante.nacionalidade);

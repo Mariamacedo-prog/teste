@@ -5,8 +5,10 @@
       <mat-icon (click)="toggleMenu()">menu</mat-icon> 
       <p *ngIf="isMenuOpen">REURB</p>  
     </div>
-    <div (click)="logout()">	<mat-icon>keyboard_tab</mat-icon></div>
+
+  
   </div> 
+
   <ul class="menu-list" [ngClass]="{'menu-open': isMenuOpen, 'menu-closed': !isMenuOpen}" >
     <li *ngFor="let menuItem of menuItens">
       <a (click)="isMenuOpen = false" [routerLink]="menuItem.route" routerLinkActive="active">
@@ -15,5 +17,9 @@
       </a>
     </li>
   </ul>
+
+  <div class="footerAreaMenu">  
+    <div  class="logoIconMenu" (click)="logout()">	<mat-icon>keyboard_tab</mat-icon>  <p *ngIf="isMenuOpen">SAIR</p>   </div>
+  </div> 
 </nav> 
 

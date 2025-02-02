@@ -38,6 +38,7 @@ export class NucleosFormComponent {
   planosFormControl = new FormControl('');
   nomeFormControl = new FormControl('', Validators.required);
   especieFormControl = new FormControl('');
+  empresaIdFormControl = new FormControl('');
   siglaFormControl = new FormControl('', [
     this.validateSigla(this.nucleos, this.itemId)
   ]);
@@ -65,9 +66,14 @@ export class NucleosFormComponent {
         this.cidadeFormControl.setValue(nucleo.cidade);
         this.ufFormControl.setValue(nucleo.uf);
         this.planosFormControl.setValue(nucleo.planos);
+        
 
         if(nucleo.especie){
           this.especieFormControl.setValue(nucleo.especie);
+        }
+
+        if(nucleo.empresaId){
+          this.empresaIdFormControl.setValue(nucleo.empresaId);
         }
 
         if(nucleo.sigla){
@@ -102,7 +108,8 @@ export class NucleosFormComponent {
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
       "especie": this.especieFormControl.value,
-      "sigla": this.siglaFormControl.value
+      "sigla": this.siglaFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
 
     if(item){
@@ -120,7 +127,8 @@ export class NucleosFormComponent {
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
       "especie": this.especieFormControl.value,
-      "sigla": this.siglaFormControl.value
+      "sigla": this.siglaFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
     this.service.updateItem(this.itemId, item)
   }

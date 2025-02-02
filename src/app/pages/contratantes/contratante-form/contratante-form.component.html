@@ -187,6 +187,13 @@
                   Este campo é <strong>obrigatório</strong>
                 </mat-error>
               </mat-form-field>
+              <mat-form-field>
+                <mat-label *ngIf="cpfCnpjLength() <= 11">CPF</mat-label>
+                <mat-label *ngIf="cpfCnpjLength() > 11"> CNPJ</mat-label>
+                <input [readonly]="visualizar" matInput formControlName="cpfConjuge" (input)="maskCpfCnpj('cpf')" />
+                <mat-error *ngIf="formControls?.get('cpfConjuge')?.hasError('cpfInvalido')">CPF inválido</mat-error>
+                <mat-error *ngIf="formControls?.get('cpfConjuge')?.hasError('cnpjInvalido')">CNPJ inválido</mat-error>
+              </mat-form-field>
             </div>
           </mat-tab>
   

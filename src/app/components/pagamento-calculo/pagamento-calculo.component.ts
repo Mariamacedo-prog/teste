@@ -79,6 +79,7 @@ export class PagamentoCalculoComponent {
     this.formControls = this.formBuilder.group({
       id: [0],
       idImovel: [''],
+      empresaId: [''],
       plano: [null, Validators.required],
       plano_valor: [null, Validators.required],
       entrada: this.entradaFormControls,
@@ -127,6 +128,10 @@ export class PagamentoCalculoComponent {
               this.formControls?.get('plano_valor')?.setValue(venda.plano_valor);
             }else{
               this.formControls?.get('plano_valor')?.setValue(venda.plano);
+            }
+
+            if(venda.empresaId){
+              this.formControls?.get('empresaId')?.setValue(venda.empresaId);
             }
 
             if(venda.porcentagemDesconto){

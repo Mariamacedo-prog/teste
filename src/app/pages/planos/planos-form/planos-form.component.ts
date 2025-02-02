@@ -32,6 +32,7 @@ export class PlanosFormComponent {
   numeroParcelasFormControl = new FormControl('', [Validators.required]);
   statusFormControl = new FormControl(false, [Validators.required]);
   descontoFormControl = new FormControl(null);
+  empresaIdFormControl = new FormControl('');
   percentageOptions = [
     { value: 5, label: '5%' },
     { value: 10, label: '10%' },
@@ -69,15 +70,19 @@ export class PlanosFormComponent {
     });
 
     if(this.planoId){
-      this.planosService.findById(this.planoId).subscribe(user => {
-        this.valorFormControl.setValue(user.valor);
-        this.nomeFormControl.setValue(user.nome);
-        this.formaPagamentoFormControl.setValue(user.formaPagamento);
-        this.entradaFormControl.setValue(user.entrada);
-        this.numeroParcelasFormControl.setValue(user.numeroParcelas);
-        this.statusFormControl.setValue(user.status);
-        if(user.desconto){
-          this.descontoFormControl.setValue(user.desconto);
+      this.planosService.findById(this.planoId).subscribe(plano => {
+        this.valorFormControl.setValue(plano.valor);
+        this.nomeFormControl.setValue(plano.nome);
+        this.formaPagamentoFormControl.setValue(plano.formaPagamento);
+        this.entradaFormControl.setValue(plano.entrada);
+        this.numeroParcelasFormControl.setValue(plano.numeroParcelas);
+        this.statusFormControl.setValue(plano.status);
+        if(plano.empresaId){
+          this.empresaIdFormControl.setValue(plano.empresaId);
+        }
+
+        if(plano.desconto){
+          this.descontoFormControl.setValue(plano.desconto);
         }
       });
     }
@@ -91,7 +96,8 @@ export class PlanosFormComponent {
       "entrada": this.entradaFormControl.value,
       "numeroParcelas": this.numeroParcelasFormControl.value,
       "status": this.statusFormControl.value,
-      "desconto": this.descontoFormControl.value
+      "desconto": this.descontoFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
     if(item){
       this.planosService.save(item);
@@ -108,7 +114,8 @@ export class PlanosFormComponent {
       "entrada": this.entradaFormControl.value,
       "numeroParcelas": this.numeroParcelasFormControl.value,
       "status": this.statusFormControl.value,
-      "desconto": this.descontoFormControl.value
+      "desconto": this.descontoFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
     this.planosService.updateItem(this.planoId, item)
   }

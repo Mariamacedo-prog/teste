@@ -115,7 +115,7 @@
             <div class="inputs-row-form"  *ngIf="showAnexos">
               <app-file-input [nome]="'Foto*'" 
               [fileInput]="this.formControls.get('enderecoPorta')?.get('fotos')?.value"
-              (fileOutput)="saveFileBase64($event)" 
+              (fileOutput)="saveFileBase64($event, 'fotos')" 
               (fileSelected)="onFileSelected($event)"></app-file-input>
             </div>
           </mat-tab>
@@ -176,6 +176,12 @@
                 <mat-label>Área Edificada</mat-label>
                 <input [readonly]="visualizar || formControls.get('editedProjeto')?.value == true"  maxlength="8" type="text" matInput formControlName="areaEdificadaProjeto"/>
               </mat-form-field>
+            </div>
+            <div class="inputs-row-form"  *ngIf="showAnexos">
+              <app-file-input [nome]="'Anexar Plantas'" 
+              [fileInput]="this.formControls.get('enderecoProjeto')?.get('anexarPlantas')?.value"
+              (fileOutput)="saveFileBase64($event, 'anexarPlantas')" 
+              (fileSelected)="onFileSelected($event)"></app-file-input>
             </div>
 
           </mat-tab>
@@ -241,12 +247,12 @@
   
   
   
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId === '' || this.imovelId === undefined">
+        <div class="area-botao-form " *ngIf="this.imovelId === '' || this.imovelId === undefined">
           <button mat-raised-button color="primary" *ngIf="this.access === 'total'" (click)="create()" [disabled]="!formValid()">Cadastrar</button>
           <button  mat-raised-button color="link" routerLink="/imovel/lista">Voltar</button>
         </div>
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.imovelId !== '' && this.imovelId !== undefined">
+        <div class="area-botao-form " *ngIf="this.imovelId !== '' && this.imovelId !== undefined">
           <button *ngIf="!visualizar && this.access === 'total'" mat-raised-button color="primary" (click)="update()"  [disabled]="!formValid()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/imovel/lista">Voltar</button>
         </div>

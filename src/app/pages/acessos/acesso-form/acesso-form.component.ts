@@ -54,6 +54,7 @@ export class AcessoFormComponent implements OnInit{
     usuario: ['restrito', Validators.required],
     vendedor: ['restrito', Validators.required],
     gerenciar_documento: ['restrito', Validators.required],
+    empresas: ['restrito', Validators.required]
   });
 
 
@@ -67,6 +68,7 @@ export class AcessoFormComponent implements OnInit{
       createdAt: [null],
       deletedAt: [null],
       nomeGrupo: ["", [Validators.required]],
+      empresaId: [null],
       status: [true],
       updatedAt: [null],
       permissoes: this.permissoesFormControls
@@ -89,6 +91,7 @@ export class AcessoFormComponent implements OnInit{
           id: item.id,
           createdAt: item.createdAt,
           deletedAt: item.deletedAt,
+          empresaId: item.empresaId || "",
           nomeGrupo: item.nomeGrupo,
           status: item.status,
           updatedAt: item.updatedAt,

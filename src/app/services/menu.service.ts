@@ -15,11 +15,12 @@ export class MenuService {
     {"icon": "flag", "label": "Prefeitura", "value": "prefeitura",   "route": "/prefeitura/lista", id: 7},
     {"icon": "gavel", "label": "Cartório", "value": "cartorio",   "route": "/cartorio/lista", id: 8},
 
-    {"icon": "local_atm", "label": "Planos", "value": "plano",   "route": "/planos/lista", id: 11},
+    {"icon": "local_atm", "label": "Planos", "value": "plano",   "route": "/planos/lista", id: 9},
     {"icon": "linear_scale", "label": "Status", "value": "status",   "route": "/status/lista", id: 10},
-    {"icon": "radio_button_unchecked", "label": "Núcleos", "value": "nucleo",   "route": "/nucleos/lista", id: 13},
-    {"icon": "border_color", "label": "Contratos", "value": "contrato",   "route": "/contrato/lista", id: 9},
-    {"icon": "folder_open", "label": "Gerenciar Documentos", "value": "gerenciar_documento",   "route": "/gerenciarDocumento/lista", id: 9}
+    {"icon": "radio_button_unchecked", "label": "Núcleos", "value": "nucleo",   "route": "/nucleos/lista", id: 11},
+    {"icon": "border_color", "label": "Contratos", "value": "contrato",   "route": "/contrato/lista", id:12},
+    {"icon": "folder_open", "label": "Gerenciar Documentos", "value": "gerenciar_documento",   "route": "/gerenciarDocumento/lista", id: 13},
+    {"icon": "folder_closed", "label": "Franqueados", "value": "empresas",   "route": "/empresas/lista", id: 14},
   ]
   constructor(private firestore: AngularFirestore) {}
 

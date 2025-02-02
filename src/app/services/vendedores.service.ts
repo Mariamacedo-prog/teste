@@ -61,6 +61,19 @@ export class VendedoresService {
     }
   }
 
+  async updateAll(): Promise<void> {
+    try {
+      const querySnapshot = await this.itemsCollection.ref.get();
+      querySnapshot.forEach(async (doc) => {
+        await doc.ref.update({ empresaId: "Myx6tIheTMM2mFLpb5ZU" });
+      });
+
+      this.toolboxService.showTooltip('success', 'Campo empresaId adicionado a todos os núcleos com sucesso!', 'Sucesso!');
+    } catch (error) {
+      this.toolboxService.showTooltip('error', 'Ocorreu um erro ao adicionar o campo empresaId', 'ERROR!');
+    }
+  }
+
   deleteItem(id: any): Promise<void> {
     return this.itemsCollection.doc(id).delete();
   }

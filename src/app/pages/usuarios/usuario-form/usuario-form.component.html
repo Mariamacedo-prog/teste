@@ -94,7 +94,7 @@
           <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
         </div>
 
-        <div class="area-botao-form " *ngIf="isLoggedIn && this.userId !== '' && this.userId !== undefined">
+        <div class="area-botao-form " *ngIf="this.userId !== '' && this.userId !== undefined">
           <button *ngIf="!view && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
           <button mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
         </div>

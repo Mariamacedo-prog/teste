@@ -123,6 +123,7 @@ export class ContratanteGridComponent {
         { type: "text", width: 300, object_name: "estadoCivil", title: "Estado Civil do Contratante" },
         { type: "text", width: 300, object_name: "nomeConjugue", title: "Nome do Conjugê do Contratante" },
         { type: "text", width: 300, object_name: "nacionalidadeConjugue", title: "Nacionalidade do Conjugê do Contratante" },
+        { type: "text", width: 300, object_name: "cpfConjuge", title: "CPF do Conjugê do Contratante" },
         
         
         { type: "text", width: 300, object_name: "cartorio.nome", title: "Cartorio" },
