@@ -103,7 +103,7 @@ export class ImovelFormComponent {
       editedPorta: false,
       editedProjeto: false,
       editedDefinitivo: false,
-      empresaId: "Myx6tIheTMM2mFLpb5ZU"
+      empresaId: ""
     });
 
     this.route.params.subscribe(params => {

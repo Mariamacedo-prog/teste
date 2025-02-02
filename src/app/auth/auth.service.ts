@@ -71,9 +71,9 @@ export class AuthService {
     return of(this.isLoggedIn).pipe(delay(1000));
   }
 
-  loginContratante(cpf: string, email: string): Observable<boolean> {
-    if (cpf && email) {
-      this.contratantesService.findByCpfEmail(cpf, email).subscribe(usuarioEncontrado => {
+  loginContratante(cpf: string): Observable<boolean> {
+    if (cpf) {
+      this.contratantesService.findByCpfEmail(cpf).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
           this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
       

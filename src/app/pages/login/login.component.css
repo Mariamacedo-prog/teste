@@ -4,7 +4,7 @@
   align-items: center;
   height: 95vh;
   width: 95vw;
-  background-color: #f0f2f5; /* Cor de fundo semelhante à do Facebook */
+  background-color: #f0f2f5;
 }
 
 .mat-card {
@@ -13,11 +13,11 @@
 }
 
 .mat-card-header {
-  background-color: #4267b2; /* Cor de fundo do cabeçalho semelhante à do Facebook */
+  background-color: #4267b2;
 }
 
 .mat-card-title {
-  color: #fff; /* Cor do texto do título do cabeçalho */
+  color: #fff;
 }
 
 .mat-form-field {
@@ -44,7 +44,7 @@ button {
 
 .login-links a {
   text-decoration: none;
-  color: #4267b2; /* Cor do link semelhante à do Facebook */
+  color: #4267b2;
 }
 
 .divider {
@@ -72,7 +72,7 @@ button {
 
 .login-links a {
   text-decoration: none;
-  color: #4267b2; /* Cor do link semelhante à do Facebook */
+  color: #4267b2;
 }
 
 .divider {

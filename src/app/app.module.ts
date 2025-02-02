@@ -26,6 +26,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
 import { ExcelService } from './services/utils/excel.service';
 import { StoreModule } from '@ngrx/store';
 import { authReducer } from './store/store';
+import {MatSelectModule} from '@angular/material/select';
 
 export const MY_DATE_FORMATS = {
   parse: {
@@ -48,6 +49,7 @@ export const MY_DATE_FORMATS = {
   imports: [
     BrowserModule,
     CommonModule,
+    MatSelectModule,
     AppRoutingModule,
     HttpClientModule,
     BrowserAnimationsModule, 

@@ -27,9 +27,9 @@ export class ContratantesService {
       );
   }
 
-  findByCpfEmail(cpf: string, email: string): Observable<any[]> {
+  findByCpfEmail(cpf: string): Observable<any[]> {
     return this.firestore.collection('contratantes', 
-      ref => ref.where('cpf', '==', cpf).where('email', '==', email)).valueChanges();
+      ref => ref.where('cpf', '==', cpf)).valueChanges();
   }
 
   async save(user: any): Promise<void> { 
