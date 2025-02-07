@@ -54,7 +54,7 @@ export class LoginComponent {
   }
 
   login(): void {
-    this.authService.login(this.usuario.cpf, this.usuario.senha).subscribe(() => {
+    this.authService.login(this.usuario.cpf, this.usuario.senha, this.empresaSelected?.id).subscribe(() => {
       if (this.authService.isLoggedIn$) {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
@@ -67,7 +67,7 @@ export class LoginComponent {
   }
 
   loginContratante(): void {
-    this.authService.loginContratante(this.contratante.cpf).subscribe(() => {
+    this.authService.loginContratante(this.contratante.cpf, this.empresaSelected?.id).subscribe(() => {
       if (this.authService.isLoggedIn$) {
         const redirectUrl = this.authService.redirectUrl
           ? this.authService.redirectUrl
@@ -82,12 +82,11 @@ export class LoginComponent {
   changeEmpresa(event: any): void {
     if(event.value){
       this.empresaSelected = event.value;
-      this.atualizarFranqueado(event.value.companyIdentifier)
+      this.updateFranqueado(event.value.companyIdentifier)
     }
-   
   }
 
-  atualizarFranqueado(novoValor: string): void {
+  updateFranqueado(novoValor: string): void {
     const queryParams = { ...this.route.snapshot.queryParams };
 
     queryParams['franqueado'] = novoValor;

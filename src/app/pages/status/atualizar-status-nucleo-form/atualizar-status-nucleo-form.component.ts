@@ -6,6 +6,7 @@ import { StatusService } from '../../../services/status.service';
 import { FormControl, Validators } from '@angular/forms';
 import { NucleoService } from '../../../services/nucleo.service';
 import { ContratosService } from '../../../services/contratos.service';
+import { AuthService } from '../../../auth/auth.service';
 
 @Component({
   selector: 'app-atualizar-status-nucleo-form',
@@ -13,15 +14,21 @@ import { ContratosService } from '../../../services/contratos.service';
   styleUrl: './atualizar-status-nucleo-form.component.css'
 })
 export class AtualizarStatusNucleoFormComponent {
-  constructor(private router: Router, private route: ActivatedRoute,
-    private service: StatusService, private statusService: StatusService, private nucleoService: NucleoService, private contratosService: ContratosService) {}
+  constructor(private router: Router, private authService: AuthService,
+    private service: StatusService, private statusService: StatusService, private nucleoService: NucleoService, 
+    private contratosService: ContratosService) {
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+      });
+    }
 
  itemId = '';
  view: boolean = false;
  isLoggedIn: boolean = false;
  databaseInfo: any = {};
  timeoutId: any;
-
+ user: any = {};
  status: any[] = [];
 
  nucleos: any[] = [];
@@ -39,13 +46,13 @@ export class AtualizarStatusNucleoFormComponent {
  }
 
  findStatus(){
-  this.statusService.getItems().subscribe((status)=>{
+  this.statusService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((status)=>{
     this.status = status;
   });
 }
 
 findNucleos(){
-  this.nucleoService.getItems().subscribe((nucleos)=>{
+  this.nucleoService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((nucleos)=>{
     this.nucleos = nucleos;
   });
 }

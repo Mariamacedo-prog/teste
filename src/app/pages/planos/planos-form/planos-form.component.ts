@@ -10,7 +10,7 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './planos-form.component.css'
 })
 export class PlanosFormComponent {
-
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
      private planosService: PlanosService,
      private  authService: AuthService
@@ -18,6 +18,10 @@ export class PlanosFormComponent {
        this.authService.permissions$.subscribe(perms => {
          this.access = perms.plano;
        });
+       
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+      });
      }
  
      access: any = '';
@@ -100,6 +104,10 @@ export class PlanosFormComponent {
       "empresaId": this.empresaIdFormControl.value
     }
     if(item){
+      if(this.user.empresaId){
+        item.empresaId = this.user.empresaId;
+      }
+
       this.planosService.save(item);
       this.toolboxService.showTooltip('success', 'Plano realizado com sucesso!', 'Sucesso!');
       this.router.navigate(['/planos/lista']);

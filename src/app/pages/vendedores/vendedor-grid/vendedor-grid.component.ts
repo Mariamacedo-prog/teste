@@ -25,12 +25,18 @@ export class VendedorGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
+
   constructor(private router: Router, private toolboxService: ToolboxService, private vendedoresService: VendedoresService,
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.vendedor;
+    });
+    
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
  
@@ -43,12 +49,22 @@ export class VendedorGridComponent {
   }
   
   findAll(){
-    this.vendedoresService.getItems().subscribe(vendedores => {
-      if (vendedores.length >= 0) {
-        this.dataSource = vendedores;
-        this.dataSourceFilter = vendedores;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.vendedoresService.getItems().subscribe(vendedores => {
+        if (vendedores.length >= 0) {
+          this.dataSource = vendedores;
+          this.dataSourceFilter = vendedores;
+        }
+      });
+    }else{
+      this.vendedoresService.getItemsByEmpresaId(this.user.empresaId || '').subscribe(vendedores => {
+        if (vendedores.length >= 0) {
+          this.dataSource = vendedores;
+          this.dataSourceFilter = vendedores;
+        }
+      });
+    }
+   
   }
 
   addNewVendedor() {

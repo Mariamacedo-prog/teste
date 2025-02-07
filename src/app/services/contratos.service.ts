@@ -6,7 +6,6 @@ import { Observable, from } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { collection, query, where, getDocs, updateDoc, doc } from "firebase/firestore";
 
 
 @Injectable({
@@ -23,6 +22,9 @@ export class ContratosService {
     return this.firestore.collection('contratos').valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('contratos', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
   checkIfcnpjExists(cnpj: string): Observable<boolean> {
     return this.firestore.collection('contratos', ref => ref.where('cnpj', '==', cnpj))

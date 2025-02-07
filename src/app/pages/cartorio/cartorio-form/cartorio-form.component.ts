@@ -23,6 +23,7 @@ export class CartorioFormComponent {
   filteredOptions: Observable<string[]> = of([]);
 
   formControls!: FormGroup; 
+  user: any = {};
 
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
@@ -31,7 +32,12 @@ export class CartorioFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.cartorio;
-      });}
+      });
+    
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+      });
+    }
 
   enderecoFormControls = this.formBuilder.group({
     rua: ['', Validators.required],
@@ -114,7 +120,12 @@ export class CartorioFormComponent {
         const cnpjExists = await this.cartoriosService.checkIfcnpjExists(cnpj).toPromise(); 
   
         if (!cnpjExists) {
-          await this.cartoriosService.save(this.formControls.getRawValue()); 
+          let item  = this.formControls.getRawValue();
+          if(this.user.empresaId){
+            item.empresaId = this.user.empresaId;
+          }
+
+          await this.cartoriosService.save(item); 
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
           this.router.navigate(['/cartorio/lista']);
         } else {

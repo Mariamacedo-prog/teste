@@ -25,12 +25,18 @@ export class StatusGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
+
   constructor(private router: Router, private toolboxService: ToolboxService, private service: StatusService,
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.status;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -43,12 +49,22 @@ export class StatusGridComponent {
   }
 
   findAll(){
-    this.service.getItems().subscribe(item => {
-      if (item.length >= 0) {
-        this.dataSource = item;
-        this.dataSourceFilter = item;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.service.getItems().subscribe(item => {
+        if (item.length >= 0) {
+          this.dataSource = item;
+          this.dataSourceFilter = item;
+        }
+      });
+    }else{
+      this.service.getItemsByEmpresaId(this.user.empresaId || '').subscribe(item => {
+        if (item.length >= 0) {
+          this.dataSource = item;
+          this.dataSourceFilter = item;
+        }
+      });
+    }
+    
   }
 
   addNew() {

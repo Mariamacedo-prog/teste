@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import 'firebase/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
-import { Observable } from 'rxjs';
+import { from, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
@@ -21,6 +21,10 @@ export class NucleoService {
 
   getItems(): Observable<any[]> {
     return this.itemsCollection.valueChanges({ idField: 'id' });
+  }
+
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('nucleos', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
   }
 
   async save(user: any): Promise<void> { 

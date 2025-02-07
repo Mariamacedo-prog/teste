@@ -25,12 +25,17 @@ export class FuncionarioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {}
   constructor(private router: Router, private toolboxService: ToolboxService, private funcionariosService: FuncionariosService,
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.funcionario;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -43,12 +48,21 @@ export class FuncionarioGridComponent {
   }
 
   findAll(){
-    this.funcionariosService.getItems().subscribe(funcionarios => {
-      if (funcionarios.length >= 0) {
-        this.dataSource = funcionarios;
-        this.dataSourceFilter = funcionarios;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.funcionariosService.getItems().subscribe((funcionarios)=>{
+        if (funcionarios.length >= 0) {
+          this.dataSource = funcionarios;
+          this.dataSourceFilter = funcionarios;
+        }
+      });
+    }else{
+      this.funcionariosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((funcionarios)=>{
+        if (funcionarios.length >= 0) {
+          this.dataSource = funcionarios;
+          this.dataSourceFilter = funcionarios;
+        }
+      });
+    }
   }
 
   addNewFuncionario() {

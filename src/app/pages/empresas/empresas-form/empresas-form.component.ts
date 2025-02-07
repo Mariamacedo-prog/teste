@@ -77,6 +77,7 @@ export class EmpresasFormComponent {
     "perfil": [{id:'', nomeGrupo: ''}],
     "empresaId": [null],
     "createdAt": new Date(),
+    "empresaPrincipal": [false],
     "deletedAt": null,
     "updatedAt": new Date(),
   });
@@ -150,6 +151,7 @@ export class EmpresasFormComponent {
             telefone: empresa?.userAdmin?.telefone || '',
             empresaId: empresa?.userAdmin?.empresaId || null,
             nome: empresa?.userAdmin?.nome || '',
+            empresaPrincipal: empresa.principal || false,
             perfil: empresa?.userAdmin?.perfil || null,
             createdAt: empresa?.userAdmin?.createdAt || null,
             deletedAt: empresa?.userAdmin?.deletedAt || null,

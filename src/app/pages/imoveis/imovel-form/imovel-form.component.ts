@@ -32,6 +32,8 @@ export class ImovelFormComponent {
   timeoutId: any;
   filteredCpf: any[] = [];
   loadingCpf: boolean = false;
+  user: any = {};
+
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder, 
     private imoveisService: ImoveisService, private contratantesService: ContratantesService,
@@ -40,6 +42,10 @@ export class ImovelFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.imovel;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -210,7 +216,12 @@ export class ImovelFormComponent {
       this.formControls.get('editedPorta')?.setValue(true);
     }
 
-    this.imoveisService.save(this.formControls.getRawValue());
+    let item  = this.formControls.getRawValue();
+    if(this.user.empresaId){
+      item.empresaId = this.user.empresaId;
+    }
+
+    this.imoveisService.save(item);
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
     this.router.navigate(['/imovel/lista']);
   }
@@ -338,7 +349,7 @@ export class ImovelFormComponent {
   }
 
   findContratante(){
-    this.contratantesService.getItems().subscribe(contratantes => {
+    this.contratantesService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((contratantes)=>{
       if (contratantes.length >= 0) {
         this.contratantes = contratantes;
       }

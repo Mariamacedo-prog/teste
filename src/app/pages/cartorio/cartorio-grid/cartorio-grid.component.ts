@@ -25,12 +25,16 @@ export class CartorioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  loggedUser: any = {}
   constructor(private router: Router, private toolboxService: ToolboxService,
     public dialog: MatDialog,private cartoriosService: CartoriosService, 
     private excelService: ExcelService, private authService: AuthService
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.cartorio;
+      });
+      this.authService.user$.subscribe(user => {
+        this.loggedUser = user;
       });
     }
   newCartorio() {
@@ -46,12 +50,21 @@ export class CartorioGridComponent {
   }
 
   findAll(){
-    this.cartoriosService.getItems().subscribe(catorios => {
-      if (catorios.length >= 0) {
-        this.dataSource = catorios;
-        this.dataSourceFilter = catorios;
-      }
-    });
+    if (this.loggedUser.empresaPrincipal) {
+      this.cartoriosService.getItems().subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.dataSource = cartorios;
+          this.dataSourceFilter = cartorios;
+        }
+      });
+    }else{
+      this.cartoriosService.getItemsByEmpresaId(this.loggedUser.empresaId || '').subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.dataSource = cartorios;
+          this.dataSourceFilter = cartorios;
+        }
+      });
+    }
   }
 
   search() {

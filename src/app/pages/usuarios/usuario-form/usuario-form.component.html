@@ -4,7 +4,18 @@
       <mat-card-title>Cadastro de Usuário</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
+    <mat-card-content *ngIf="this.showContent">
+      <div class="inputs-row-form" *ngIf="this.userId === '' || this.userId === undefined" >
+        <mat-form-field *ngIf="this.isLoggedIn == false">
+          <mat-label>Empresa:</mat-label>
+          <mat-select  (selectionChange)="changeEmpresa($event)" [(ngModel)]="empresaSelected" >
+            <mat-option *ngFor="let empresa of empresasList;" [value]="empresa" >
+              {{ empresa?.companyIdentifier + " - " + empresa?.nome}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+
       <mat-form-field *ngIf="this.perfilAcesso === 'total'"> 
         <mat-label>Perfil</mat-label>
         <input type="text"
@@ -88,16 +99,17 @@
         </mat-form-field>
       </div>
 
-        <div class="area-botao-form " *ngIf="this.userId === '' || this.userId === undefined">
-          <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
-          <button *ngIf="isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
-          <button *ngIf="isLoggedIn" mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
-        </div>
 
-        <div class="area-botao-form " *ngIf="this.userId !== '' && this.userId !== undefined">
-          <button *ngIf="!view && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
-          <button mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
-        </div>
+      <div class="area-botao-form " *ngIf="this.userId === '' || this.userId === undefined">
+        <button mat-raised-button color="primary" (click)="create()" [disabled]="!validForm()">Cadastrar</button>
+        <button *ngIf="this.isLoggedIn == false" mat-raised-button color="link" routerLink="/login">Voltar</button>
+        <button *ngIf="this.isLoggedIn == true" mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
+      </div>
+
+      <div class="area-botao-form " *ngIf="this.userId !== '' && this.userId !== undefined">
+        <button *ngIf="!view && this.access === 'total'" mat-raised-button color="primary" (click)="update()" [disabled]="!validForm()"> Atualizar</button>
+        <button mat-raised-button color="link" routerLink="/usuario/lista">Voltar</button>
+      </div>
     </mat-card-content>
   </mat-card>
 </div>

@@ -24,6 +24,9 @@ export class VendedoresService {
     return this.firestore.collection('vendedores').valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('vendedores', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
   checkIfCPFExists(cpf: string): Observable<boolean> {
     return this.firestore.collection('vendedores', ref => ref.where('cpf', '==', cpf))
@@ -58,19 +61,6 @@ export class VendedoresService {
     } catch (error) {
       console.error("Erro ao atualizar o item: ", error);
       throw error;
-    }
-  }
-
-  async updateAll(): Promise<void> {
-    try {
-      const querySnapshot = await this.itemsCollection.ref.get();
-      querySnapshot.forEach(async (doc) => {
-        await doc.ref.update({ empresaId: "Myx6tIheTMM2mFLpb5ZU" });
-      });
-
-      this.toolboxService.showTooltip('success', 'Campo empresaId adicionado a todos os núcleos com sucesso!', 'Sucesso!');
-    } catch (error) {
-      this.toolboxService.showTooltip('error', 'Ocorreu um erro ao adicionar o campo empresaId', 'ERROR!');
     }
   }
 

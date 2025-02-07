@@ -24,12 +24,17 @@ export class ImovelGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {}
   constructor(private router: Router, private imoveisService: ImoveisService, public dialog: MatDialog, 
     private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.imovel;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -46,12 +51,21 @@ export class ImovelGridComponent {
   }
 
   findAll(){
-    this.imoveisService.getItems().subscribe(imoveis => {
-      if (imoveis.length >= 0) {
-        this.dataSource = imoveis;
-        this.dataSourceFilter = imoveis;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.imoveisService.getItems().subscribe((imoveis)=>{
+        if (imoveis.length >= 0) {
+          this.dataSource = imoveis;
+          this.dataSourceFilter = imoveis;
+        }
+      });
+    }else{
+      this.imoveisService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((imoveis)=>{
+        if (imoveis.length >= 0) {
+          this.dataSource = imoveis;
+          this.dataSourceFilter = imoveis;
+        }
+      });
+    }
   }
 
   search() {

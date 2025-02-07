@@ -33,7 +33,7 @@ export class ContratanteFormComponent {
   arrayValidateCpfSocio = [];
 
   loadingCartorio: boolean = false;
-  
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private validateService: ValidateService,
     private formBuilder: FormBuilder, private contratantesService: ContratantesService,
@@ -42,6 +42,10 @@ export class ContratanteFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.contratante;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
   anexosFormControl = this.formBuilder.group({
@@ -175,7 +179,7 @@ export class ContratanteFormComponent {
   }
 
   findAllCartorios(){
-    this.cartoriosService.getItems().subscribe(cartorios => { 
+    this.cartoriosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((cartorios)=>{
       if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
         this.filteredCartorios  = cartorios;
@@ -196,6 +200,10 @@ export class ContratanteFormComponent {
     body.cpf_socio ? body.cpf_socio = body.cpf_socio.replace(/\D/g, '') : body.cpf_socio = "";
 
     if (body.cpf) {
+      if(this.user.empresaId){
+        body.empresaId = this.user.empresaId;
+      }
+      
       try {
         const cpfExists = await this.contratantesService.checkIfCPFExists(body.cpf).toPromise(); 
   

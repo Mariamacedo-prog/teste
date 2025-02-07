@@ -24,6 +24,10 @@ export class UsuariosService {
     return this.firestore.collection('usuarios').valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('usuarios', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
+
 
   checkIfCPFExists(cpf: string): Observable<boolean> {
     return this.firestore.collection('usuarios', ref => ref.where('cpf', '==', cpf))
@@ -40,9 +44,9 @@ export class UsuariosService {
     return { id: docRef.id, ...docSnapshot.data() };
   }
 
-  findByCpfSenha(cpf: string, senha: string): Observable<any[]> {
+  findByCpfSenha(cpf: string, senha: string, empresaId: string): Observable<any[]> {
     return this.firestore.collection('usuarios', 
-      ref => ref.where('cpf', '==', cpf).where('senha', '==', senha)).valueChanges();
+      ref => ref.where('cpf', '==', cpf).where('senha', '==', senha).where('empresaId', '==', empresaId)).valueChanges();
   }
 
   findById(id: string): Observable<any> {
@@ -68,6 +72,20 @@ export class UsuariosService {
       throw error;
     }
   }
+
+  async updateAll(): Promise<void> {
+    try {
+      const querySnapshot = await this.itemsCollection.ref.get();
+      querySnapshot.forEach(async (doc) => {
+        await doc.ref.update({ empresaPrincipal: true });
+      });
+
+      this.toolboxService.showTooltip('success', 'Campo empresaId adicionado a todos os núcleos com sucesso!', 'Sucesso!');
+    } catch (error) {
+      this.toolboxService.showTooltip('error', 'Ocorreu um erro ao adicionar o campo empresaId', 'ERROR!');
+    }
+  }
+
 
   deleteItem(id: any): Promise<void> {
     return this.itemsCollection.doc(id).delete();

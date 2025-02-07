@@ -25,12 +25,18 @@ export class UsuarioGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
+
   constructor(private router: Router, private toolboxService: ToolboxService, private usuariosService: UsuariosService, 
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.usuario;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
   adicionarNovoUsuario() {
@@ -58,12 +64,21 @@ export class UsuarioGridComponent {
   }
 
   findAllUsers(){
-    this.usuariosService.getItems().subscribe(usuarios => {
-      if (usuarios.length >= 0) {
-        this.dataSource = usuarios;
-        this.dataSourceFilter = usuarios;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.usuariosService.getItems().subscribe(usuarios => {
+        if (usuarios.length >= 0) {
+          this.dataSource = usuarios;
+          this.dataSourceFilter = usuarios;
+        }
+      });
+    }else{
+      this.usuariosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe(usuarios => {
+        if (usuarios.length >= 0) {
+          this.dataSource = usuarios;
+          this.dataSourceFilter = usuarios;
+        }
+      });
+    }
   }
 
   deleteItem(element: any){

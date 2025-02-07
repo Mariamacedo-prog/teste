@@ -17,14 +17,19 @@ export class AcessoGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
+
   constructor(private router: Router, 
-    private toolboxService: ToolboxService, 
     public dialog: MatDialog,
     private service: AcessoService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.acesso;
+    });
+    
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -38,12 +43,21 @@ export class AcessoGridComponent {
       this.router.navigate(["/usuario/lista"]);
     }
 
-    this.service.getItems().subscribe(items => {
-      if (items.length >= 0) {
-        this.dataSource = items;
-        this.dataSourceFilter = items;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.service.getItems().subscribe((items)=>{
+        if (items.length >= 0) {
+          this.dataSource = items;
+          this.dataSourceFilter = items;
+        }
+      });
+    }else{
+      this.service.getItemsByEmpresaId(this.user.empresaId || '').subscribe((items)=>{
+        if (items.length >= 0) {
+          this.dataSource = items;
+          this.dataSourceFilter = items;
+        }
+      });
+    }
   }
 
   adicionarNovo() {

@@ -16,6 +16,7 @@ export class AcessoFormComponent implements OnInit{
   id = "";
   view: boolean = false;
   access: any = '';
+  user: any = {};
 
   databaseInfo: any = {};
   filteredOptions: Observable<string[]> = of([]);
@@ -37,6 +38,9 @@ export class AcessoFormComponent implements OnInit{
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.acesso;
+      });
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -116,7 +120,13 @@ export class AcessoFormComponent implements OnInit{
 
   create() {
     if(this.formControls.getRawValue()){
-      this.service.save(this.formControls.getRawValue());
+      let item  = this.formControls.getRawValue();
+
+      if(this.user.empresaId){
+        item.empresaId = this.user.empresaId;
+      }
+      
+      this.service.save(item);
       this.toolboxService.showTooltip('success', 'Perfil cadastrado com sucesso!', 'Sucesso!');
       this.router.navigate(['/acesso/lista']);
     }

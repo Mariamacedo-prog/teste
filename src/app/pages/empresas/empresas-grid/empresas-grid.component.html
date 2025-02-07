@@ -6,7 +6,9 @@
           <input matInput placeholder="Pesquisar por Nome ou CNPJ" [(ngModel)]="searchTerm" (keyup)="search()" />
           <mat-icon matPrefix>search</mat-icon>
         </mat-form-field>
-        <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon>download</mat-icon></button>
+        <!--  
+          <button  style="margin-top:10px; margin-left: 20px;" class="icon-blue" mat-icon-button (click)="generateExcel()"> <mat-icon>download</mat-icon></button>
+         -->  
         <button style="margin-top:17px; margin-left: 20px; padding: 15px 50px;" (click)="search()" mat-stroked-button color="primary">Filtrar</button>
         <button style="margin-top:17px; margin-left: 20px;" mat-raised-button color="primary"  (click)="adicionarNovo()">Novo Franqueado</button>
        </div>

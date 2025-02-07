@@ -11,12 +11,17 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './status-form.component.css'
 })
 export class StatusFormComponent {
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private service: StatusService,
     private  authService: AuthService
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.status;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -59,6 +64,11 @@ export class StatusFormComponent {
      "empresaId":this.empresaIdFormControl.value,
      "descricao": this.descricaoFormControl.value,
    }
+   
+   if(this.user.empresaId){
+    item.empresaId = this.user.empresaId;
+   }
+
    if(item){
      this.service.save(item);
      this.toolboxService.showTooltip('success', 'Status cadastrado com sucesso!', 'Sucesso!');

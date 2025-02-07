@@ -24,6 +24,9 @@ export class PrefeiturasService {
     return this.firestore.collection('prefeituras').valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('prefeituras', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
   checkIfcnpjExists(cnpj: string): Observable<boolean> {
     return this.firestore.collection('prefeituras', ref => ref.where('cnpj', '==', cnpj))

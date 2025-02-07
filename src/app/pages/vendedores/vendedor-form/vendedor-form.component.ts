@@ -14,7 +14,7 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './vendedor-form.component.css'
 })
 export class VendedorFormComponent {
-
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
     private vendedoresService: VendedoresService,  private formBuilder: FormBuilder,
@@ -22,6 +22,10 @@ export class VendedorFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.vendedor;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -137,6 +141,10 @@ export class VendedorFormComponent {
       "dadosBancarios": this.dadosBancadios,
       "empresaId": this.empresaIdFormControl.value,
     };
+
+    if(this.user.empresaId){
+      item.empresaId = this.user.empresaId;
+    }
  
     if(item.cpf){
       this.vendedoresService.checkIfCPFExists(item.cpf).toPromise().then(cpfExists => {

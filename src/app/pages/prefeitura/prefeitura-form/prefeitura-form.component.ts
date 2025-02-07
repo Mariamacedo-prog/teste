@@ -22,6 +22,7 @@ export class PrefeituraFormComponent {
   visualizar: boolean = false;
   formControls!: FormGroup;
   showAnexos: boolean  = false;
+  user: any = {};
 
   constructor(private toolboxService: ToolboxService, private router: Router,
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
@@ -30,6 +31,10 @@ export class PrefeituraFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.prefeitura;
+      });
+      
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -125,7 +130,13 @@ export class PrefeituraFormComponent {
     if(this.formControls.get('cnpj')?.getRawValue()){
       this.prefeiturasService.checkIfcnpjExists(this.formControls.get('cnpj')?.getRawValue()).toPromise().then(cpfExists => {
         if (!cpfExists) {
-          this.prefeiturasService.save(this.formControls.getRawValue());
+          
+          let item = this.formControls.getRawValue()
+          if(this.user.empresaId){
+            item.empresaId = this.user.empresaId;
+          }
+
+          this.prefeiturasService.save(item);
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
 
           this.router.navigate(['/prefeitura/lista']);

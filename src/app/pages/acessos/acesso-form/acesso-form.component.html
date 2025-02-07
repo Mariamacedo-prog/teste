@@ -23,7 +23,18 @@
             <span class="permissao-list-section">
               <ul>
                 @for (tela of arrayTelas; track tela) {
-                  <mat-card class="card-tela" >
+                  <mat-card class="card-tela" *ngIf="!tela.principal">
+                    <li class="li-tela">
+                      <div class="nome-tela"> <mat-icon >{{tela.icon}}</mat-icon> <p>{{tela.label}}</p></div>
+                      <mat-chip-listbox [formControlName]="tela.value" >
+                        <mat-chip-option value="restrito" color="warn"> Restrito</mat-chip-option>
+                        <mat-chip-option value="consulta">Consulta</mat-chip-option>
+                        <mat-chip-option value="total">Total</mat-chip-option>
+                      </mat-chip-listbox>
+                    </li>
+                  </mat-card>
+
+                  <mat-card class="card-tela" *ngIf="tela.principal && this.user?.empresaPrincipal">
                     <li class="li-tela">
                       <div class="nome-tela"> <mat-icon >{{tela.icon}}</mat-icon> <p>{{tela.label}}</p></div>
                       <mat-chip-listbox [formControlName]="tela.value" >

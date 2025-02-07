@@ -6,6 +6,7 @@ import { ValidateService } from '../../../services/utils/validate.service';
 import { UsuariosService } from '../../../services/usuarios.service';
 import { AcessoService } from '../../../services/acesso.service';
 import { AuthService } from '../../../auth/auth.service';
+import { EmpresasService } from '../../../services/empresas.service';
 
 @Component({
   selector: 'app-usuario-form',
@@ -20,7 +21,8 @@ export class UsuarioFormComponent {
     private usuariosService: UsuariosService,
     private formBuilder: FormBuilder, 
     private acessoService: AcessoService,
-    private  authService: AuthService
+    private authService: AuthService, 
+    private empresaService: EmpresasService
     ) {
       this.authService.permissions$.subscribe(perms => {
         if(perms?.usuario){
@@ -31,10 +33,13 @@ export class UsuarioFormComponent {
           this.perfilAcesso = perms.acesso;
         }
       });
-      this.authService.isLoggedIn$.subscribe(logged => {
-        this.isLoggedIn = logged;
+ 
+      this.authService.user$.subscribe(user => {
+        this.loggedUser = user;
       });
     }
+
+  loggedUser: any = {}
   userId = '';
   access: any = '';
   perfilAcesso: any = '';
@@ -48,6 +53,11 @@ export class UsuarioFormComponent {
   filteredAcessos: any[] = [];
   loadingAcessos: boolean = false;
 
+  empresaSelected: any = {};
+  paramItem: any = ''
+  empresasList: any = [];
+  showContent = false;
+
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   nomeFormControl = new FormControl('', Validators.required);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
@@ -58,6 +68,7 @@ export class UsuarioFormComponent {
   deletedAtFormControl = new FormControl(null);
   updatedAtFormControl = new FormControl(null);
   empresaIdFormControl = new FormControl(null);
+  empresaPrincipalFormControl = new FormControl(false);
   principalFormControl = new FormControl(false);
   
   perfil = this.formBuilder.group({
@@ -74,6 +85,27 @@ export class UsuarioFormComponent {
        }
     });
 
+    this.route.queryParamMap.subscribe(params => {
+      const franqueado = params.get('franqueado');
+      if(franqueado){
+        this.paramItem = franqueado;
+      }else{
+        this.paramItem =  "REURB";
+      }
+    });
+
+    this.empresaService.getItems().subscribe((empresas)=>{
+      if (empresas.length >= 0) {
+        this.empresasList = empresas;
+
+        let indexEmpresa = empresas.findIndex((item: any) => item.companyIdentifier === this.paramItem);
+
+        if(indexEmpresa >= 0){
+          this.empresaSelected = empresas[indexEmpresa]
+        }
+      }
+    });
+
     this.isAuthenticated();
     this.findAcessos();
     if(this.userId){
@@ -85,6 +117,7 @@ export class UsuarioFormComponent {
         this.senhaFormControl.setValue(user.senha);
         this.confirmSenhaFormControl.setValue(user.senha);
         this.empresaIdFormControl.setValue(user.empresaId || '');
+        this.empresaPrincipalFormControl.setValue(user.empresaPrincipal || false)
         
         if(user.perfil){
           this.perfil?.get('id')?.setValue(user.perfil.id);
@@ -106,12 +139,24 @@ export class UsuarioFormComponent {
         this.maskCpfCnpj();
       });
     }
+
+    this.showContent = true;
+
+    this.authService.isLoggedIn$.subscribe(isLoggedIn => {
+      this.isLoggedIn = isLoggedIn;
+    });
   }
 
   findAcessos(){
-    this.acessoService.getItems().subscribe((acessos)=>{
-      this.acessos = acessos;
-    });
+    if (this.loggedUser.empresaPrincipal) {
+      this.acessoService.getItems().subscribe((acessos)=>{
+        this.acessos = acessos;
+      });
+    }else{
+      this.acessoService.getItemsByEmpresaId(this.loggedUser.empresaId || '').subscribe((acessos)=>{
+        this.acessos = acessos;
+      });
+    }
   }
 
   formatPhone() {
@@ -158,6 +203,15 @@ export class UsuarioFormComponent {
       "createdAt": new Date(),
       "deletedAt": null,
       "updatedAt": new Date(),
+      "empresaPrincipal": this.empresaPrincipalFormControl.value
+    }
+
+    if(this.isLoggedIn && this.loggedUser.empresaId){
+      item.empresaId = this.loggedUser.empresaId
+      item.empresaPrincipal = this.loggedUser.empresaPrincipal
+    }else{
+      item.empresaId = this.empresaSelected.id || null
+      item.empresaPrincipal = this.empresaSelected.principal
     }
 
     if(this.confirmSenhaFormControl.value != this.senhaFormControl.value){
@@ -199,6 +253,7 @@ export class UsuarioFormComponent {
       "createdAt": this.createdAtFormControl.value,
       "deletedAt": this.deletedAtFormControl.value,
       "updatedAt": new Date(),
+      "empresaPrincipal":  this.empresaPrincipalFormControl.value
     }
 
     if(item.cpf){
@@ -255,5 +310,24 @@ export class UsuarioFormComponent {
     this.perfil?.get('id')?.setValue(item.id);
     this.perfil?.get('nomeGrupo')?.setValue(item.nomeGrupo);
     this.loadingAcessos = false;
+  }
+
+  changeEmpresa(event: any): void {
+    if(event.value){
+      this.empresaSelected = event.value;
+      this.updateFranqueado(event.value.companyIdentifier)
+    }
+  }
+
+  updateFranqueado(novoValor: string): void {
+    const queryParams = { ...this.route.snapshot.queryParams };
+
+    queryParams['franqueado'] = novoValor;
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams: queryParams,
+      queryParamsHandling: 'merge'
+    });
   }
 }

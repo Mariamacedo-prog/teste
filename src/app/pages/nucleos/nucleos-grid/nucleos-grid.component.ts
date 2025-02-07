@@ -25,12 +25,18 @@ export class NucleosGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
-  constructor(private router: Router, private toolboxService: ToolboxService, private service: NucleoService,
+  user: any = {};
+
+  constructor(private router: Router, private service: NucleoService,
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.nucleo;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -43,12 +49,21 @@ export class NucleosGridComponent {
   }
 
   findAll(){
-    this.service.getItems().subscribe(item => {
-      if (item.length >= 0) {
-        this.dataSource = item;
-        this.dataSourceFilter = item;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.service.getItems().subscribe((items)=>{
+        if (items.length >= 0) {
+          this.dataSource = items;
+          this.dataSourceFilter = items;
+        }
+      });
+    }else{
+      this.service.getItemsByEmpresaId(this.user.empresaId || '').subscribe((items)=>{
+        if (items.length >= 0) {
+          this.dataSource = items;
+          this.dataSourceFilter = items;
+        }
+      });
+    }
   }
 
   addNew() {

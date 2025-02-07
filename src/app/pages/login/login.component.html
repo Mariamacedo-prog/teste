@@ -4,7 +4,7 @@
       <mat-card-title>{{title}}</mat-card-title>
     </mat-card-header>
     <mat-form-field >
-      <mat-label>Franqueado:</mat-label>
+      <mat-label>Empresa:</mat-label>
       <mat-select  (selectionChange)="changeEmpresa($event)" [(ngModel)]="empresaSelected" >
         <mat-option *ngFor="let empresa of empresasList;" [value]="empresa" >
           {{ empresa?.companyIdentifier + " - " + empresa?.nome}}
@@ -29,7 +29,7 @@
           <div class="login-links">
             <a href="#">Esqueci minha senha</a>
             <span class="divider">|</span>
-            <a routerLink="/usuario/novo/cadastro">Cadastrar</a>
+            <a [routerLink]="'/usuario/novo/cadastro'">Cadastrar</a>
           </div>
         </mat-card-content>
       </mat-tab>
