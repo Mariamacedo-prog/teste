@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { Observable, firstValueFrom, from, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -19,6 +19,12 @@ export class ContratantesService {
   }
 
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('contratantes', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
+  
+
+
   checkIfCPFExists(cpf: string): Observable<boolean> {
     return this.firestore.collection('contratantes', ref => ref.where('cpf', '==', cpf))
       .get()
@@ -27,9 +33,9 @@ export class ContratantesService {
       );
   }
 
-  findByCpfEmail(cpf: string, email: string): Observable<any[]> {
+  findByCpf(cpf: string, empresaId: string): Observable<any[]> {
     return this.firestore.collection('contratantes', 
-      ref => ref.where('cpf', '==', cpf).where('email', '==', email)).valueChanges();
+      ref => ref.where('cpf', '==', cpf).where('empresaId', '==', empresaId)).valueChanges();
   }
 
   async save(user: any): Promise<void> { 

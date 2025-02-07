@@ -23,6 +23,10 @@ export class StatusService {
     return this.itemsCollection.valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('status', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
+
   async save(user: any): Promise<void> { 
     return await this.itemsCollection.add(user).then(() => undefined);
   }

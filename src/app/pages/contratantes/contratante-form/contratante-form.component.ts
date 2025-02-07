@@ -33,7 +33,7 @@ export class ContratanteFormComponent {
   arrayValidateCpfSocio = [];
 
   loadingCartorio: boolean = false;
-  
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private validateService: ValidateService,
     private formBuilder: FormBuilder, private contratantesService: ContratantesService,
@@ -42,6 +42,10 @@ export class ContratanteFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.contratante;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
   anexosFormControl = this.formBuilder.group({
@@ -68,6 +72,7 @@ export class ContratanteFormComponent {
     this.formControls = this.formBuilder.group({
       id: [0, Validators.required],
       nome: ['', Validators.required],
+      empresaId: [""],
       cpf: ['', [Validators.required, this.validateService.validateCPForCNPJ]],
       rg: [''],
       email: ['', [Validators.required, Validators.email]],
@@ -77,6 +82,7 @@ export class ContratanteFormComponent {
       profissao: ['', [Validators.required]],
       estadoCivil: ['', [Validators.required]],
       nomeConjugue: [''],
+      cpfConjuge: [''],
       dataExpedicao:  [''],
       nacionalidadeConjugue: [''],
       estrangeiro: [false],
@@ -101,6 +107,10 @@ export class ContratanteFormComponent {
         this.formControls?.get('id')?.setValue(contratante.id);
         this.formControls?.get('nome')?.setValue(contratante.nome);
 
+        if(contratante.empresaId){
+          this.formControls?.get('empresaId')?.setValue(contratante.empresaId);
+        }
+
         this.formControls?.get('cpf')?.setValue( this.validateService.formatCpfCnpj(contratante.cpf));
 
         this.formControls?.get('rg')?.setValue(contratante.rg);
@@ -111,6 +121,7 @@ export class ContratanteFormComponent {
         this.formControls?.get('estadoCivil')?.setValue(contratante.estadoCivil);
         this.formControls?.get('nomeConjugue')?.setValue(contratante.nomeConjugue);
         this.formControls?.get('nacionalidadeConjugue')?.setValue(contratante.nacionalidadeConjugue);
+        this.formControls?.get('cpfConjuge')?.setValue( this.validateService.formatCpfCnpj(contratante.cpfConjuge));
         this.formControls?.get('orgaoExpedicao')?.setValue(contratante.orgaoExpedicao);
 
         if(contratante.estrangeiro){
@@ -168,7 +179,7 @@ export class ContratanteFormComponent {
   }
 
   findAllCartorios(){
-    this.cartoriosService.getItems().subscribe(cartorios => { 
+    this.cartoriosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((cartorios)=>{
       if (cartorios.length >= 0) {
         this.cartorios  = cartorios;
         this.filteredCartorios  = cartorios;
@@ -189,6 +200,10 @@ export class ContratanteFormComponent {
     body.cpf_socio ? body.cpf_socio = body.cpf_socio.replace(/\D/g, '') : body.cpf_socio = "";
 
     if (body.cpf) {
+      if(this.user.empresaId){
+        body.empresaId = this.user.empresaId;
+      }
+      
       try {
         const cpfExists = await this.contratantesService.checkIfCPFExists(body.cpf).toPromise(); 
   
@@ -228,20 +243,25 @@ export class ContratanteFormComponent {
 
   selectEstadoCivil() {
     const estadoCivilAtual = this.formControls?.get('estadoCivil')?.value?.toString();
-    
     if (estadoCivilAtual === 'Casado' || estadoCivilAtual === 'União Estável') {
       this.isMarried = true;
       this.formControls?.get('nomeConjugue')?.setValidators([Validators.required]);
       this.formControls?.get('nacionalidadeConjugue')?.setValidators([Validators.required]);
+      this.formControls?.get('cpfConjuge')?.setValidators([Validators.required, this.validateService.validateCPForCNPJ]);
+      
     } else {
       this.isMarried = false;
       this.formControls?.get('nomeConjugue')?.clearValidators();
       this.formControls?.get('nacionalidadeConjugue')?.clearValidators();
+      this.formControls?.get('cpfConjuge')?.clearValidators();
       this.formControls?.get('nomeConjugue')?.setValue("");
       this.formControls?.get('nacionalidadeConjugue')?.setValue("");
+      this.formControls?.get('cpfConjuge')?.setValue("");
     }
 
     this.formControls?.get('nomeConjugue')?.updateValueAndValidity();
+    this.formControls?.get('nacionalidadeConjugue')?.updateValueAndValidity();
+    this.formControls?.get('cpfConjuge')?.updateValueAndValidity();
     this.formControls?.get('nacionalidadeConjugue')?.updateValueAndValidity();
   }
 

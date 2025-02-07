@@ -47,6 +47,8 @@ export class ContratosFormComponent {
   nucleos: any[] = [];
   filteredNucleos: any[] = [];
   loadingNucleo: boolean = false;
+  user: any = {};
+
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private formBuilder: FormBuilder, private wordService: WordService, private contratosService: ContratosService, 
     private contratantesService: ContratantesService, private empresaService: EmpresasService, 
@@ -56,6 +58,9 @@ export class ContratosFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.contrato;
+      });
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -106,7 +111,7 @@ export class ContratosFormComponent {
     }
 
     this.formControls = this.formBuilder.group({
-      id: ['', Validators.required],
+      id: [null, Validators.required],
       assinaturaContratante: [''],
       assinaturaContratada: [''],
       assinaturaTesteminha1: [''],
@@ -118,6 +123,7 @@ export class ContratosFormComponent {
       status: [""],
       numeroContrato: [null],
       createdAt: [null],
+      empresaId: [""],
       updatedAt: [null],
       imovelId: [''],
       contratante: this.contratanteFormControls,
@@ -134,7 +140,6 @@ export class ContratosFormComponent {
     });
 
     this.findContratantes();
-    this.findEmpresa();
     this.findVendedores();
     this.findStatus();
     this.findNucleos();
@@ -148,94 +153,128 @@ export class ContratosFormComponent {
         this.formControls?.get('assinaturaTesteminha1')?.setValue(contrato.assinaturaTesteminha1);
         this.formControls?.get('assinaturaTesteminha2')?.setValue(contrato.assinaturaTesteminha2);
 
-        if(contrato.vendedor){
+        if(contrato?.vendedor){
           this.formControls?.get('vendedor')?.setValue(contrato.vendedor);
           this.formControls?.get('vendedor_nome')?.setValue(contrato.vendedor.nome);  
         }
 
-        if(contrato.nucleo){
+        if(contrato?.nucleo){
           this.formControls?.get('nucleo')?.setValue(contrato.nucleo);
           this.formControls?.get('nucleo_nome')?.setValue(contrato.nucleo.nome);  
         }
 
-        if(contrato.status){
+        if(contrato?.status){
           this.formControls?.get('status')?.setValue(contrato.status);
         }
 
-        if(contrato.createdAt){
+        if(contrato?.createdAt){
           this.formControls?.get('createdAt')?.setValue(contrato.createdAt);
         }
         
-        if(contrato.updatedAt){
+        if(contrato?.updatedAt){
           this.formControls?.get('updatedAt')?.setValue(contrato.updatedAt); 
         }
 
-        if(contrato.numeroContrato){
+        if(contrato?.numeroContrato){
           this.formControls?.get('numeroContrato')?.setValue(contrato.numeroContrato);
         }
 
-        this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato.crf.numerocrf);
-        this.formControls?.get('crf')?.get('crfentregue')?.setValue(contrato.crf.crfentregue);
-        this.formControls?.get('crf')?.get('statusentrega')?.setValue(contrato.crf.statusentrega);
+        if(contrato?.empresaId){
+          this.formControls?.get('empresaId')?.setValue(contrato.empresaId);
+        }
 
-        this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato.cartorio.nome);
-        this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato.cartorio.cns);
-        this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato.cartorio.cidadeUf);
+        if(contrato?.empresa){
+          this.formControls?.get('empresa')?.get('nome')?.setValue(contrato?.empresa?.nome);
+          this.formControls?.get('empresa')?.get('cnpj')?.setValue(contrato?.empresa?.cnpj);
+          this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(contrato?.empresa?.endereco.rua);
+          this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(contrato?.empresa?.endereco.numero);
+          this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(contrato?.empresa?.endereco.bairro);
+          this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(contrato?.empresa?.endereco.complemento);
+          this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(contrato?.empresa?.endereco.cidadeUf);
+        }
+    
+        if(contrato?.crf){
+          this.formControls?.get('crf')?.get('numerocrf')?.setValue(contrato?.crf?.numerocrf || '');
+          this.formControls?.get('crf')?.get('crfentregue')?.setValue(contrato?.crf?.crfentregue  || '');
+          this.formControls?.get('crf')?.get('statusentrega')?.setValue(contrato?.crf?.statusentrega  || '');
+        }
+    
+
+
+        this.formControls?.get('cartorio')?.get('nome')?.setValue(contrato?.cartorio?.nome);
+        this.formControls?.get('cartorio')?.get('cns')?.setValue(contrato?.cartorio?.cns);
+        this.formControls?.get('cartorio')?.get('cidadeUf')?.setValue(contrato?.cartorio?.cidadeUf);
      
-        this.formControls?.get('contratante')?.get('id')?.setValue(contrato.contratante.id);
-        this.formControls?.get('contratante')?.get('nome')?.setValue(contrato.contratante.nome);
-        this.formControls?.get('contratante')?.get('cpf')?.setValue(contrato.contratante.cpf);
-        this.formControls?.get('contratante')?.get('rg')?.setValue(contrato.contratante.rg);
-        this.formControls?.get('contratante')?.get('email')?.setValue(contrato.contratante.email);
-        this.formControls?.get('contratante')?.get('telefone')?.setValue(contrato.contratante.telefone);
-        this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato.contratante.nacionalidade);
-        this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato.contratante.profissao);
-        this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato.contratante.estadoCivil);
+        this.formControls?.get('contratante')?.get('id')?.setValue(contrato?.contratante?.id);
+        this.formControls?.get('contratante')?.get('nome')?.setValue(contrato?.contratante?.nome);
+        this.formControls?.get('contratante')?.get('cpf')?.setValue(contrato?.contratante?.cpf);
+        this.formControls?.get('contratante')?.get('rg')?.setValue(contrato?.contratante?.rg);
+        this.formControls?.get('contratante')?.get('email')?.setValue(contrato?.contratante?.email);
+        this.formControls?.get('contratante')?.get('telefone')?.setValue(contrato?.contratante?.telefone);
+        this.formControls?.get('contratante')?.get('nacionalidade')?.setValue(contrato?.contratante?.nacionalidade);
+        this.formControls?.get('contratante')?.get('profissao')?.setValue(contrato?.contratante?.profissao);
+        this.formControls?.get('contratante')?.get('estadoCivil')?.setValue(contrato?.contratante?.estadoCivil);
 
-        if(contrato.contratante?.razao_social){
+        if(contrato?.contratante?.razao_social){
           this.formControls?.get('contratante')?.get('razao_social')?.setValue(contrato.contratante.razao_social);
         }
 
-        if(contrato.contratante?.pessoa_juridica){
+        if(contrato?.contratante?.pessoa_juridica){
           this.formControls?.get('contratante')?.get('pessoa_juridica')?.setValue(contrato.contratante.pessoa_juridica);
         }
      
-        if(contrato.contratante.cpf_socio){
+        if(contrato?.contratante?.cpf_socio){
           this.formControls?.get('contratante')?.get('cpf_socio')?.setValue(contrato.contratante.cpf_socio);
         }
    
-        if(contrato.imovelId){
+        if(contrato?.imovelId){
           this.formControls?.get('imovelId')?.setValue(contrato.imovelId);
         }
         this.findImovel();
       });
+    }else{
+      this.findEmpresa();
     }
   }
 
   findContratantes(){
-    this.contratantesService.getItems().subscribe((contratantes)=>{
-      this.contratantes = contratantes;
+    this.contratantesService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((contratantes)=>{
+      if (contratantes.length >= 0) {
+        this.contratantes = contratantes;
+      }
     });
   }
 
   findVendedores(){
-    this.vendedoresService.getItems().subscribe((vendedores)=>{
+    this.vendedoresService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((vendedores)=>{
       this.vendedores = vendedores;
     });
   }
 
   findEmpresa(){
-    this.empresaService.getItems().subscribe((empresas: any)=>{
-      let empresa = empresas[0];
-
-      this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
-      this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
-      this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
-      this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(empresa.endereco.numero);
-      this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(empresa.endereco.bairro);
-      this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(empresa.endereco.complemento);
-      this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(empresa.endereco.cidadeUf);
-    });
+    if(this.user.empresaId){
+      this.empresaService.findById(this.user.empresaId).subscribe((empresa: any)=>{
+        this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
+        this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
+        this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
+        this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(empresa.endereco.numero);
+        this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(empresa.endereco.bairro);
+        this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(empresa.endereco.complemento);
+        this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(empresa.endereco.cidadeUf);
+      });
+    }else{
+      this.empresaService.getItems().subscribe((empresas: any)=>{
+        let empresa = empresas[0];
+  
+        this.formControls?.get('empresa')?.get('nome')?.setValue(empresa.nome);
+        this.formControls?.get('empresa')?.get('cnpj')?.setValue(empresa.cnpj);
+        this.formControls?.get('empresa')?.get('endereco')?.get('rua')?.setValue(empresa.endereco.rua);
+        this.formControls?.get('empresa')?.get('endereco')?.get('numero')?.setValue(empresa.endereco.numero);
+        this.formControls?.get('empresa')?.get('endereco')?.get('bairro')?.setValue(empresa.endereco.bairro);
+        this.formControls?.get('empresa')?.get('endereco')?.get('complemento')?.setValue(empresa.endereco.complemento);
+        this.formControls?.get('empresa')?.get('endereco')?.get('cidadeUf')?.setValue(empresa.endereco.cidadeUf);
+      });
+    }
   }
 
   findImovel(){
@@ -263,13 +302,13 @@ export class ContratosFormComponent {
   }
 
   findStatus(){
-    this.statusService.getItems().subscribe((status)=>{
+    this.statusService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((status)=>{
       this.status = status;
     });
   }
 
   findNucleos(){
-    this.nucleoService.getItems().subscribe((nucleos)=>{
+    this.nucleoService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((nucleos)=>{
       this.nucleos = nucleos;
     });
   }
@@ -281,12 +320,17 @@ export class ContratosFormComponent {
 
   create() {
     let nucleo = this.formControls?.get('nucleo')?.value;
+    this.formControls?.get('createdAt')?.setValue(new Date());
     if(nucleo){
       this.formControls?.get('nucleo_nome')?.setValue(nucleo.nome);
     }
 
-    this.formControls?.get('createdAt')?.setValue(new Date());
-    this.contratosService.save(this.formControls.getRawValue());
+    let item  = this.formControls.getRawValue();
+    if(this.user.empresaId){
+      item.empresaId = this.user.empresaId;
+    }
+
+    this.contratosService.save(item);
     this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
     this.router.navigate(['/contrato/lista']);
   }

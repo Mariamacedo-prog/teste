@@ -14,7 +14,7 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './vendedor-form.component.css'
 })
 export class VendedorFormComponent {
-
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
     private vendedoresService: VendedoresService,  private formBuilder: FormBuilder,
@@ -22,6 +22,10 @@ export class VendedorFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.vendedor;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -40,7 +44,7 @@ export class VendedorFormComponent {
   ]
   showAnexos: boolean  = false;
 
-  teste = {
+  dadosBancadios = {
     agencia:'',
     conta: '',
     digito: '',
@@ -61,6 +65,7 @@ export class VendedorFormComponent {
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
   fotoFormControl = new FormControl({base64: '',type: ''});
   perfilFormControl = new FormControl('', Validators.required);
+  empresaIdFormControl = new FormControl('');
   formaPagamentoFormControl = new FormControl([], Validators.required);
 
   dadosBancariosFormControls = new FormControl({
@@ -103,9 +108,13 @@ export class VendedorFormComponent {
   
         if(vendedor.dadosBancarios){
           this.dadosBancariosFormControls.setValue(vendedor.dadosBancarios);
-          this.teste = vendedor.dadosBancarios;
+          this.dadosBancadios = vendedor.dadosBancarios;
         }
 
+        if(vendedor.empresaId){
+          this.empresaIdFormControl.setValue(vendedor.empresaId);
+        }
+        
         this.showAnexos = true
       });
       }else{
@@ -129,8 +138,13 @@ export class VendedorFormComponent {
       "foto": this.fotoFormControl.value,
       "perfil": this.perfilFormControl.value,
       "formaPagamento": this.formaPagamentoFormControl.value,
-      "dadosBancarios": this.teste
+      "dadosBancarios": this.dadosBancadios,
+      "empresaId": this.empresaIdFormControl.value,
     };
+
+    if(this.user.empresaId){
+      item.empresaId = this.user.empresaId;
+    }
  
     if(item.cpf){
       this.vendedoresService.checkIfCPFExists(item.cpf).toPromise().then(cpfExists => {
@@ -165,7 +179,8 @@ export class VendedorFormComponent {
           "foto": this.fotoFormControl.value,
           "perfil": this.perfilFormControl.value,
           "formaPagamento": this.formaPagamentoFormControl.value,
-          "dadosBancarios": this.teste
+          "dadosBancarios": this.dadosBancadios,
+          "empresaId": this.empresaIdFormControl.value,
         };
     if(item.cpf){
       this.vendedoresService.updateItem(this.vendedorId, item)

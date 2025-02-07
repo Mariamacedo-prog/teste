@@ -1,8 +1,16 @@
 <div class="login-container">
-  <mat-card>
+  <mat-card   [style.width]="'600px'">
     <mat-card-header>
-      <mat-card-title>REURB</mat-card-title>
+      <mat-card-title>{{title}}</mat-card-title>
     </mat-card-header>
+    <mat-form-field >
+      <mat-label>Empresa:</mat-label>
+      <mat-select  (selectionChange)="changeEmpresa($event)" [(ngModel)]="empresaSelected" >
+        <mat-option *ngFor="let empresa of empresasList;" [value]="empresa" >
+          {{ empresa?.companyIdentifier + " - " + empresa?.nome}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
 
     <mat-tab-group >
       <mat-tab  label="Usuário"> 
@@ -21,26 +29,20 @@
           <div class="login-links">
             <a href="#">Esqueci minha senha</a>
             <span class="divider">|</span>
-            <a routerLink="/usuario/novo/cadastro">Cadastrar</a>
+            <a [routerLink]="'/usuario/novo/cadastro'">Cadastrar</a>
           </div>
         </mat-card-content>
       </mat-tab>
       <mat-tab  label="Contratante"> 
         <mat-card-content>
-        
-          <mat-form-field>
-            <mat-label>E-mail</mat-label>
-            <input matInput [(ngModel)]="contratante.email" />
-          </mat-form-field>
-          <mat-form-field>
+          <mat-form-field >
             <mat-label>CPF / CNPJ</mat-label>
             <input matInput [(ngModel)]="contratante.cpf" />
           </mat-form-field>
     
-          <button mat-raised-button color="primary" [disabled]="contratante.email == '' || contratante.cpf == ''" (click)="loginContratante()">Entrar</button>
+          <button mat-raised-button color="primary" [disabled]="contratante.cpf == ''" (click)="loginContratante()">Entrar</button>
         </mat-card-content>
       </mat-tab>
     </mat-tab-group>
-
   </mat-card>
 </div>

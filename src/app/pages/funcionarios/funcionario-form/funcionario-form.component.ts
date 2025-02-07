@@ -15,6 +15,8 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './funcionario-form.component.css'
 })
 export class FuncionarioFormComponent {
+  user: any = {};
+
   constructor(private toolboxService: ToolboxService, private router: Router, 
     private route: ActivatedRoute, private cepService: CepService, private validateService: ValidateService,
     private funcionariosService: FuncionariosService, private usuariosService: UsuariosService,
@@ -22,6 +24,10 @@ export class FuncionarioFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.funcionario;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -48,7 +54,7 @@ export class FuncionarioFormComponent {
   cepFormControl = new FormControl('', [Validators.required]);
   emailFormControl = new FormControl('', [Validators.required, Validators.email]);
   telefoneFormControl = new FormControl('', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]);
-
+  empresaIdFormControl = new FormControl('');
 
   ngOnInit(): void {
     if(this.access == 'restrito'){
@@ -77,10 +83,14 @@ export class FuncionarioFormComponent {
         this.cidadeUfFormControl.setValue(funcionario.cidadeUf);
         this.cepFormControl.setValue(funcionario.cep);
 
+        if(funcionario.empresaId){
+          this.empresaIdFormControl.setValue(funcionario.empresaId);
+        }
+
         this.maskCpfCnpj();
       });
     }
-    this.usuariosService.getItems().subscribe(usuarios => {
+    this.usuariosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe(usuarios => {
       this.usuarios = usuarios;
     });
   }
@@ -122,10 +132,16 @@ export class FuncionarioFormComponent {
       "usuario":this.usuarioFormControl.value,
       "email": this.emailFormControl.value,
       "telefone":this.telefoneFormControl.value,
-      "cep": this.cepFormControl.value
+      "cep": this.cepFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
 
     if(item.cpf){
+      
+      if(this.user.empresaId){
+        item.empresaId = this.user.empresaId;
+      }
+
       this.funcionariosService.checkIfCPFExists(item.cpf).toPromise().then(cpfExists => {
         if (!cpfExists) {
           this.funcionariosService.save(item);
@@ -155,8 +171,10 @@ export class FuncionarioFormComponent {
       "usuario":this.usuarioFormControl.value,
       "email": this.emailFormControl.value,
       "telefone":this.telefoneFormControl.value,
-      "cep": this.cepFormControl.value
+      "cep": this.cepFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
+
 
     if(item.cpf){
       this.funcionariosService.updateItem(this.funcionarioId, item)

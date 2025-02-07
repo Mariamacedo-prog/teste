@@ -38,7 +38,6 @@ export class GerenciarDocumentoGridComponent {
    }
 
   ngOnInit(): void {
-    console.log(this.user)
     if(this.access == 'restrito'){
       this.router.navigate(["/usuario/lista"]);
     }
@@ -58,7 +57,6 @@ export class GerenciarDocumentoGridComponent {
 
   findByCpf(cpf: string){
     this.contratosService.findByCpf(cpf).subscribe(contratos => {
-      console.log(contratos, "contratos")
       if (contratos.length >= 0) {
         this.dataSource = contratos;
         this.dataSourceFilter = contratos;
@@ -66,18 +64,26 @@ export class GerenciarDocumentoGridComponent {
     });
 
     this.gerenciarDocumentoService.getByCpf(cpf).subscribe(info => {
-      console.log(info, "info")
       this.contratoInfo = info
     });
   }
   
   findAll(){
-    this.contratosService.getItems().subscribe(contratos => {
-      if (contratos.length >= 0) {
-        this.dataSource = contratos;
-        this.dataSourceFilter = contratos;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.contratosService.getItems().subscribe((contratos)=>{
+        if (contratos.length >= 0) {
+          this.dataSource = contratos;
+          this.dataSourceFilter = contratos;
+        }
+      });
+    }else{
+      this.contratosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((contratos)=>{
+        if (contratos.length >= 0) {
+          this.dataSource = contratos;
+          this.dataSourceFilter = contratos;
+        }
+      });
+    }
 
     this.gerenciarDocumentoService.getItems().subscribe(info => {
       this.contratoInfo = info

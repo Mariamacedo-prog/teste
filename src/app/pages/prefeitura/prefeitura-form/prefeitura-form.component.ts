@@ -22,6 +22,7 @@ export class PrefeituraFormComponent {
   visualizar: boolean = false;
   formControls!: FormGroup;
   showAnexos: boolean  = false;
+  user: any = {};
 
   constructor(private toolboxService: ToolboxService, private router: Router,
     private route: ActivatedRoute, private cepService: CepService, private formBuilder: FormBuilder,
@@ -30,6 +31,10 @@ export class PrefeituraFormComponent {
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.prefeitura;
+      });
+      
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -66,6 +71,7 @@ export class PrefeituraFormComponent {
       representante: this.representanteFormControls,
       endereco: this.enderecoFormControls,
       nome: ['', Validators.required],
+      empresaId: [''],
       cnpj: ['', [Validators.required, this.validateService.validateCNPJ]],
       telefone: ['', [Validators.required, Validators.pattern(/^\(\d{2}\)\s\d{4,5}-\d{4}$/)]],
       email: ['', [Validators.required, Validators.email]],
@@ -88,6 +94,9 @@ export class PrefeituraFormComponent {
       this.formControls.get('cnpj')?.setValue(prefeitura.cnpj);
       this.formControls.get('telefone')?.setValue(prefeitura.telefone);
       this.formControls.get('email')?.setValue(prefeitura.email);
+      if(prefeitura.empresaId){
+        this.formControls.get('empresaId')?.setValue(prefeitura.empresaId);
+      }
 
       this.formControls.get('representante')?.get('nome')?.setValue(prefeitura.representante.nome);
       this.formControls.get('representante')?.get('nacionalidade')?.setValue(prefeitura.representante.nacionalidade);
@@ -121,7 +130,13 @@ export class PrefeituraFormComponent {
     if(this.formControls.get('cnpj')?.getRawValue()){
       this.prefeiturasService.checkIfcnpjExists(this.formControls.get('cnpj')?.getRawValue()).toPromise().then(cpfExists => {
         if (!cpfExists) {
-          this.prefeiturasService.save(this.formControls.getRawValue());
+          
+          let item = this.formControls.getRawValue()
+          if(this.user.empresaId){
+            item.empresaId = this.user.empresaId;
+          }
+
+          this.prefeiturasService.save(item);
           this.toolboxService.showTooltip('success', 'Cadastro realizado com sucesso!', 'Sucesso!');
 
           this.router.navigate(['/prefeitura/lista']);

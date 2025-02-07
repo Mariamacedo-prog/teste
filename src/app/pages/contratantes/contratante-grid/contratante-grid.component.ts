@@ -27,7 +27,7 @@ export class ContratanteGridComponent {
   dataSourceFilter:any = [];
   searchTerm: string = '';
   cartorios: any = [];
-
+  user: any = {};
   cartorioSearch: string = '';
   constructor(private router: Router, private toolboxService: ToolboxService, public dialog: MatDialog,
     private contratantesService: ContratantesService, private cartoriosService: CartoriosService, 
@@ -36,6 +36,9 @@ export class ContratanteGridComponent {
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.contratante;
+    });
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
   adicionarNovo() {
@@ -46,23 +49,39 @@ export class ContratanteGridComponent {
     if(this.access == 'restrito'){
       this.router.navigate(["/usuario/lista"]);
     }
-
-    this.contratantesService.getItems().subscribe(contratante => { 
-      if (contratante.length >= 0) {
-        this.dataSource = contratante;
-        this.dataSourceFilter = contratante;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.contratantesService.getItems().subscribe((contratante)=>{
+        if (contratante.length >= 0) {
+          this.dataSource = contratante;
+          this.dataSourceFilter = contratante;
+        }
+      });
+    }else{
+      this.contratantesService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((contratante)=>{
+        if (contratante.length >= 0) {
+          this.dataSource = contratante;
+          this.dataSourceFilter = contratante;
+        }
+      });
+    }
   }
 
   ngOnInit(): void {
     this.findAll();
 
-    this.cartoriosService.getItems().subscribe(cartorios => { 
-      if (cartorios.length >= 0) {
-        this.cartorios  = cartorios;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.cartoriosService.getItems().subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.cartorios  = cartorios;
+        }
+      });
+    }else{
+      this.cartoriosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.cartorios  = cartorios;
+        }
+      });
+    }
   }
 
   search() {
@@ -123,6 +142,7 @@ export class ContratanteGridComponent {
         { type: "text", width: 300, object_name: "estadoCivil", title: "Estado Civil do Contratante" },
         { type: "text", width: 300, object_name: "nomeConjugue", title: "Nome do Conjugê do Contratante" },
         { type: "text", width: 300, object_name: "nacionalidadeConjugue", title: "Nacionalidade do Conjugê do Contratante" },
+        { type: "text", width: 300, object_name: "cpfConjuge", title: "CPF do Conjugê do Contratante" },
         
         
         { type: "text", width: 300, object_name: "cartorio.nome", title: "Cartorio" },

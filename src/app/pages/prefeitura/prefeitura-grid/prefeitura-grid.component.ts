@@ -24,6 +24,8 @@ export class PrefeituraGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
+
   constructor(private router: Router, private prefeiturasService: PrefeiturasService, 
     public dialog: MatDialog, 
     private excelService: ExcelService,
@@ -31,6 +33,10 @@ export class PrefeituraGridComponent {
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.prefeitura;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
 
@@ -47,12 +53,21 @@ export class PrefeituraGridComponent {
   }
 
   findAll(){
-    this.prefeiturasService.getItems().subscribe(prefeituras => {
-      if (prefeituras.length >= 0) {
-        this.dataSource = prefeituras;
-        this.dataSourceFilter = prefeituras;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.prefeiturasService.getItems().subscribe(prefeituras => {
+        if (prefeituras.length >= 0) {
+          this.dataSource = prefeituras;
+          this.dataSourceFilter = prefeituras;
+        }
+      });
+    }else{
+      this.prefeiturasService.getItemsByEmpresaId(this.user.empresaId || '').subscribe(prefeituras => {
+        if (prefeituras.length >= 0) {
+          this.dataSource = prefeituras;
+          this.dataSourceFilter = prefeituras;
+        }
+      });
+    }
   }
 
 

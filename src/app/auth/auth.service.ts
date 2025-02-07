@@ -9,6 +9,7 @@ import { AuthState, loginSuccess, setPermissions, logOutSuccess }  from "../stor
 import { Store } from '@ngrx/store';
 import { AcessoService } from '../services/acesso.service';
 import { ContratantesService } from '../services/contratantes.service';
+import { ToolboxService } from '../components/toolbox/toolbox.service';
 @Injectable({
   providedIn: 'root',
 })
@@ -21,6 +22,7 @@ export class AuthService {
   isLoggedIn$: Observable<boolean>;
 
   constructor(private router: Router, 
+    private toolboxService: ToolboxService,
     private usuariosService: UsuariosService,
     private contratantesService: ContratantesService,
     private acessoService: AcessoService,
@@ -39,12 +41,11 @@ export class AuthService {
     return this.isLoggedIn;
   }
 
-  login(cpf: string, senha: string): Observable<boolean> {
+  login(cpf: string, senha: string, empresaId: string): Observable<boolean> {
     if (cpf && senha) {
-      this.usuariosService.findByCpfSenha(cpf, senha).subscribe(usuarioEncontrado => {
+      this.usuariosService.findByCpfSenha(cpf, senha, empresaId).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
-          console.log(usuarioEncontrado)
-          this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
+          this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0]}));           
           if(usuarioEncontrado[0].perfil.id){
             this.getAllPermissions(usuarioEncontrado[0].perfil.id);
           }else{
@@ -61,18 +62,21 @@ export class AuthService {
               status: 'restrito',
               usuario: 'restrito',
               vendedor: 'restrito',
-              gerenciar_documento: 'restrito'
+              gerenciar_documento: 'restrito',
+              empresas: 'restrito'
             } }));
           }
+        }else{
+          this.toolboxService.showTooltip('error',"CPF/CNPJ, senha ou empresa incorretos. Verifique os dados e tente novamente.", 'ERROR!');
         }
       });
     }
     return of(this.isLoggedIn).pipe(delay(1000));
   }
 
-  loginContratante(cpf: string, email: string): Observable<boolean> {
-    if (cpf && email) {
-      this.contratantesService.findByCpfEmail(cpf, email).subscribe(usuarioEncontrado => {
+  loginContratante(cpf: string, empresaId: string): Observable<boolean> {
+    if (cpf) {
+      this.contratantesService.findByCpf(cpf, empresaId).subscribe(usuarioEncontrado => {
         if (usuarioEncontrado.length > 0) {
           this.store.dispatch(loginSuccess({ user: usuarioEncontrado[0] }));
       
@@ -89,9 +93,12 @@ export class AuthService {
               status: 'restrito',
               usuario: 'restrito',
               vendedor: 'restrito',
-              gerenciar_documento: 'consulta'
+              gerenciar_documento: 'consulta',
+              empresas: 'restrito'
             } }));
         
+        }else{
+          this.toolboxService.showTooltip('error',"CPF/CNPJ ou Empresa inválidos. Por favor, verifique os dados e tente novamente.", 'ERROR!');
         }
       });
     }

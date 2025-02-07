@@ -24,6 +24,9 @@ export class VendedoresService {
     return this.firestore.collection('vendedores').valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('vendedores', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
   checkIfCPFExists(cpf: string): Observable<boolean> {
     return this.firestore.collection('vendedores', ref => ref.where('cpf', '==', cpf))

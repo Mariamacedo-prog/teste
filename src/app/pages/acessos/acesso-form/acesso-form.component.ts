@@ -16,6 +16,7 @@ export class AcessoFormComponent implements OnInit{
   id = "";
   view: boolean = false;
   access: any = '';
+  user: any = {};
 
   databaseInfo: any = {};
   filteredOptions: Observable<string[]> = of([]);
@@ -38,6 +39,9 @@ export class AcessoFormComponent implements OnInit{
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.acesso;
       });
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+      });
     }
 
   permissoesFormControls = this.formBuilder.group({
@@ -54,6 +58,7 @@ export class AcessoFormComponent implements OnInit{
     usuario: ['restrito', Validators.required],
     vendedor: ['restrito', Validators.required],
     gerenciar_documento: ['restrito', Validators.required],
+    empresas: ['restrito', Validators.required]
   });
 
 
@@ -67,6 +72,7 @@ export class AcessoFormComponent implements OnInit{
       createdAt: [null],
       deletedAt: [null],
       nomeGrupo: ["", [Validators.required]],
+      empresaId: [null],
       status: [true],
       updatedAt: [null],
       permissoes: this.permissoesFormControls
@@ -89,6 +95,7 @@ export class AcessoFormComponent implements OnInit{
           id: item.id,
           createdAt: item.createdAt,
           deletedAt: item.deletedAt,
+          empresaId: item.empresaId || "",
           nomeGrupo: item.nomeGrupo,
           status: item.status,
           updatedAt: item.updatedAt,
@@ -113,7 +120,13 @@ export class AcessoFormComponent implements OnInit{
 
   create() {
     if(this.formControls.getRawValue()){
-      this.service.save(this.formControls.getRawValue());
+      let item  = this.formControls.getRawValue();
+
+      if(this.user.empresaId){
+        item.empresaId = this.user.empresaId;
+      }
+      
+      this.service.save(item);
       this.toolboxService.showTooltip('success', 'Perfil cadastrado com sucesso!', 'Sucesso!');
       this.router.navigate(['/acesso/lista']);
     }

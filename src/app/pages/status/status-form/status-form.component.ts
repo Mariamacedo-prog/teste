@@ -11,12 +11,17 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './status-form.component.css'
 })
 export class StatusFormComponent {
+  user: any = {};
   constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
     private service: StatusService,
     private  authService: AuthService
     ) {
       this.authService.permissions$.subscribe(perms => {
         this.access = perms.status;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
       });
     }
 
@@ -26,6 +31,7 @@ export class StatusFormComponent {
  databaseInfo: any = {};
 
  descricaoFormControl = new FormControl("", [Validators.required]);
+ empresaIdFormControl = new FormControl("");
  nomeFormControl = new FormControl('', Validators.required);
 
  ngOnInit(): void {
@@ -42,9 +48,12 @@ export class StatusFormComponent {
    });
 
    if(this.itemId){
-     this.service.findById(this.itemId).subscribe(user => {
-       this.nomeFormControl.setValue(user.nome);
-       this.descricaoFormControl.setValue(user.descricao);
+     this.service.findById(this.itemId).subscribe(status => {
+      if(status.empresaId){
+        this.empresaIdFormControl.setValue(status.empresaId)
+      }
+       this.nomeFormControl.setValue(status.nome);
+       this.descricaoFormControl.setValue(status.descricao);
      });
    }
  }
@@ -52,8 +61,14 @@ export class StatusFormComponent {
  create() {
    const item = {
      "nome":this.nomeFormControl.value,
+     "empresaId":this.empresaIdFormControl.value,
      "descricao": this.descricaoFormControl.value,
    }
+   
+   if(this.user.empresaId){
+    item.empresaId = this.user.empresaId;
+   }
+
    if(item){
      this.service.save(item);
      this.toolboxService.showTooltip('success', 'Status cadastrado com sucesso!', 'Sucesso!');
@@ -64,6 +79,7 @@ export class StatusFormComponent {
  async update(){
    const item = {
     "nome":this.nomeFormControl.value,
+    "empresaId":this.empresaIdFormControl.value,
     "descricao": this.descricaoFormControl.value,
    }
    this.service.updateItem(this.itemId, item)

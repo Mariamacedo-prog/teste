@@ -59,7 +59,7 @@
     
           <div class="inputs-row-form">
             <mat-form-field>
-              <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length <= 11">CPF</mat-label>
+              <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length <= 11 || cpfFormControl.value == ''">CPF</mat-label>
               <mat-label *ngIf="cpfFormControl.value && cpfFormControl.value.length > 11">CNPJ</mat-label>
               <input [readonly]="visualizar"  matInput [formControl]="cpfFormControl" />
               <mat-error *ngIf="cpfFormControl.hasError('cpfInvalido')">CPF inválido</mat-error>
@@ -87,29 +87,29 @@
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Banco</mat-label>
-              <input [readonly]="visualizar" matInput [(ngModel)]="teste.banco" placeholder="Nome do banco" />
+              <input [readonly]="visualizar" matInput [(ngModel)]="dadosBancadios.banco" placeholder="Nome do banco" />
             </mat-form-field>
           </div>
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Agencia</mat-label>
-              <input [readonly]="visualizar" matInput [(ngModel)]="teste.agencia" placeholder="Agencia" />
+              <input [readonly]="visualizar" matInput [(ngModel)]="dadosBancadios.agencia" placeholder="Agencia" />
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Conta</mat-label>
-              <input [readonly]="visualizar" matInput [(ngModel)]="teste.conta" placeholder="Conta" />
+              <input [readonly]="visualizar" matInput [(ngModel)]="dadosBancadios.conta" placeholder="Conta" />
             </mat-form-field>
 
             <mat-form-field>
               <mat-label>Dígito</mat-label>
-              <input [readonly]="visualizar" matInput [(ngModel)]="teste.digito" placeholder="Digito" />
+              <input [readonly]="visualizar" matInput [(ngModel)]="dadosBancadios.digito" placeholder="Digito" />
             </mat-form-field>
           </div>
           <div class="inputs-row-form">
             <mat-form-field>
               <mat-label>Tipo: </mat-label>
-              <mat-select [(ngModel)]="teste.tipo">
+              <mat-select [(ngModel)]="dadosBancadios.tipo">
                 <mat-option [value]="1">Conta Corrente</mat-option>
                 <mat-option [value]="2">Conta Poupança</mat-option>
               </mat-select>

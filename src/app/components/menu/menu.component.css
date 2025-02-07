@@ -56,9 +56,15 @@ a:hover {
   transition: width 0.3s ease;
   overflow-x: hidden;
   overflow-y: hidden;
-
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
+
+.footerAreaMenu{
+  justify-self: flex-end;
+}
 .logoIconMenu{
   display: flex;
   padding-right: 5px;
@@ -74,6 +80,11 @@ a:hover {
 }
 .menu-closed {
   width: 60px;
+}
+
+
+.menu-list {
+  flex: 1;
 }
 
 mat-icon{

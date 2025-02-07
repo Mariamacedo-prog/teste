@@ -51,6 +51,7 @@ export class MenuComponent {
   generateListMenu(){
     let teste = this.menuService.getMenuItems();
     let novoMenuList: MenuItem[] = [];
+
     for(let item of teste){
       if(this.permissions && this.permissions[item.value] != null){
         if(this.permissions[item.value] != 'restrito'){

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { Observable, firstValueFrom, map } from 'rxjs';
+import { Observable, firstValueFrom, from, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +18,10 @@ export class CartoriosService {
     return this.itemsCollection.valueChanges({ idField: 'id' });
   }
 
+
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('cartorios', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
   checkIfcnpjExists(cnpj: string): Observable<boolean> {
     return this.firestore.collection('cartorios', ref => ref.where('cnpj', '==', cnpj))

@@ -14,6 +14,8 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import { DialogModule } from '@angular/cdk/dialog';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSelectModule } from '@angular/material/select';
 
 const routes: Routes = [
   { path: 'novo/cadastro', component: UsuarioFormComponent},
@@ -31,6 +33,8 @@ const routes: Routes = [
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
+    MatFormFieldModule,
+    MatSelectModule,
     MatTableModule,
     MatIconModule,
     MatCardModule,

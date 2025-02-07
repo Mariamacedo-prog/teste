@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToolboxService } from '../components/toolbox/toolbox.service';
 import { Router } from '@angular/router';
-import { Observable, firstValueFrom, map } from 'rxjs';
-
+import { Observable, firstValueFrom, from } from 'rxjs';
+import { map } from 'rxjs/operators';
 @Injectable({
   providedIn: 'root'
 })
@@ -18,10 +18,15 @@ export class AcessoService {
     return this.itemsCollection.valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('acessos', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
 
-  async save(item: any): Promise<void> { 
+
+  async save(item: any): Promise<any> { 
     try {
-      await this.itemsCollection.add(item);
+      const docRef = await this.itemsCollection.add(item);
+      return { id: docRef.id, ...item };
     } catch (error) {
       console.error("Erro ao criar o item: ", error);
       throw error;

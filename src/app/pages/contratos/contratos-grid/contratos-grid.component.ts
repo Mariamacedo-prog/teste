@@ -29,6 +29,8 @@ export class ContratosGridComponent {
 
   cartorios: any = [];
   cartorioSearch: string = '';
+
+  user: any = {}
   constructor(private router: Router, private toolboxService: ToolboxService,
      private contratosService: ContratosService, private cartoriosService: CartoriosService,
      public dialog: MatDialog, private excelService: ExcelService,
@@ -37,6 +39,9 @@ export class ContratosGridComponent {
      this.authService.permissions$.subscribe(perms => {
        this.access = perms.contrato;
      });
+     this.authService.user$.subscribe(user => {
+      this.user = user;
+    });
    }
   adicionarNovo() {
     this.router.navigate(["/contrato/novo"]);
@@ -48,21 +53,36 @@ export class ContratosGridComponent {
     }
 
     this.findAll();
-
-    this.cartoriosService.getItems().subscribe(cartorios => {
-      if (cartorios.length >= 0) {
-        this.cartorios  = cartorios;
-      }
-    });
   }
   
   findAll(){
-    this.contratosService.getItems().subscribe(contratos => {
-      if (contratos.length >= 0) {
-        this.dataSource = contratos;
-        this.dataSourceFilter = contratos;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.contratosService.getItems().subscribe((contratos)=>{
+        if (contratos.length >= 0) {
+          this.dataSource = contratos;
+          this.dataSourceFilter = contratos;
+        }
+      });
+
+      this.cartoriosService.getItems().subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.cartorios  = cartorios;
+        }
+      });
+    }else{
+      this.contratosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((contratos)=>{
+        if (contratos.length >= 0) {
+          this.dataSource = contratos;
+          this.dataSourceFilter = contratos;
+        }
+      });
+
+      this.cartoriosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((cartorios)=>{
+        if (cartorios.length >= 0) {
+          this.cartorios  = cartorios;
+        }
+      });
+    }
   }
 
   search() {

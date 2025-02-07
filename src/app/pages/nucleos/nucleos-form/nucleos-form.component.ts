@@ -13,21 +13,13 @@ import { AuthService } from '../../../auth/auth.service';
   styleUrl: './nucleos-form.component.css'
 })
 export class NucleosFormComponent {
-  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
-    private service: NucleoService, private planoService: PlanosService, private cepService: CepService,
-    private  authService: AuthService
-    ) {
-      this.authService.permissions$.subscribe(perms => {
-        this.access = perms.nucleo;
-      });
-    }
   nucleos: any[] = [];
 
   itemId = '';
   view: boolean = false;
   access: any = '';
   databaseInfo: any = {};
-
+  user: any = {};
   cepFormControl = new FormControl('');
 
   planosList: any[]= [];
@@ -38,10 +30,24 @@ export class NucleosFormComponent {
   planosFormControl = new FormControl('');
   nomeFormControl = new FormControl('', Validators.required);
   especieFormControl = new FormControl('');
+  empresaIdFormControl = new FormControl('');
   siglaFormControl = new FormControl('', [
     this.validateSigla(this.nucleos, this.itemId)
   ]);
-  
+ 
+
+  constructor(private toolboxService: ToolboxService, private router: Router, private route: ActivatedRoute,
+    private service: NucleoService, private planoService: PlanosService, private cepService: CepService,
+    private  authService: AuthService
+    ) {
+      this.authService.permissions$.subscribe(perms => {
+        this.access = perms.nucleo;
+      });
+
+      this.authService.user$.subscribe(user => {
+        this.user = user;
+      });
+    }
 
   ngOnInit(): void {
     if(this.access == 'restrito'){
@@ -65,9 +71,14 @@ export class NucleosFormComponent {
         this.cidadeFormControl.setValue(nucleo.cidade);
         this.ufFormControl.setValue(nucleo.uf);
         this.planosFormControl.setValue(nucleo.planos);
+        
 
         if(nucleo.especie){
           this.especieFormControl.setValue(nucleo.especie);
+        }
+
+        if(nucleo.empresaId){
+          this.empresaIdFormControl.setValue(nucleo.empresaId);
         }
 
         if(nucleo.sigla){
@@ -102,10 +113,15 @@ export class NucleosFormComponent {
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
       "especie": this.especieFormControl.value,
-      "sigla": this.siglaFormControl.value
+      "sigla": this.siglaFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
 
     if(item){
+      if(this.user.empresaId){
+        item.empresaId = this.user.empresaId;
+      }
+
       this.service.save(item);
       this.toolboxService.showTooltip('success', 'Status cadastrado com sucesso!', 'Sucesso!');
       this.router.navigate(['/nucleos/lista']);
@@ -120,7 +136,8 @@ export class NucleosFormComponent {
       "uf":this.ufFormControl.value,
       "planos": this.planosFormControl.value,
       "especie": this.especieFormControl.value,
-      "sigla": this.siglaFormControl.value
+      "sigla": this.siglaFormControl.value,
+      "empresaId": this.empresaIdFormControl.value
     }
     this.service.updateItem(this.itemId, item)
   }

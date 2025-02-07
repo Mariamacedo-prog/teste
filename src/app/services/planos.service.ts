@@ -23,6 +23,10 @@ export class PlanosService {
     return this.itemsCollection.valueChanges({ idField: 'id' });
   }
 
+  getItemsByEmpresaId(empresaId: string): Observable<any[]> {
+    return this.firestore.collection('planos', ref => ref.where('empresaId', '==', empresaId)).valueChanges({ idField: 'id' });
+  }
+
   getActiveItems(): Observable<any[]> {
     return this.firestore.collection<any>('planos', ref => ref.where('status', '==', true))
     .valueChanges({ idField: 'id' });

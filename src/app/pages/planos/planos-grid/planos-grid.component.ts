@@ -25,14 +25,19 @@ export class PlanosGridComponent {
   dataSource:any = [];
   dataSourceFilter:any = [];
   searchTerm: string = '';
+  user: any = {};
 
-  constructor(private router: Router, private toolboxService: ToolboxService,
+  constructor(private router: Router,
     private planosService: PlanosService,
     public dialog: MatDialog, private excelService: ExcelService,
     private authService: AuthService
   ) {
     this.authService.permissions$.subscribe(perms => {
       this.access = perms.plano;
+    });
+
+    this.authService.user$.subscribe(user => {
+      this.user = user;
     });
   }
   ngOnInit(): void {
@@ -45,12 +50,21 @@ export class PlanosGridComponent {
 
 
   findAll(){
-    this.planosService.getItems().subscribe(planos => {
-      if (planos.length >= 0) {
-        this.dataSource = planos;
-        this.dataSourceFilter = planos;
-      }
-    });
+    if (this.user.empresaPrincipal) {
+      this.planosService.getItems().subscribe(planos => {
+        if (planos.length >= 0) {
+          this.dataSource = planos;
+          this.dataSourceFilter = planos;
+        }
+      });
+    }else{
+      this.planosService.getItemsByEmpresaId(this.user.empresaId || '').subscribe((planos)=>{
+        if (planos.length >= 0) {
+          this.dataSource = planos;
+          this.dataSourceFilter = planos;
+        }
+      });
+    }
   }
 
   addNew() {
