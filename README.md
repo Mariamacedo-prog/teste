@@ -1,27 +1,75 @@
-# Reubr
+# LUCREE VENDAS
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.2.3.
+![Badge de Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
-## Development server
+![Badge de Versão](https://img.shields.io/badge/vers%C3%A3o-1.0.0-green)
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Índice
 
-## Code scaffolding
+- [LUCREE VENDAS](#lucree-vendas)
+  - [Índice](#índice)
+  - [Descrição](#descrição)
+  - [Instalação](#instalação)
+  - [Uso](#uso)
+  - [Pacotes](#pacotes)
+  - [Apoio](#apoio)
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Descrição
 
-## Build
+O **Lucree Vendas** é um aplicativo desenvolvido em Kotlin, projetado para realizar transações financeiras na maquininha GPOS700X. Utilizando a biblioteca de integração (SDK) Android v3.5.0 da Gsurf.
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## Instalação
 
-## Running unit tests
+1. Clone o repositório:
+    git clone https://....@bitbucket.org/bevipag/apk-lucree-vendas.git
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+2. Instale as dependências:
+    ./gradlew build
 
-## Running end-to-end tests
+3. Instale o aplicativo no dispositivo:
+    ./gradlew installGpos700homologDebug
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+4. Gere o APK em modo Debug:
+   ./gradlew assembleDebug
+   Após gerar o APK no modo Debug, ele será encontrado na pasta: app/build/outputs/apk/gpos700homolog/debug
 
-## Further help
+5. Gere o APK em modo Release:
+    ./gradlew assembleRelease
+    Após gerar o APK no modo Release, ele será encontrado na pasta: app/build/outputs/apk/gpos700homolog/release
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+6. Limpeza do projeto:
+   ./gradlew clean
+
+## Uso
+
+Após a instalação, abra o aplicativo no dispositivo Android para iniciar as operações de pagamento.
+
+## Pacotes
+
+Abaixo estão os pacotes de aplicativos registrados até o momento, junto com seus respectivos applicationId: (Cupom - applicationId)
+9     - "com.gsurf.lucreevendassiqueira"
+11    - "com.gsurf.lucreevendaskgm"
+
+Caso seja necessário gerar pacotes para cupons diferentes, você precisará alterar alguns arquivos do projeto:
+
+build.grandle (module :app)
+![alt text](image.png)
+
+settings.grandle
+![alt text](image-1.png)
+
+app/src/main/res/values/strings.xml
+![alt text](image-2.png)
+
+app/src/main/java/com/gsurf/lucreevendas/model/ParamsVoucherNumber.kt
+![alt text](image-3.png)
+
+Após gerar o APK no modo Release, ele será encontrado na pasta: app/build/outputs/apk/gpos700homolog/release
+
+## Apoio
+
+Para mais informações sobre a biblioteca de integração (SDK) Android v3.5.0 da Gsurf, consulte a documentação oficial:
+https://docs.gsurfnet.com/docs/manuais-de-utiliza-o/f0263b9432aa9-documentacao-da-biblioteca-de-integracao-sdk-android-v3-5-0#gertec-gpos700
+
+Para exemplos de desenvolvimento, visite o repositório oficial da Gertec no GitHub:
+https://github.com/gertecdeveloper/Gpos700X/tree/main/Kotlin
