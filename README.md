@@ -1,8 +1,6 @@
 # LUCREE VENDAS
 
-<p align="center">
-    <img loading="lazy" src="https://img.shields.io/badge/status-em%20desenvolvimento-yellow"/>
-</p>
+![Badge de Status](https://img.shields.io/badge/status-em%20desenvolvimento-yellow)
 
 ![Badge de Versão](https://img.shields.io/badge/vers%C3%A3o-1.0.0-green)
 
